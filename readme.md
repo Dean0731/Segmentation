@@ -21,7 +21,7 @@
 |mask-rcnn	|2017.5|||
 |deeplabv2  | 2017.5	|	https://arxiv.org/pdf/1606.00915.pdf||
 |deeplabv3	|2017.7		|https://arxiv.org/pdf/1706.05587.pdf||
-|deeplabv3+	|2018.8.22	|	https://arxiv.org/pdf/1802.02611.pdf||
+|deeplabv3+	|2018.8.22	|	https://arxiv.org/pdf/1802.02611.pdf|https://github.com/tensorflow/models/tree/master/research/deeplab|
 |Gated-SCNN	|2019.7.12	|	https://arxiv.org/pdf/1907.05740v1.pdf||
 |<font color=red>北京大学提出的大分辨率图像,图像分割Semantic segmentation of high-resolution images </font>|2017| http://scis.scichina.com/en/2017/123101.pdf|modified joint  bilateral upsampling algorithm|
 

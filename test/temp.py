@@ -1,2 +1,8 @@
-a=12313.165765456
-print('asd{:.2f}'.format(a,))
+class A:
+    def __init__(self):
+        pass
+x= A()
+x.a = 12
+a = x
+x.a = 13
+print(a.a)

@@ -11,7 +11,7 @@
 # print("有全连接层总参数量:",model.count_params())
 
 
-from network import Unet,Segnet,Segnet2,Segnet3,Segnet4
+from network import Unet,Segnet,Segnet2,Segnet3,Segnet4,Deeplabv3
 def networkSize(model):
     model = model(width,height,channel,n_labels=2)
     print("总参数量:",model.count_params())
@@ -62,8 +62,10 @@ def segnetSize(model):
     print("网络总消耗内存:",str(all_params_memory+all_feature_memory)+"M")
 if __name__ == '__main__':
     pass
-    (width,height,channel)=(2816,2816,3)
+    (width,height,channel)=(576,576,3)
     #(width,height,channel)=(576,576,3)
     #segnetSize(Segnet.Segnet)
     #segnetSize(Segnet2.Segnet)
-    segnetSize(Segnet4.Segnet)
+    #segnetSize(Segnet4.Segnet)
+    segnetSize(Deeplabv3.Deeplabv3)
+    #networkSize()
