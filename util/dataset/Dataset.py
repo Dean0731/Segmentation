@@ -10,6 +10,9 @@ import logging
 import os
 from tensorflow import keras
 from util import Tools
+from util.dataset.AerialImage import AerialImage
+from util.dataset.CountrySide import CountrySide
+from util.dataset.Massachusetts import Massachusetts
 
 class Dataset():
     def __init__(self,parent,dir=('images', 'gt'),shapeToOneDimension = False,data_size='tif_576'):
@@ -29,7 +32,7 @@ class Dataset():
                              cval=0.0, horizontal_flip=False, vertical_flip=False,
                              rescale=None, preprocessing_function=None, data_format=None,
                              validation_split=0.0)
-        self.size = {'train':[],'val':[],'test':[]}
+        self.size = {'train':[],'val':[],'testNetwork':[]}
     def setDataset(self,flag='tif_576'):
         pass
     def __getDir(self,data_type):
@@ -37,7 +40,7 @@ class Dataset():
             data_type = self.train_dir
         elif data_type =="val":
             data_type = self.val_dir
-        elif data_type =="test":
+        elif data_type =="testNetwork":
             data_type = self.test_dir
         else:
             logging.error("数据错误,没有{}参数".format(data_type))
@@ -74,9 +77,19 @@ class Dataset():
     def getData(self,target_size=(64, 64),mask_size=(64,64),batch_size = 4):
         data = self.__getGenerator(target_size=target_size, mask_size=mask_size, batch_size=batch_size, data_type='train', flag=False)
         validation_data = self.__getGenerator(target_size, mask_size=mask_size, batch_size=batch_size, data_type='val', flag=False)
-        test_data = self.__getGenerator(target_size=target_size, mask_size=mask_size, batch_size=batch_size, data_type='test', flag=False)
+        test_data = self.__getGenerator(target_size=target_size, mask_size=mask_size, batch_size=batch_size, data_type='testNetwork', flag=False)
         return data,validation_data,test_data
     def getSize(self,data_type):
         if self.size[data_type] == []:
             self.size[data_type] = Tools.countNumOfFolder(self.__getDir(data_type))
         return int(self.size.get(data_type)[0]/2)
+def selectDataset(str='A',data_size='tif_576'):
+    if str == 'A':
+        dataset = AerialImage(parent='G:\AI_dataset\法国-房屋数据集2',data_size=data_size)
+    elif str == 'C':
+        dataset = CountrySide(parent='G:\AI_dataset\DOM',data_size=data_size)
+    elif str == 'M':
+        dataset = Massachusetts(parent='G:\AI_dataset\马萨诸塞州-房屋数据集1',data_size=data_size)
+    else:
+        print("错误:未找到数据集.")
+    return dataset

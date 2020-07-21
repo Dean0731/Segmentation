@@ -10,7 +10,7 @@ from __future__ import division
 from __future__ import print_function
 
 import tensorflow as tf
-from test.test.Xception import Xception
+from test.testNetwork.Xception import Xception
 from keras.models import Model
 from keras import layers
 from keras.layers import Input
@@ -145,4 +145,4 @@ def Deeplabv3(input_shape=(512, 512, 3), classes=21, alpha=1.,OS=16):
 
     return model
 if __name__ == '__main__':
-    Deeplabv3(classes=2).summary()
+    Deeplabv3(classes=2).summary(line_length=200)

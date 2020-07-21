@@ -1,10 +1,8 @@
 import os
 from tensorflow import keras
-from util import Decorator,Evaluate,GenerateDir,Tools
-from util.dataset.AerialImage import AerialImage
-from util.dataset.CountrySide import CountrySide
-from util.dataset.Massachusetts import Massachusetts
-from network import Segnet3,Segnet
+from util import Evaluate,Tools
+from util.dataset import Dataset
+from network import Model
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = "3"
 def complie(model,lr,num_classes):
@@ -19,18 +17,9 @@ def fit(model,data,steps_per_epoch,epochs,validation_data,validation_steps,callb
               validation_data=validation_data,validation_steps=validation_steps,
               epochs=epochs,callbacks=callbacks,# verbose=1,
               )
-def selectDataset(str='A',data_size='tif_576'):
-    if str == 'A':
-        dataset = AerialImage(parent='G:\AI_dataset\法国-房屋数据集2',data_size=data_size)
-    elif str == 'C':
-        dataset = CountrySide(parent='G:\AI_dataset\DOM',data_size=data_size)
-    elif str == 'M':
-        dataset = Massachusetts(parent='G:\AI_dataset\马萨诸塞州-房屋数据集1',data_size=data_size)
-    else:
-        print("错误:未找到数据集.")
-    return dataset
 
-@Decorator.timer(flag=True)
+
+@Tools.Decorator.timer(flag=True)
 def main():
     # 必写参数
     target_size = (576,576)
@@ -39,20 +28,19 @@ def main():
     batch_size = 2
 
     # 获取数据
-    dataset = selectDataset('M',"{}_{}".format('tif',target_size[0]))
+    dataset = Dataset.selectDataset('M',"{}_{}".format('tif',target_size[0]))
     data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
-    data.__next__()
+
     pre_file = r'h5'
     epochs = 160
-    period = max(1,epochs/10)
-    train_step,val_step,test_step = [dataset.getSize(type)//batch_size for type in ['train','val','test']]
+    period = max(1,epochs/10) # 每1/10 epochs保存一次
+    train_step,val_step,test_step = [dataset.getSize(type)//batch_size for type in ['train','val','testNetwork']]
 
     # 生成参数日志文件夹
-    log_dir,h5_dir,event_dir = GenerateDir.get_dir()
+    log_dir,h5_dir,event_dir = Tools.get_dir()
     # 获取模型
-    model = Segnet.Segnet(target_size[0],target_size[1],3,n_labels=num_classes)
-    # model = Unet.Unet(target_width,target_height,3,n_labels=num_classes)
-    # 是否有与训练文件，有的话导入
+    model = Model.getModel('xception',target_size,n_labels=1000)
+    # 是否有与预训练文件，有的话导入
     if os.path.exists(pre_file):
         model.load_weights(pre_file)
     callback = Evaluate.getCallBack(log_dir,h5_dir,event_dir,period)

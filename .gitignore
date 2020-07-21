@@ -2,3 +2,4 @@
 /dataset/
 /util/__pycache__/
 /network/__pycache__/
+/train.log
