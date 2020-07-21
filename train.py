@@ -9,8 +9,12 @@ def complie(model,lr,num_classes):
     return model.compile(
         loss="categorical_crossentropy",
         optimizer=keras.optimizers.Adam(lr=lr),
-        metrics=[Evaluate.MyMeanIOU(num_classes=num_classes), "acc"]
-        # metrics=['acc']
+        metrics=[Evaluate.MyMeanIOU(num_classes=num_classes),
+                 Evaluate.MyAccuracy(),
+                 Evaluate.MyMeanIOU,
+                 Evaluate.Precision,
+                 Evaluate.Recall,
+                 Evaluate.AveragePrecision]
     )
 def fit(model,data,steps_per_epoch,epochs,validation_data,validation_steps,callbacks):
     model.fit(data,steps_per_epoch=steps_per_epoch,

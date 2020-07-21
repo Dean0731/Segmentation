@@ -8,13 +8,37 @@
 import os
 import tensorflow as tf
 from tensorflow import keras
-
+from sklearn.metrics import f1_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import average_precision_score
+from sklearn.metrics import roc_auc_score
 
 class MyMeanIOU(tf.keras.metrics.MeanIoU):
+    """
+    各类分割后的IOU平均值为MIOU
+    """
     def update_state(self, y_true, y_pred, sample_weight=None):
-        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
+        return super().update_state(tf.argmin(y_true, axis=-1), tf.argmin(y_pred, axis=-1), sample_weight)
 
-
+class MyAccuracy(tf.keras.metrics.Accuracy):
+    def update_state(self, y_true, y_pred, sample_weight=None):
+        return super().update_state(tf.argmin(y_true, axis=-1), tf.argmin(y_pred, axis=-1), sample_weight)
+average = [None,'micro','macro','weighted','samples']
+average = average[1]
+# average = average[3] # 这两个都可以 map会不一样
+def Precision(y_true, y_pred):
+    y_true,y_pred = tf.argmin(y_true,axis=-1),tf.argmin(y_pred,axis=-1)
+    return precision_score(y_true, y_pred,average=average)
+def Recall(y_true, y_pred):
+    y_true,y_pred = tf.argmin(y_true,axis=-1),tf.argmin(y_pred,axis=-1)
+    return recall_score(y_true, y_pred,average=average)
+def F1(y_true, y_pred):
+    y_true,y_pred = tf.argmin(y_true,axis=-1),tf.argmin(y_pred,axis=-1)
+    return f1_score(y_true, y_pred,average=average)
+def AveragePrecision(y_true, y_pred):
+    y_true,y_pred = tf.argmin(y_true,axis=-1),tf.argmin(y_pred,axis=-1)
+    return average_precision_score(y_true, y_pred,average=average)
 def getCallBack(log_dir, h5_dir, event_dir, period):
 
     tensorBoardDir = keras.callbacks.TensorBoard(log_dir=event_dir)
