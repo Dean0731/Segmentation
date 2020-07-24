@@ -41,9 +41,6 @@ def getCallBack(log_dir, h5_dir, event_dir, period):
     return [tensorBoardDir, checkpoint]
 
 class MyMeanIOU(tf.keras.metrics.MeanIoU):
-    """
-    各类分割后的IOU平均值为MIOU
-    """
     def update_state(self, y_true, y_pred, sample_weight=None):
         return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
 class MyAccuracy(tf.keras.metrics.Accuracy):

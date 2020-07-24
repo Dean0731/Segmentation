@@ -22,9 +22,25 @@
 #     FN = P-TP # FN=P-TP
 #     recall = TP / (TP + FN + tf.cast(K.epsilon(),tf.int64)) # TP/(TP+FN)
 #     return recall
-import tensorflow as tf
-a = tf.constant(11)
-b = tf.constant(12)
-print(a+b)
-
-print(tf.test.is_gpu_available())
+import train
+target_size = (576,576)
+mask_size = (576,576)
+num_classes = 2
+batch_size = 4
+dataset = train.selectDataset('A',"{}_{}".format('tif',576),parent='G:\AI_dataset')
+data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
+data1 = data.__next__()
+data1 = data.__next__()
+data1 = data.__next__()
+img,label = data1[0],data1[1]
+# print(img.shape,label.shape)
+img = img[0,:,:,:]
+label = label[1,:,:,:]
+print(label.shape)
+import numpy
+# label = numpy.argmax(label,axis=2)
+for i in range(576):
+    for j in range(576):
+        print(label[i,j,1],end='')
+    print()
+print(label.shape)

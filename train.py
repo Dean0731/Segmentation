@@ -56,7 +56,7 @@ def getNetwork_Model():
     pre_file = r'h5'
     epochs = 160
     period = max(1,epochs/10) # 每1/10 epochs保存一次
-    train_step,val_step,test_step = [dataset.getSize(type)//batch_size for type in ['train','val','testNetwork']]
+    train_step,val_step,test_step = [dataset.getSize(type)//batch_size for type in ['train','val','test']]
 
     # 生成参数日志文件夹
     log_dir,h5_dir,event_dir = Tools.get_dir()

@@ -28,7 +28,7 @@ class Dataset:
                              cval=0.0, horizontal_flip=False, vertical_flip=False,
                              rescale=None, preprocessing_function=None, data_format=None,
                              validation_split=0.0)
-        self.size = {'train':[],'val':[],'testNetwork':[]}
+        self.size = {'train':[],'val':[],'test':[]}
     def setDataset(self,flag='tif_576'):
         pass
     def __getDir(self,data_type):
@@ -36,7 +36,7 @@ class Dataset:
             data_type = self.train_dir
         elif data_type =="val":
             data_type = self.val_dir
-        elif data_type =="testNetwork":
+        elif data_type =="test":
             data_type = self.test_dir
         else:
             logging.error("数据错误,没有{}参数".format(data_type))
@@ -55,24 +55,16 @@ class Dataset:
                                                             color_mode='grayscale')
         train_generator = zip(image_generator, label_generator)
         for (img, mask) in train_generator:
-            img, mask = self.__adjustData(img, mask, num_classes,flag)
+            img, mask = self.adjustData(img, mask, num_classes,flag)
             yield (img, mask)
 
-    def __adjustData(self,img, mask, num_classes,flag):
-        mask = mask[:, :, :, 0].astype(int) if (len(mask.shape) == 4) else mask[:, :, 0]
-        new_mask = np.zeros(mask.shape + (num_classes,)).astype(int)  # (2, 416, 416, 2)
-        for i, j in zip(range(num_classes), [0, 255]):
-            new_mask[:, :, :, i] = (j == mask[:, :, :])
-        if flag:
-            mask = new_mask.reshape((-1,new_mask.shape[1]*new_mask.shape[2],num_classes))
-        else:
-            mask = new_mask
-        return (img, mask)
+    def adjustData(self,img, mask, num_classes,flag):
+        pass
 
     def getData(self,target_size=(64, 64),mask_size=(64,64),batch_size = 4):
         data = self.__getGenerator(target_size=target_size, mask_size=mask_size, batch_size=batch_size, data_type='train', flag=False)
         validation_data = self.__getGenerator(target_size, mask_size=mask_size, batch_size=batch_size, data_type='val', flag=False)
-        test_data = self.__getGenerator(target_size=target_size, mask_size=mask_size, batch_size=batch_size, data_type='testNetwork', flag=False)
+        test_data = self.__getGenerator(target_size=target_size, mask_size=mask_size, batch_size=batch_size, data_type='test', flag=False)
         return data,validation_data,test_data
     def getSize(self,data_type):
         if self.size[data_type] == []:

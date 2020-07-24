@@ -5,29 +5,15 @@
       <paths name="1050ti">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/dean/PythonWorkSpace/Segmentation" local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
-          <excludedPaths>
-            <excludedPath local="true" path="$PROJECT_DIR$/dataset" />
-            <excludedPath local="true" path="$PROJECT_DIR$/source" />
-            <excludedPath local="true" path="$PROJECT_DIR$/test" />
-            <excludedPath local="true" path="$PROJECT_DIR$/log" />
-            <excludedPath local="true" path="$PROJECT_DIR$/legacy" />
-          </excludedPaths>
         </serverdata>
       </paths>
       <paths name="p2000">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/dean/PythonWorkSpace/Segmentation" local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
-          <excludedPaths>
-            <excludedPath local="true" path="$PROJECT_DIR$/source" />
-            <excludedPath local="true" path="$PROJECT_DIR$/dataset" />
-            <excludedPath local="true" path="$PROJECT_DIR$/legacy" />
-            <excludedPath local="true" path="$PROJECT_DIR$/log" />
-            <excludedPath local="true" path="$PROJECT_DIR$/test" />
-          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>

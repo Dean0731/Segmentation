@@ -1,4 +1,6 @@
 import os
+import numpy as np
+from PIL import Image
 def compareFolder(file,file2):
     image = file
     label = file2
@@ -24,3 +26,22 @@ def compareFolder(file_less,file_much):
             else:
                 f.write(label[i]+"\n")
                 i = i+1
+def getNumOfImage(file):
+    img = Image.open(file)
+    print(img.mode)
+    img = img.convert('L')
+    # img = img.resize((576,500))
+    print(img.mode)
+    img = np.asarray(img)
+    print(img.shape)
+
+    for i in range(576):
+        for j in range(576):
+            print(img[i,j],end='')
+        print()
+if __name__ == '__main__':
+    file = r'G:\AI_dataset\aerialImage\AerialImage576\test\gt\austin15_006.tif'
+    # file = r'G:\AI_dataset\massachusetts\Massachusetts576\Test Set\Target maps\22828930_15_000.tif'
+    # file = r'G:\AI_dataset\massachusetts\Massachusetts576\Test Set\Target maps\22828930_15_000.tif'
+    # file = r'G:\AI_dataset\dom\Segmentation\val\label_png\裴庄村51-dom\裴庄村51-dom_00001.png'
+    getNumOfImage(file)
