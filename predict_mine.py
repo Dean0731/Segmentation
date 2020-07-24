@@ -7,7 +7,7 @@ np.set_printoptions(threshold = 1e6)
 def main():
     target_size = (576,576)
     num_classes = 2
-    h5 = 'ep048-loss0.001-val_loss0.000.h5'
+    h5 = 'last.h5'
     set='trainSet'
     set='testSet'
     set='testSet'
@@ -25,7 +25,7 @@ def main():
         img = np.array(img)
         img = img.reshape(-1,target_size[0],target_size[1],3)
         pr = model.predict(img)[0]
-        pr = pr.reshape((target_size[0],target_size[1],2)).argmax(axis=2)
+        pr = pr.argmax(axis=2)
         pr[:,:] = (pr[:,:]==1) *255
         seg_img = Image.fromarray(np.uint8(pr)).convert('P')
         seg_img.save(os.path.join(label_dir,"{}-label.png".format(str(name).split('.')[0])))

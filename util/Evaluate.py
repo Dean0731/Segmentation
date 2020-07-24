@@ -45,16 +45,16 @@ class MyMeanIOU(tf.keras.metrics.MeanIoU):
     各类分割后的IOU平均值为MIOU
     """
     def update_state(self, y_true, y_pred, sample_weight=None):
-        return super().update_state(tf.argmin(y_true, axis=-1), tf.argmin(y_pred, axis=-1), sample_weight)
+        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
 class MyAccuracy(tf.keras.metrics.Accuracy):
     def update_state(self, y_true, y_pred, sample_weight=None):
-        return super().update_state(tf.argmin(y_true, axis=-1), tf.argmin(y_pred, axis=-1), sample_weight)
+        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
 class MyPrecusion(tf.keras.metrics.Precision):
     def update_state(self, y_true, y_pred, sample_weight=None):
-        return super().update_state(tf.argmin(y_true, axis=-1), tf.argmin(y_pred, axis=-1), sample_weight)
+        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
 class MyRecall(tf.keras.metrics.Recall):
     def update_state(self, y_true, y_pred, sample_weight=None):
-        return super().update_state(tf.argmin(y_true, axis=-1), tf.argmin(y_pred, axis=-1), sample_weight)
+        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
 
 
 average = [None,'micro','macro','weighted','samples']
@@ -62,21 +62,21 @@ average = average[3]
 # average = average[3] # 这两个都可以 map会不一样
 
 def Precision(y_true, y_pred):
-    y_true,y_pred = tf.argmin(y_true,axis=-1),tf.argmin(y_pred,axis=-1)
+    y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
     return precision_score(y_true, y_pred,average=average)
 def Recall(y_true, y_pred):
-    y_true,y_pred = tf.argmin(y_true,axis=-1),tf.argmin(y_pred,axis=-1)
+    y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
     return recall_score(y_true, y_pred,average=average)
 def F1(y_true, y_pred):
-    y_true,y_pred = tf.argmin(y_true,axis=-1),tf.argmin(y_pred,axis=-1)
+    y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
     return f1_score(y_true, y_pred,average=average)
 def AveragePrecision(y_true, y_pred):
-    y_true,y_pred = tf.argmin(y_true,axis=-1),tf.argmin(y_pred,axis=-1)
+    y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
     return average_precision_score(y_true, y_pred,average=average)
 
 from tensorflow.keras import backend as K
 def P(y_true, y_pred):
-    y_true,y_pred = K.cast(K.argmin(y_true,axis=-1),'float32'),K.cast(K.argmin(y_pred,axis=-1),'float32')
+    y_true,y_pred = K.cast(K.argmax(y_true,axis=-1),'float32'),K.cast(K.argmax(y_pred,axis=-1),'float32')
     true_positives = K.sum(K.cast(K.greater(K.clip(y_true * y_pred, 0, 1), 0.20), 'float32'))
     pred_positives = K.sum(K.cast(K.greater(K.clip(y_pred, 0, 1), 0.20), 'float32'))
 
@@ -85,7 +85,7 @@ def P(y_true, y_pred):
 
 #recall
 def R(y_true, y_pred):
-    y_true,y_pred = K.cast(K.argmin(y_true,axis=-1),'float32'),K.cast(K.argmin(y_pred,axis=-1),'float32')
+    y_true,y_pred = K.cast(K.argmax(y_true,axis=-1),'float32'),K.cast(K.argmax(y_pred,axis=-1),'float32')
     true_positives = K.sum(K.cast(K.greater(K.clip(y_true * y_pred, 0, 1), 0.20), 'float32'))
     poss_positives = K.sum(K.cast(K.greater(K.clip(y_true, 0, 1), 0.20), 'float32'))
     recall = true_positives / (poss_positives + K.epsilon())

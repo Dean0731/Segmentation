@@ -24,12 +24,12 @@ def complie(model,lr,num_classes):
         metrics=[
             Evaluate.MyAccuracy(),
             Evaluate.MyMeanIOU(num_classes=num_classes),
-            # Evaluate.MyPrecusion(),
-            # Evaluate.MyRecall(),
+            Evaluate.MyPrecusion(),
+            Evaluate.MyRecall(),
             # Evaluate.AveragePrecision
-            Evaluate.P,
-            Evaluate.R,
-            Evaluate.F,
+            # Evaluate.P,
+            # Evaluate.R,
+            # Evaluate.F,
         ]
     )
     return model
@@ -47,7 +47,7 @@ def getNetwork_Model():
     target_size = (576,576)
     mask_size = (576,576)
     num_classes = 2
-    batch_size = 3
+    batch_size = 2
 
     # 获取数据
     dataset = selectDataset('C',"{}_{}".format('tif',576),parent='/home/dean/PythonWorkSpace/Segmentation/dataset')
