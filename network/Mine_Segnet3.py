@@ -1,12 +1,11 @@
 # Pragram:
-# 	Segnet前端添加卷积结构适合高分辨率图像
+# 	Segnet网络，原始网络
 # History:
 # 2020-07-06 Dean First Release
-# 2020-07-12 Dean v1.2
 # Email:dean0731@qq.com
 import tensorflow as tf
 import tensorflow.keras.backend as K
-from tensorflow.keras.layers import Conv2D, BatchNormalization, Reshape, Lambda, Input, Activation,DepthwiseConv2D
+from tensorflow.keras.layers import Conv2D, BatchNormalization, Reshape, Lambda, Input, Activation
 from tensorflow.keras.models import Model
 
 def MaxPool2DWithArgmax(input_tensor, ksize, strides):
@@ -30,36 +29,9 @@ def Segnet(height=576,width=576,channel=3,n_labels=2):
     args = {"ksize": (1,2,2,1), "strides":(1,2,2,1)}
     pool_size = (1,2,2,1)
 
-    input_kernel_size=(3,3)
+
     inputs = Input(input_shape)
-
-    x = Conv2D(32,input_kernel_size,strides=(2,2),padding="same")(inputs)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(32,input_kernel_size,strides=(2,2),padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(32,input_kernel_size,strides=(2,2),padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-
-    # x = DepthwiseConv2D((7,7),strides=(2,2), padding="same")(inputs)
-    # x = Conv2D(32, (1, 1), padding="same")(x)
-    # x = BatchNormalization()(x)
-    # x = Activation("relu")(x)
-    # x = DepthwiseConv2D((7,7),strides=(2,2), padding="same")(x)
-    # x = Conv2D(32, (1,1), padding="same")(x)
-    # x = BatchNormalization()(x)
-    # x = Activation("relu")(x)
-    # x = DepthwiseConv2D((7,7),strides=(2,2), padding="same")(x)
-    # x = Conv2D(32, (1,1), padding="same")(x)
-    # x = BatchNormalization()(x)
-    # x = Activation("relu")(x)
-
-    # ===================================================================
-
-
-    x = Conv2D(64, (kernel, kernel), padding="same")(x)
+    x = Conv2D(64, (kernel, kernel), padding="same")(inputs)
     x = BatchNormalization()(x)
     x = Activation("relu")(x)
     x = Conv2D(64, (kernel, kernel), padding="same")(x)
@@ -179,5 +151,5 @@ def Segnet(height=576,width=576,channel=3,n_labels=2):
 
     return Model(inputs=inputs, outputs=outputs, name="SegNet")
 if __name__ == '__main__':
-
-    Segnet(2816,2816,3).summary()
+    # dropout 也起到正则化效果，但是不如bn，一般只有fc层后边使用，现在几乎不用了，
+    Segnet(576,576,3).summary()

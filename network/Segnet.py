@@ -29,7 +29,7 @@ def Segnet(height=576,width=576,channel=3,n_labels=2):
     args = {"ksize": (1,2,2,1), "strides":(1,2,2,1)}
     pool_size = (1,2,2,1)
 
-
+    # with tf.device('/')
     inputs = Input(input_shape)
     x = Conv2D(64, (kernel, kernel), padding="same")(inputs)
     x = BatchNormalization()(x)

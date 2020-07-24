@@ -7,14 +7,14 @@ class Massachusetts(Dataset.Dataset):
 
     def setDataset(self,flag='tif_576'):
         if flag== 'tif_576':
-            self.train_dir = r'Massachusetts576/Training Set'
-            self.val_dir = r'Massachusetts576/Validation Set'
-            self.test_dir = r'Massachusetts576/Test Set'
+            self.train_dir = r'massachusetts/Massachusetts576/Training Set'
+            self.val_dir = r'massachusetts/Massachusetts576/Validation Set'
+            self.test_dir = r'massachusetts/Massachusetts576/Test Set'
             print('tif_576')
         elif flag=='tif_1500':
-            self.train_dir = r'Massachusetts1500/Training Set'
-            self.val_dir = r'Massachusetts1500/Validation Set'
-            self.test_dir = r'Massachusetts1500/Test Set'
+            self.train_dir = r'massachusetts/Massachusetts1500/Training Set'
+            self.val_dir = r'massachusetts/Massachusetts1500/Validation Set'
+            self.test_dir = r'massachusetts/Massachusetts1500/Test Set'
             print('tif_1500')
         else:
             print("未找到数据集")

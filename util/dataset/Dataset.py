@@ -10,11 +10,7 @@ import logging
 import os
 from tensorflow import keras
 from util import Tools
-from util.dataset.AerialImage import AerialImage
-from util.dataset.CountrySide import CountrySide
-from util.dataset.Massachusetts import Massachusetts
-
-class Dataset():
+class Dataset:
     def __init__(self,parent,dir=('images', 'gt'),shapeToOneDimension = False,data_size='tif_576'):
         self.train_dir = ''
         self.val_dir = ''
@@ -63,7 +59,6 @@ class Dataset():
             yield (img, mask)
 
     def __adjustData(self,img, mask, num_classes,flag):
-        #img = img / 255
         mask = mask[:, :, :, 0].astype(int) if (len(mask.shape) == 4) else mask[:, :, 0]
         new_mask = np.zeros(mask.shape + (num_classes,)).astype(int)  # (2, 416, 416, 2)
         for i, j in zip(range(num_classes), [0, 255]):
@@ -83,13 +78,3 @@ class Dataset():
         if self.size[data_type] == []:
             self.size[data_type] = Tools.countNumOfFolder(self.__getDir(data_type))
         return int(self.size.get(data_type)[0]/2)
-def selectDataset(str='A',data_size='tif_576'):
-    if str == 'A':
-        dataset = AerialImage(parent='G:\AI_dataset\法国-房屋数据集2',data_size=data_size)
-    elif str == 'C':
-        dataset = CountrySide(parent='G:\AI_dataset\DOM',data_size=data_size)
-    elif str == 'M':
-        dataset = Massachusetts(parent='G:\AI_dataset\马萨诸塞州-房屋数据集1',data_size=data_size)
-    else:
-        print("错误:未找到数据集.")
-    return dataset

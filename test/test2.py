@@ -22,3 +22,9 @@
 #     FN = P-TP # FN=P-TP
 #     recall = TP / (TP + FN + tf.cast(K.epsilon(),tf.int64)) # TP/(TP+FN)
 #     return recall
+import tensorflow as tf
+a = tf.constant(11)
+b = tf.constant(12)
+print(a+b)
+
+print(tf.test.is_gpu_available())

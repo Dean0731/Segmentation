@@ -10,7 +10,7 @@ def getModel(name,shape,n_labels=2):
     name = name.lower()
     if name =='deeplabv3plus' :
         model = Deeplabv3plus.Deeplabv3(*shape,n_labels=n_labels)
-    elif name == 'sgenet':
+    elif name == 'segnet':
         model = Segnet.Segnet(*shape,n_labels=n_labels)
     elif name == 'unet':
         model = Unet.Unet(*shape,n_labels=n_labels)
