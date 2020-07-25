@@ -118,3 +118,5 @@ def get_dir(parent=None):
         if not os.path.exists(i):
             os.makedirs(i)
     return log_dir,h5_dir,event_dir
+if __name__ == '__main__':
+    pass

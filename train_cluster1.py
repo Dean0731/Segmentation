@@ -16,10 +16,9 @@ os.environ['TF_CONFIG'] = json.dumps({
     'cluster': {
         'worker': ["172.16.6.209:20000", "172.16.7.240:20001"]
     },
-    'task': {'type': 'worker', 'index': 0}
+    'task': {'type': 'worker', 'index': 0},
 })
 strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy()
-
 
 @Tools.Decorator.timer(flag=True)
 def main():
@@ -29,5 +28,7 @@ def main():
     model = train.fit(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,callbacks=callback)
     model.save_weights(os.path.join(h5_dir, 'last.h5'))
     model.evaluate(test_data,steps=test_step)
+
 if __name__ == '__main__':
-    main()
+    ret, time = main()
+    Tools.sendMessage("The job had cost about {:.2f}小时".format(time//3600))

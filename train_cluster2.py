@@ -24,11 +24,9 @@ strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy()
 @Tools.Decorator.timer(flag=True)
 def main():
     with strategy.scope():
-        model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = train.getNetwork_Model()
+        model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = train.getNetwork_Model(False)
         model = train.complie(model,lr=0.001,num_classes=num_classes)
     model = train.fit(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,callbacks=callback)
-    model.save_weights(os.path.join(h5_dir, 'last.h5'))
-    model.evaluate(test_data,steps=test_step)
 if __name__ == '__main__':
     main()
 

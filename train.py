@@ -3,7 +3,7 @@ from tensorflow import keras
 from util import Evaluate,Tools
 from network import Model
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = "3"
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = "3"
 from util.dataset.AerialImage import AerialImage
 from util.dataset.CountrySide import CountrySide
 from util.dataset.Massachusetts import Massachusetts
@@ -42,12 +42,12 @@ def fit(model,data,steps_per_epoch,epochs,validation_data,validation_steps,callb
     return model
 
 
-def getNetwork_Model():
+def getNetwork_Model(log=True):
     # 必写参数
     target_size = (576,576)
     mask_size = (576,576)
     num_classes = 2
-    batch_size = 2
+    batch_size = 3
 
     # 获取数据
     dataset = selectDataset('C',"{}_{}".format('tif',576),parent='/home/dean/PythonWorkSpace/Segmentation/dataset')
@@ -58,14 +58,18 @@ def getNetwork_Model():
     period = max(1,epochs/10) # 每1/10 epochs保存一次
     train_step,val_step,test_step = [dataset.getSize(type)//batch_size for type in ['train','val','test']]
 
-    # 生成参数日志文件夹
-    log_dir,h5_dir,event_dir = Tools.get_dir()
+
     # 获取模型
     model = Model.getModel('Segnet',target_size,n_labels=2)
     # 是否有与预训练文件，有的话导入
     if os.path.exists(pre_file):
         model.load_weights(pre_file)
-    callback = Evaluate.getCallBack(log_dir,h5_dir,event_dir,period)
+    # 生成参数日志文件夹
+    if log:
+        log_dir,h5_dir,event_dir = Tools.get_dir()
+        callback = Evaluate.getCallBack(log_dir,h5_dir,event_dir,period)
+    else:
+        callback,h5_dir = None,None
     return model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir
 @Tools.Decorator.timer(flag=True)
 def main():

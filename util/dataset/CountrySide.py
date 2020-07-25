@@ -9,27 +9,27 @@ class CountrySide(Dataset.Dataset):
         if flag == 'tif_576':
             self.train_dir = r'dom/segmentation2/train'
             self.val_dir = r'dom/segmentation2/val'
-            self.test_dir = r'dom/segmentation2/testNetwork'
+            self.test_dir = r'dom/segmentation2/test'
             print('tif_576')
         elif flag == 'tif_288':
             self.train_dir = r'dom/segmentation5/train'
             self.val_dir = r'dom/segmentation5/val'
-            self.test_dir = r'dom/segmentation5/testNetwork'
+            self.test_dir = r'dom/segmentation5/test'
             print('tif_288')
         elif flag == 'png_576':
             self.train_dir = r'dom/segmentation3/train'
             self.val_dir = r'dom/segmentation3/val'
-            self.test_dir = r'dom/segmentation3/testNetwork'
+            self.test_dir = r'dom/segmentation3/test'
             print('png_576')
         elif flag == 'png_288':
             self.train_dir = r'dom/segmentation4/train'
             self.val_dir = r'dom/segmentation4/val'
-            self.test_dir = r'dom/segmentation4/testNetwork'
+            self.test_dir = r'dom/segmentation4/test'
             print('png_288')
         elif flag=='tif_3072':
             self.train_dir = r'dom/segmentation/train'
             self.val_dir = r'dom/segmentation/val'
-            self.test_dir = r'dom/segmentation/testNetwork'
+            self.test_dir = r'dom/segmentation/test'
             print('tif_3072')
         else:
             print("未找到数据集")
