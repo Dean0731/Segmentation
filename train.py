@@ -79,6 +79,7 @@ def main():
     model.save_weights(os.path.join(h5_dir, 'last.h5'))
     model.evaluate(test_data,steps=test_step)
 
+
 if __name__ == '__main__':
     ret, time = main()
     Tools.sendMessage("The job had cost about {:.2f}小时".format(time//3600))
