@@ -175,8 +175,7 @@ def Deeplabv3(width,height,channel = 3, n_labels=2):
     size_before = tf.keras.backend.int_shape(x)
     b4 = Lambda(lambda x: tf.image.resize(x, size_before[1:3]))(b4) # 扩张为64*64*256
 
-    x = Concatenate()([b4, b0, b1, b2, b3])
-
+    x = Concatenate()([b4,b0, b1, b2, b3])
 
     x = Conv2D(256, (1, 1), padding='same',
                use_bias=False)(x)
@@ -185,13 +184,12 @@ def Deeplabv3(width,height,channel = 3, n_labels=2):
     x = Dropout(0.1)(x)
 
 
-    x = Lambda(lambda xx: tf.image.resize(x, skip1.shape[1:3]))(x)
+    x = Lambda(lambda xx: tf.image.resize(xx, skip1.shape[1:3]))(x)
 
 
     dec_skip1 = Conv2D(48, (1, 1), padding='same',use_bias=False)(skip1)
     dec_skip1 = BatchNormalization(epsilon=1e-5)(dec_skip1)
     dec_skip1 = Activation('relu')(dec_skip1)
-
     x = Concatenate()([x, dec_skip1])
 
     x = SepConv_BN(x, 256,depth_activation=True, epsilon=1e-5)
@@ -210,5 +208,5 @@ def Deeplabv3(width,height,channel = 3, n_labels=2):
 
     return model
 if __name__ == '__main__':
-    model = Deeplabv3(512,512,3)
+    model = Deeplabv3(576,576,3)
     model.summary(line_length=200)

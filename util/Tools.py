@@ -119,4 +119,5 @@ def get_dir(parent=None):
             os.makedirs(i)
     return log_dir,h5_dir,event_dir
 if __name__ == '__main__':
-    pass
+    from network import Model
+    computerNetworkSize(Model.getModel('deeplabv3plus',(576,576),n_labels=2))

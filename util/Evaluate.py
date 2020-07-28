@@ -54,22 +54,22 @@ class MyRecall(tf.keras.metrics.Recall):
         return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
 
 
-average = [None,'micro','macro','weighted','samples']
-average = average[3]
-# average = average[3] # 这两个都可以 map会不一样
-
-def Precision(y_true, y_pred):
-    y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
-    return precision_score(y_true, y_pred,average=average)
-def Recall(y_true, y_pred):
-    y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
-    return recall_score(y_true, y_pred,average=average)
-def F1(y_true, y_pred):
-    y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
-    return f1_score(y_true, y_pred,average=average)
-def AveragePrecision(y_true, y_pred):
-    y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
-    return average_precision_score(y_true, y_pred,average=average)
+# average = [None,'micro','macro','weighted','samples']
+# average = average[3]
+# # average = average[3] # 这两个都可以 map会不一样
+#
+# def Precision(y_true, y_pred):
+#     y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
+#     return precision_score(y_true, y_pred,average=average)
+# def Recall(y_true, y_pred):
+#     y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
+#     return recall_score(y_true, y_pred,average=average)
+# def F1(y_true, y_pred):
+#     y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
+#     return f1_score(y_true, y_pred,average=average)
+# def AveragePrecision(y_true, y_pred):
+#     y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
+#     return average_precision_score(y_true, y_pred,average=average)
 
 from tensorflow.keras import backend as K
 def P(y_true, y_pred):
