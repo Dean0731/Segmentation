@@ -2,10 +2,5 @@
 # from util import Tools
 # model = Mine_Segnet3.Segnet(3072,3072,3)
 # Tools.computerNetworkSize(model)
-
-def a(flag =True):
-    if flag:
-        b = 1
-
-    return b
-print(a(False))
+a = 2 *(97.06*45.08)/(97.06+45.08)
+print(a)
