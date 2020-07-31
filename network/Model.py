@@ -5,7 +5,7 @@
 # @Desc     :
 # @History  :
 #   2020/7/21 Dean First Release
-from network import Deeplabv3plus,Segnet,Unet,Xception
+from network import Deeplabv3plus,Segnet,Unet,Xception,Mine_Segnet_1,Mine_Segnet_2
 def getModel(name,shape,n_labels=2):
     name = name.lower()
     if name =='deeplabv3plus' :
@@ -16,6 +16,10 @@ def getModel(name,shape,n_labels=2):
         model = Unet.Unet(*shape,n_labels=n_labels)
     elif name == 'xception':
         model = Xception.Xception(*shape,n_labels=n_labels)
+    elif name =='mysegnet_1':
+        model = Mine_Segnet_1.Segnet(*shape, n_labels=n_labels)
+    elif name =='mysegnet_2':
+        model = Mine_Segnet_2.Segnet(*shape, n_labels=n_labels)
     else:
         model = None
         print('未找到网络')
@@ -23,4 +27,4 @@ def getModel(name,shape,n_labels=2):
 if __name__ == '__main__':
     shape=(576,576)
     channels = 3
-    getModel('xception',(shape+(channels,)),n_labels=1000).summary()
+    getModel('mysegnet',(576,576),n_labels=2)

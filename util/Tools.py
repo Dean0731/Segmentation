@@ -118,6 +118,10 @@ def get_dir(parent=None):
         if not os.path.exists(i):
             os.makedirs(i)
     return log_dir,h5_dir,event_dir
+from network import Model
 if __name__ == '__main__':
-    from network import Model
-    computerNetworkSize(Model.getModel('deeplabv3plus',(576,576),n_labels=2))
+    # model = Model.getModel('mysegnet',(2816,2816),n_labels=2)
+    target_size = 576,576
+    model = Model.getModel('mysegnet_2',target_size,n_labels=2)
+    model.summary()
+    computerNetworkSize(model)

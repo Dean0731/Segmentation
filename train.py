@@ -45,12 +45,12 @@ def fit(model,data,steps_per_epoch,epochs,validation_data,validation_steps,callb
 def getNetwork_Model(log=True):
     # 必写参数
     target_size = (576,576)
-    mask_size = (576,576)
+    mask_size = (288,288)
     num_classes = 2
-    batch_size = 2
+    batch_size = 4
 
     # 获取数据
-    dataset = selectDataset('A',"{}_{}".format('tif',576),parent='/home/dean/PythonWorkSpace/Segmentation/dataset')
+    dataset = selectDataset('C',"{}_{}".format('tif',576),parent='/home/dean/PythonWorkSpace/Segmentation/dataset')
     data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
 
     pre_file = r'h5'
@@ -60,7 +60,7 @@ def getNetwork_Model(log=True):
 
 
     # 获取模型
-    model = Model.getModel('segnet',target_size,n_labels=2)
+    model = Model.getModel('mysegnet_1',target_size,n_labels=2)
     # 是否有与预训练文件，有的话导入
     if os.path.exists(pre_file):
         model.load_weights(pre_file)

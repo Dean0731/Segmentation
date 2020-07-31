@@ -1,7 +1,7 @@
 from PIL import Image
 import numpy as np
 import os
-from network import Segnet,Unet,Mine_Segnet3
+from network import Segnet,Unet,Mine_Segnet_1
 np.set_printoptions(threshold = 1e6)
 
 def main():
