@@ -10,14 +10,15 @@ def main():
     h5 = 'last.h5'
     set='trainSet'
     set='testSet'
-    set='testSet'
+    set='M-testSet'
 
     model = Segnet.Segnet(target_size[0], target_size[1], 3, n_labels=num_classes)
     model.load_weights(h5)
 
     dir = os.path.join('source\images\img',set)
     label_dir = os.path.join('source\images\img',"{}_pre_label".format(set))
-
+    if not os.path.exists(label_dir):
+        os.mkdir(label_dir)
     for img in os.listdir(dir):
         name = img
         img = Image.open(os.path.join(dir,img))

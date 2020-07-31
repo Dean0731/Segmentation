@@ -50,7 +50,7 @@ def getNetwork_Model(log=True):
     batch_size = 2
 
     # 获取数据
-    dataset = selectDataset('C',"{}_{}".format('tif',576),parent='/home/dean/PythonWorkSpace/Segmentation/dataset')
+    dataset = selectDataset('A',"{}_{}".format('tif',576),parent='/home/dean/PythonWorkSpace/Segmentation/dataset')
     data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
 
     pre_file = r'h5'
@@ -60,7 +60,7 @@ def getNetwork_Model(log=True):
 
 
     # 获取模型
-    model = Model.getModel('deeplabv3plus',target_size,n_labels=2)
+    model = Model.getModel('segnet',target_size,n_labels=2)
     # 是否有与预训练文件，有的话导入
     if os.path.exists(pre_file):
         model.load_weights(pre_file)

@@ -1,16 +1,15 @@
-from util.dataset import Dataset
+from . import Dataset
 import numpy as np
 class AerialImage(Dataset.Dataset):
     def __init__(self,parent,dir=('images', 'gt'),shapeToOneDimension = False,data_size='tif_576'):
         Dataset.Dataset.__init__(self,parent,dir,shapeToOneDimension,data_size)
-
     def setDataset(self,flag='tif_576'):
         if flag == 'tif_576':
             self.train_dir = r'aerialImage/AerialImage576/train'
             self.val_dir = r'aerialImage/AerialImage576/val'
             self.test_dir = r'aerialImage/AerialImage576/test'
             print('tif_576')
-        elif flag =='tif_3072':
+        elif flag == 'tif_3072':
             self.train_dir = r'aerialImage/AerialImage3072/train'
             self.val_dir = r'aerialImage/AerialImage3072/val'
             self.test_dir = r'aerialImage/AerialImage3072/test'
@@ -29,4 +28,6 @@ class AerialImage(Dataset.Dataset):
             mask = new_mask
         return (img, mask)
 if __name__ == '__main__':
-    pass
+    dataset = AerialImage(parent= '..\dataset',data_size='tif_576')
+    data,validation_data,test_data = dataset.getData(target_size=(576,576),mask_size=(576,576),batch_size=4)
+    data.__next__()

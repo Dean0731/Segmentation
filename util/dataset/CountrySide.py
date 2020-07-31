@@ -1,6 +1,5 @@
 from . import Dataset
 import numpy as np
-
 class CountrySide(Dataset.Dataset):
     def __init__(self,parent,dir=('img', 'label_png'),shapeToOneDimension = False,data_size='tif_576'):
         Dataset.Dataset.__init__(self,parent,dir,shapeToOneDimension,data_size)
@@ -44,3 +43,8 @@ class CountrySide(Dataset.Dataset):
         else:
             mask = new_mask
         return (img, mask)
+if __name__ == '__main__':
+    dataset = CountrySide(parent= './dataset',data_size='tif_576')
+    print(dataset.train_dir)
+    data,validation_data,test_data = dataset.getData(target_size=(576,576),mask_size=(576,576),batch_size=4)
+    data.__next__()
