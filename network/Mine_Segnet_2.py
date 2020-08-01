@@ -182,4 +182,4 @@ def Segnet(height=576,width=576,channel=3,n_labels=2):
     return Model(inputs=inputs, outputs=outputs, name="mine_segnet")
 if __name__ == '__main__':
     # dropout 也起到正则化效果，但是不如bn，一般只有fc层后边使用，现在几乎不用了，
-    Segnet(576,576,3).summary()
+    Segnet(768,768,3).summary()
