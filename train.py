@@ -80,5 +80,12 @@ def main():
     model.evaluate(test_data,steps=test_step)
 
 if __name__ == '__main__':
-    ret, time = main()
-    Tools.sendMessage("The job had cost about {:.2f}小时".format(time//3600))
+    try:
+        # ret, time = main()
+        time = 136.3
+        msg ="The job had cost about {:.2f}小时".format(time//3600)
+        raise ValueError
+    except Exception as error:
+        msg = '程序错误，终止！\n{}'.format(error)
+    finally:
+        Tools.sendMessage(msg)
