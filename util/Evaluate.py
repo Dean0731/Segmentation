@@ -21,7 +21,7 @@ def getCallBack(log_dir, h5_dir, event_dir, period):
         # h5_dir,
         os.path.join(h5_dir, 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5'),
         # 需要监视的值，通常为：val_acc 或 val_loss 或 acc 或 loss
-        monitor='val_loss',
+        monitor='val_acc',
         # 若设置为True，则只保存模型权重，否则将保存整个模型（包括模型结构，配置信息等）
         mode='auto',
         # save_best_only：当设置为True时，将只保存在验证集上性能最好的模型,检测值有改进时保存
