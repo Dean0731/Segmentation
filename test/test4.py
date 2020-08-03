@@ -4,9 +4,13 @@
 # Tools.computerNetworkSize(model)
 import requests
 proxy = {
-    'http': 'http://129.226.156.219:8118',
-    'https': 'https://129.226.156.219:8118',
+    'http': 'socks5://127.0.0.1:1080',
+    'https': 'socks5://127.0.0.1:1080',
+}
+proxy = {
+    'http': 'http://127.0.0.1:1080',
+    'https': 'https://127.0.0.1:1080',
 }
 # ret = requests.get('https://www.baidu.com',proxies=proxy)
-ret = requests.get('https://www.googel.com',proxies=proxy)
+ret = requests.get('https://www.google.com/',proxies=proxy)
 print(ret.content)
