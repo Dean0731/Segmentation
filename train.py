@@ -54,7 +54,7 @@ def getNetwork_Model(log=True):
     data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
 
     pre_file = r'h5'
-    epochs = 80
+    epochs = 60
     period = max(1,epochs/10) # 每1/10 epochs保存一次
     train_step,val_step,test_step = [dataset.getSize(type)//batch_size for type in ['train','val','test']]
 
