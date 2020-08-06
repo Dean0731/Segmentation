@@ -11,7 +11,6 @@ import os
 import json
 import train
 from util import Tools
-num_workers = 2
 os.environ['TF_CONFIG'] = json.dumps({
     'cluster': {
         'worker': ["172.16.6.209:20000", "172.16.7.240:20001"]

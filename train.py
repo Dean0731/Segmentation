@@ -44,17 +44,17 @@ def fit(model,data,steps_per_epoch,epochs,validation_data,validation_steps,callb
 
 def getNetwork_Model(log=True):
     # 必写参数
-    target_size = (576,576)
-    mask_size = (288,288)
+    target_size = (1152,1152)
+    mask_size = (576,576)
     num_classes = 2
-    batch_size = 4
+    batch_size = 2
 
     # 获取数据
-    dataset = selectDataset('C',"{}_{}".format('tif',576),parent='/home/dean/PythonWorkSpace/Segmentation/dataset')
+    dataset = selectDataset('C',"{}_{}".format('tif',3072),parent='/home/dean/PythonWorkSpace/Segmentation/dataset')
     data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
 
     pre_file = r'h5'
-    epochs = 160
+    epochs = 80
     period = max(1,epochs/10) # 每1/10 epochs保存一次
     train_step,val_step,test_step = [dataset.getSize(type)//batch_size for type in ['train','val','test']]
 
@@ -78,13 +78,10 @@ def main():
     model = fit(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,callbacks=callback)
     model.save_weights(os.path.join(h5_dir, 'last.h5'))
     model.evaluate(test_data,steps=test_step)
-
 if __name__ == '__main__':
     try:
-        # ret, time = main()
-        time = 136.3
+        ret, time = main()
         msg ="The job had cost about {:.2f}小时".format(time//3600)
-        raise ValueError
     except Exception as error:
         msg = '程序错误，终止！\n{}'.format(error)
     finally:

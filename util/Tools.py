@@ -121,7 +121,7 @@ def get_dir(parent=None):
 from network import Model
 if __name__ == '__main__':
     # model = Model.getModel('mysegnet',(2816,2816),n_labels=2)
-    target_size = 576,576
-    model = Model.getModel('mysegnet_2',target_size,n_labels=2)
+    target_size = 768,768
+    model = Model.getModel('segnet',target_size,n_labels=2)
     model.summary()
     computerNetworkSize(model)

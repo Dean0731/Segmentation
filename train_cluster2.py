@@ -27,6 +27,8 @@ def main():
         model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = train.getNetwork_Model(False)
         model = train.complie(model,lr=0.001,num_classes=num_classes)
     model = train.fit(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,callbacks=callback)
+
 if __name__ == '__main__':
-    main()
+     ret, time = main()
+    # Tools.sendMessage("The job had cost about {:.2f}小时".format(time//3600))
 
