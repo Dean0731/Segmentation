@@ -25,25 +25,36 @@ def complie(model,lr,num_classes):
 
 
 def fit(model,data,steps_per_epoch,epochs,validation_data,validation_steps,callbacks):
-    model.fit(data,steps_per_epoch=steps_per_epoch,
+
+    x = data[0][0]
+    y = data[0][1]
+    x1 = data[1][0]
+
+    model.fit(x=[x,x1],y=y,steps_per_epoch=steps_per_epoch,
               validation_data=validation_data,validation_steps=validation_steps,
               epochs=epochs,callbacks=callbacks,
-              #verbose=1,
+              # verbose=1,
               )
     return model
 
 
 def getNetwork_Model(log=True):
     # 必写参数
-    target_size = (768,768)
-    mask_size = (768,768)
+
+    target_size = (512,512)
+    mask_size = (512,512)
     num_classes = 2
     batch_size = 4
 
     # 获取数据
     # dataset = selectDataset('C',"{}_{}".format('tif',3072),parent='/home/dean/PythonWorkSpace/Segmentation/dataset')
     dataset = dataset_tools.selectDataset('C',"{}_{}".format('tif',3072),parent='/public1/data/weiht/dzf/workspace/Segmentation/dataset')
+
     data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
+
+    data2,validation_data2,test_data2 = dataset.getData(target_size=(3072,3072),mask_size=(3072,3072),batch_size=batch_size)
+
+    data = [data,data2]
 
     pre_file = r'h5'
     epochs = 160

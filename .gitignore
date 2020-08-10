@@ -5,6 +5,6 @@
 /train.log
 /last.h5
 /event
-/.idea
+/.idea/
 /.gitignore
-/test
+/test/

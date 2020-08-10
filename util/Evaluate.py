@@ -8,11 +8,8 @@
 import os
 import tensorflow as tf
 from tensorflow import keras
-from sklearn.metrics import f1_score
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import average_precision_score
-from sklearn.metrics import roc_auc_score
+from tensorflow.keras import backend as K
+
 def getCallBack(log_dir, h5_dir, event_dir, period):
 
     tensorBoardDir = keras.callbacks.TensorBoard(log_dir=event_dir)
@@ -54,24 +51,9 @@ class MyRecall(tf.keras.metrics.Recall):
         return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
 
 
-# average = [None,'micro','macro','weighted','samples']
-# average = average[3]
-# # average = average[3] # 这两个都可以 map会不一样
-#
-# def Precision(y_true, y_pred):
-#     y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
-#     return precision_score(y_true, y_pred,average=average)
-# def Recall(y_true, y_pred):
-#     y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
-#     return recall_score(y_true, y_pred,average=average)
-# def F1(y_true, y_pred):
-#     y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
-#     return f1_score(y_true, y_pred,average=average)
-# def AveragePrecision(y_true, y_pred):
-#     y_true,y_pred = tf.argmax(y_true,axis=-1),tf.argmax(y_pred,axis=-1)
-#     return average_precision_score(y_true, y_pred,average=average)
 
-from tensorflow.keras import backend as K
+
+
 def P(y_true, y_pred):
     y_true,y_pred = K.cast(K.argmax(y_true,axis=-1),'float32'),K.cast(K.argmax(y_pred,axis=-1),'float32')
     true_positives = K.sum(K.cast(K.greater(K.clip(y_true * y_pred, 0, 1), 0.20), 'float32'))
@@ -80,7 +62,7 @@ def P(y_true, y_pred):
     precision = true_positives / (pred_positives + K.epsilon())
     return precision
 
-#recall
+
 def R(y_true, y_pred):
     y_true,y_pred = K.cast(K.argmax(y_true,axis=-1),'float32'),K.cast(K.argmax(y_pred,axis=-1),'float32')
     true_positives = K.sum(K.cast(K.greater(K.clip(y_true * y_pred, 0, 1), 0.20), 'float32'))
@@ -88,7 +70,8 @@ def R(y_true, y_pred):
     recall = true_positives / (poss_positives + K.epsilon())
     return recall
 
-#f-measure
+
+# f-measure
 def F(y_true, y_pred):
     p_val = P(y_true, y_pred)
     r_val = R(y_true, y_pred)
