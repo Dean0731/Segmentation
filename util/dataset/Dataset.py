@@ -46,7 +46,6 @@ class Dataset:
         return data_type
     def __getGenerator(self,target_size,mask_size,batch_size,data_type,seed=7,num_classes=2,flag=False):
         data_type = self.__getDir(data_type)
-        print(data_type)
         image_datagen = keras.preprocessing.image.ImageDataGenerator(**self.data_gen_args)
         image_generator = image_datagen.flow_from_directory(data_type, target_size=target_size, classes=[self.img_name],
                                                             class_mode=None, seed=seed, batch_size=batch_size,

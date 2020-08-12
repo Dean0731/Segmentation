@@ -65,10 +65,7 @@ if __name__ == '__main__':
     x = tf.random.normal([4,288,288,3])
     softmax = VGG16(x,1000)
     print(softmax.shape)
-    for i in range(4):
-        for j in range(1000):
-            print(int(softmax.numpy()[i,j]),end='')
-        print()
+
     for epoch in range(60):
         for i in range(20):
             x = None
@@ -76,5 +73,5 @@ if __name__ == '__main__':
             with tf.GradientTape() as tape:
                 y_pred = VGG16(n_labels=1000)
                 loss = tf.losses.categorical_crossentropy(y_true=y_true,y_pred=y_pred)
-            grads = tape.gradient(loss,)
+            grads = tape.gradient(loss)
 

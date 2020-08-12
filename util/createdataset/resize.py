@@ -10,7 +10,7 @@ target_size=(288,288)
 target_format = 'tif'
 i = 0
 for root, dirs, files in os.walk(src, topdown=False):
-    temp = root.split('\\Segmentation\\')
+    temp = root.split('\\segmentation\\')
     for name in files:
         img = Image.open(os.path.join(root,name))
         img = img.resize(target_size,Image.ANTIALIAS)

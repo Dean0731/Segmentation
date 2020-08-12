@@ -87,7 +87,7 @@ def make_generator_model(width,height,channel):
 model = make_generator_model(572,572,3)
 #model = make_generator_model(3000,3000,3)
 model.summary()
-# logdir = r'D:\desktop\Files\Workspace\PythonWorkSpace\DeepLearning\Segmentation\event'
+# logdir = r'D:\desktop\Files\Workspace\PythonWorkSpace\DeepLearning\segmentation\event'
 # callbacks = [
 #         tf.keras.callbacks.TensorBoard(logdir),
 #         #tf.keras.callbacks.ModelCheckpoint(output_model_file,save_best_only = True),  # 默认保存最近一次训练,True表示保存效果最好的

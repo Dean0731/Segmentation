@@ -42,7 +42,7 @@ def getNetwork_Model(log=True):
 
     # 获取数据
     # dataset = selectDataset('C',"{}_{}".format('tif',3072),parent='/home/dean/PythonWorkSpace/Segmentation/dataset')
-    dataset = dataset_tools.selectDataset('C',"{}_{}".format('tif',3072),parent='/public1/data/weiht/dzf/workspace/Segmentation/dataset')
+    dataset = dataset_tools.selectDataset('C',"{}_{}".format('tif',3072),parent='/public1/data/weiht/dzf/workspace/segmentation/dataset')
     data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
 
     pre_file = r'h5'

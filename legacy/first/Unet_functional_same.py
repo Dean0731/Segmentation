@@ -93,7 +93,7 @@ dir = r'G:\AI_dataset\DOM\大郭楼-DOM\image-3000'
 image_generator = genGenerator2(dir)
 model = make_generator_model(3072,3072,3)
 model.summary()
-# logdir = r'D:\desktop\Files\Workspace\PythonWorkSpace\DeepLearning\Segmentation\event'
+# logdir = r'D:\desktop\Files\Workspace\PythonWorkSpace\DeepLearning\segmentation\event'
 # callbacks = [
 #         tf.keras.callbacks.TensorBoard(logdir),
 #         #tf.keras.callbacks.ModelCheckpoint(output_model_file,save_best_only = True),  # 默认保存最近一次训练,True表示保存效果最好的
