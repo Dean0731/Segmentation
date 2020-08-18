@@ -67,19 +67,15 @@ def train_on_batch(model,data,steps_per_epoch,epochs,validation_data,validation_
                 if epoch == 5:
                     model.optimizer.lr.assign(model.optimizer.lr/2.0)
                     tf.print("Lowering optimizer Learning Rate...\n\n")
-                step= 1
-                while step < steps_per_epoch+1:
-                    x = next(data[0])
-                    y = next(data[1])
+                step = 1
+                for x,y in data:
                     train_result = model.train_on_batch(x, y)
                     temp_train = dict(zip(model.metrics_names,Tools.getNumbySize(train_result,4)))
                     tf.print("train - step:{: >3}/{} - {}".format(step,steps_per_epoch,temp_train))
                     step = step + 1
 
                 step=1
-                while step < validation_steps+1:
-                    x = next(validation_data[0])
-                    y = next(validation_data[1])
+                for x,y in validation_data:
                     valid_result = model.test_on_batch(x, y,reset_metrics=False)
                     temp_val = dict(zip(model.metrics_names,Tools.getNumbySize(valid_result,4)))
                     tf.print("val - step:{: >3}/{} - {}".format(step,validation_steps,temp_val))
@@ -93,9 +89,7 @@ def train_on_batch(model,data,steps_per_epoch,epochs,validation_data,validation_
 def test_on_batch(model,data,test_steps):
     model.reset_metrics()
     step=1
-    while step < test_steps+1:
-        x = next(data[0])
-        y = next(data[1])
+    for x,y in data:
         test_result = model.test_on_batch(x, y,reset_metrics=False)
         step = step + 1
     tf.print("test - step:{: >3}/{} - {}".format(step-1,test_steps,dict(zip(model.metrics_names,Tools.getNumbySize(test_result,4)))))

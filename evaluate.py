@@ -1,7 +1,6 @@
 import numpy as np
 from tensorflow import keras
-from util.dataset import Dataset
-from util import Tools,Evaluate
+from util import Evaluate, Dataset
 from network import Segnet
 np.set_printoptions(threshold = 1e6)
 def main():
@@ -12,7 +11,7 @@ def main():
     h5 = 'last.h5'
     dataset = 'M'
     print("dataset:",dataset)
-    dataset = Dataset.selectDataset('M',"{}_{}".format('tif',target_size[0]))
+    dataset = Dataset.selectDataset('M', "{}_{}".format('tif', target_size[0]))
     data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
     train_step,val_step,test_step = [dataset.getSize(type)//batch_size for type in ['train','val','testNetwork']]
     model = Segnet.Segnet(target_size[0],target_size[1],3,n_labels=num_classes)

@@ -1,35 +1,28 @@
 import os
-from tensorflow import keras
-from util import Evaluate,Tools
-from util.dataset import dataset_tools
+from util import Evaluate,Tools,Dataset
 from network import Model
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = "3"
-
 def fit(model,data,steps_per_epoch,epochs,validation_data,validation_steps,callbacks):
-    model.fit(data,steps_per_epoch=steps_per_epoch,
-              validation_data=validation_data,validation_steps=validation_steps,
-              epochs=epochs,callbacks=callbacks,
-              #verbose=1,
-              )
+    model.fit(data,epochs=epochs)
     return model
-
-
 def getNetwork_Model(log=True):
     # 必写参数
-    target_size = (768,768)
-    mask_size = (768,768)
+    target_size = (576,576)
+    mask_size = (576,576)
     num_classes = 2
-    batch_size = 4
+    batch_size = 2
 
     # 获取数据
-    # dataset = selectDataset('C',"{}_{}".format('tif',3072),parent='/home/dean/PythonWorkSpace/Segmentation/dataset')
-    dataset = dataset_tools.selectDataset('C',"{}_{}".format('tif',3072),parent='/public1/data/weiht/dzf/workspace/segmentation/dataset')
-    data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
+    dataset = Dataset.Dataset(r'G:\AI_dataset\dom\segmentation\data.txt',target_size,mask_size,num_classes)
+    data,validation_data,test_data = dataset.getTrainValTestDataset()
+    data = data.batch(batch_size)
+    # validation_data = validation_data.batch(batch_size)
 
     pre_file = r'h5'
-    epochs = 160
+    epochs = 1
     period = max(1,epochs/10) # 每1/10 epochs保存一次
-    train_step,val_step,test_step = [dataset.getSize(type)//batch_size for type in ['train','val','test']]
+    # train_step,val_step,test_step = [ i//4 for i in [dataset.train_size,dataset.val_size,dataset.test_size]]
+    train_step,val_step,test_step = 2,2,1
 
 
     # 获取模型
@@ -44,22 +37,23 @@ def getNetwork_Model(log=True):
     else:
         callback,h5_dir = None,None
     return model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir
-
-
 @Tools.Decorator.timer(flag=True)
 def main():
     model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = getNetwork_Model(log=True)
     model = Evaluate.complie(model,lr=0.001,num_classes=num_classes)
     model = fit(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,callbacks=callback)
-    model.save_weights(os.path.join(h5_dir, 'last.h5'))
-    model.evaluate(test_data,steps=test_step)
-
+    # model.save_weights(os.path.join(h5_dir, 'last.h5'))
+    # model.evaluate(test_data)
 
 if __name__ == '__main__':
-    try:
-        ret, time = main()
-        msg ="The job had cost about {:.2f}小时".format(time//3600)
-    except Exception as error:
-        msg = '程序错误，终止！\n{}'.format(error)
-    finally:
-        Tools.sendMessage(msg)
+    main()
+    # msg = ""
+    # try:
+    #     ret, time = main()
+    #     m, s = divmod(time, 60)
+    #     h, m = divmod(m, 60)
+    #     msg ="The job had cost about {}h{}m{}s".format(h,m,int(s))
+    # except Exception as error:
+    #     msg = '程序错误，终止！\n{}'.format(error)
+    # finally:
+    #     Tools.sendMessage(msg)

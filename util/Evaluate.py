@@ -25,10 +25,10 @@ def complie(model,lr,num_classes):
         loss="categorical_crossentropy",
         optimizer=keras.optimizers.Adam(lr=lr),
         metrics=[
-            tf.metrics.CategoricalAccuracy(),
-            MyMeanIOU(num_classes=num_classes),
-            MyPrecusion(),
-            MyRecall(),
+            # tf.metrics.CategoricalAccuracy(),
+            # MyMeanIOU(num_classes=num_classes),
+            # MyPrecusion(),
+            # MyRecall(),
         ]
     )
     return model
