@@ -50,7 +50,7 @@ def myDefine(model,data,steps_per_epoch,epochs,validation_data,validation_steps,
             x = next(validation_data[0])
             y = next(validation_data[1])
             valid_step(model,x,y)
-            tf.print("val - step:{: >3}/{} - {{loss:{:4f},categorical_accuracy:{:4f}}}".format(step,validation_steps,valid_loss.result(),val_metric_acc.result()))
+            tf.print("val - step:{: >3}/{} - {{loss:{:4f},categorical_accuracy:{:4f}}}".format(step,validation_steps,valid_loss.result(),valid_metric_acc.result()))
         train_loss.reset_states()
         valid_loss.reset_states()
         train_metric_acc.reset_states()
