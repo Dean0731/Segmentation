@@ -5,25 +5,6 @@ from util.dataset import dataset_tools
 from network import Model
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = "3"
 
-
-def complie(model,lr,num_classes):
-    model.compile(
-        loss="categorical_crossentropy",
-        optimizer=keras.optimizers.Adam(lr=lr),
-        metrics=[
-            Evaluate.MyAccuracy(),
-            Evaluate.MyMeanIOU(num_classes=num_classes),
-            Evaluate.MyPrecusion(),
-            Evaluate.MyRecall(),
-            # Evaluate.AveragePrecision
-            # Evaluate.P,
-            # Evaluate.R,
-            Evaluate.F,
-        ]
-    )
-    return model
-
-
 def fit(model,data,steps_per_epoch,epochs,validation_data,validation_steps,callbacks):
     model.fit(data,steps_per_epoch=steps_per_epoch,
               validation_data=validation_data,validation_steps=validation_steps,
@@ -68,7 +49,7 @@ def getNetwork_Model(log=True):
 @Tools.Decorator.timer(flag=True)
 def main():
     model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = getNetwork_Model(log=True)
-    model = complie(model,lr=0.001,num_classes=num_classes)
+    model = Evaluate.complie(model,lr=0.001,num_classes=num_classes)
     model = fit(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,callbacks=callback)
     model.save_weights(os.path.join(h5_dir, 'last.h5'))
     model.evaluate(test_data,steps=test_step)

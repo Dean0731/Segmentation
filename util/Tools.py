@@ -118,6 +118,12 @@ def get_dir(parent=None):
         if not os.path.exists(i):
             os.makedirs(i)
     return log_dir,h5_dir,event_dir
+def getNumbySize(num,n):
+    if type(num) == 'float':
+        return round(num,n)
+    else:
+        return [ round(i,n) for i in num]
+
 from network import Model
 if __name__ == '__main__':
     # model = Model.getModel('mysegnet',(2816,2816),n_labels=2)

@@ -1,61 +1,105 @@
 import os
-from tensorflow import keras
 import tensorflow as tf
 from util import Evaluate,Tools
 from util.dataset import dataset_tools
 from network import Model
-import datetime
+import datetime,json
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = "3"
 
+# 自定义，不能用因为，写的不好，OOM异常
+def myDefine(model,data,steps_per_epoch,epochs,validation_data,validation_steps,log_dir):
+    optimizer = tf.optimizers.Nadam()
+    loss_func = tf.losses.CategoricalCrossentropy()
 
-def fit2(model,data,steps_per_epoch,epochs,validation_data,validation_steps,callbacks):
-    x = data[0][0]  # 576
-    x1 = data[1][0] # 3072
-    y = data[0][1]  # 576
-    val_x = validation_data[0][0]  # 576
-    val_x1 = validation_data[1][0] # 3072
-    val_y = validation_data[0][1]  # 576
+    train_loss = tf.metrics.Mean(name='train_loss')
+    train_metric_acc = tf.metrics.CategoricalAccuracy(name='train_accuracy')
 
-    acc_meter = Evaluate.keras.metrics.Accuracy()
-    op = tf.keras.optimizers.Adam(0.01)
+    valid_loss = tf.metrics.Mean(name='valid_loss')
+    valid_metric_acc = tf.metrics.CategoricalAccuracy(name='valid_accuracy')
 
-    for epoch in range(epochs):
-        for step in range(steps_per_epoch):
-            x_img = [x.__next__(),x1.__next__()]
-            y_label = y.__next__()
+    @tf.function
+    def train_step(model, features, labels):
+        with tf.GradientTape() as tape:
+            predictions = model(features,training = True)
+            loss = loss_func(labels, predictions)
+        gradients = tape.gradient(loss, model.trainable_variables)
+        optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+        train_loss.update_state(loss)
+        train_metric_acc.update_state(labels, predictions)
 
-            with tf.GradientTape() as tape:
-                loss = tf.losses.categorical_crossentropy(y_label,model([x_img]))
-                # loss = tf.losses.binary_crossentropy(y_label,model([x_img]))
-            grads = tape.gradient(loss,model.trainable_variables) # 求梯度
-            op.apply_gradients(zip(grads,model.trainable_variables)) # 更新梯度 w = w - delta
-            print("epochs:{}/{},step:{}/{},loss:{:5f}".format(epoch,epochs,step,steps_per_epoch,tf.reduce_mean(loss).numpy()))   # numpy() 将tensor转化为变量
-def complie(model,lr,num_classes):
-    model.compile(
-        loss="categorical_crossentropy",
-        optimizer=keras.optimizers.Adam(lr=lr),
-        metrics=[
-            Evaluate.MyAccuracy(),
-            Evaluate.MyMeanIOU(num_classes=num_classes),
-            Evaluate.MyPrecusion(),
-            Evaluate.MyRecall(),
-            # Evaluate.AveragePrecision
-            # Evaluate.P,
-            # Evaluate.R,
-            Evaluate.F,
-        ]
-    )
+
+    @tf.function
+    def valid_step(model, features, labels):
+        predictions = model(features)
+        batch_loss = loss_func(labels, predictions)
+        valid_loss.update_state(batch_loss)
+        valid_metric_acc.update_state(labels, predictions)
+
+
+    for epoch in tf.range(1,epochs+1):
+        tf.print("Epoch {}/{}:".format(epoch,epochs))
+        step= 1
+        while step < steps_per_epoch+1:
+            x = next(data[0])
+            y = next(data[1])
+            train_step(model,x,y)
+            tf.print("train - step:{: >3}/{} - {{loss:{:4f},categorical_accuracy:{:4f}}}".format(step,steps_per_epoch,train_loss.result(),train_metric_acc.result()))
+
+        step=1
+        while step < validation_steps+1:
+            x = next(validation_data[0])
+            y = next(validation_data[1])
+            valid_step(model,x,y)
+            tf.print("val - step:{: >3}/{} - {{loss:{:4f},categorical_accuracy:{:4f}}}".format(step,validation_steps,valid_loss.result(),val_metric_acc.result()))
+        train_loss.reset_states()
+        valid_loss.reset_states()
+        train_metric_acc.reset_states()
+        valid_metric_acc.reset_states()
+
+
+
+def train_on_batch(model,data,steps_per_epoch,epochs,validation_data,validation_steps,log_dir):
+    with open(os.path.join(log_dir,'train.log'),'w',encoding='UTF-8')as f:
+        with open(os.path.join(log_dir,'val.log'),'w',encoding="UTF-8")as f2:
+            for epoch in tf.range(1,epochs+1):
+                tf.print("Epoch {}/{}:".format(epoch,epochs))
+                model.reset_metrics()
+                # 在后期降低学习率
+                if epoch == 5:
+                    model.optimizer.lr.assign(model.optimizer.lr/2.0)
+                    tf.print("Lowering optimizer Learning Rate...\n\n")
+                step= 1
+                while step < steps_per_epoch+1:
+                    x = next(data[0])
+                    y = next(data[1])
+                    train_result = model.train_on_batch(x, y)
+                    temp_train = dict(zip(model.metrics_names,Tools.getNumbySize(train_result,4)))
+                    tf.print("train - step:{: >3}/{} - {}".format(step,steps_per_epoch,temp_train))
+                    step = step + 1
+
+                step=1
+                while step < validation_steps+1:
+                    x = next(validation_data[0])
+                    y = next(validation_data[1])
+                    valid_result = model.test_on_batch(x, y,reset_metrics=False)
+                    temp_val = dict(zip(model.metrics_names,Tools.getNumbySize(valid_result,4)))
+                    tf.print("val - step:{: >3}/{} - {}".format(step,validation_steps,temp_val))
+                    step = step + 1
+                f.write(json.dumps(temp_train)+"\n")
+                f2.write(json.dumps(temp_val)+"\n")
     return model
 
-def fit(model,data,steps_per_epoch,epochs,validation_data,validation_steps,callbacks):
-    print(type(data[0]))
-    print(type(data[1]))
-    model.fit(x=data[0],y=data[1],steps_per_epoch=steps_per_epoch,
-              # validation_data=validation_data,validation_steps=validation_steps,
-              epochs=epochs,callbacks=callbacks,
-              #verbose=1,
-              )
-    return model
+def test_on_batch(model,data,test_steps):
+    model.reset_metrics()
+    step=1
+    while step < test_steps+1:
+        x = next(data[0])
+        y = next(data[1])
+        test_result = model.test_on_batch(x, y,reset_metrics=False)
+        step = step + 1
+    tf.print("test - step:{: >3}/{} - {}".format(step-1,test_steps,dict(zip(model.metrics_names,Tools.getNumbySize(test_result,4)))))
+    return model;
+
 
 def getNetwork_Model(log=True):
     # 必写参数
@@ -66,18 +110,14 @@ def getNetwork_Model(log=True):
     batch_size = 2
 
     # 获取数据
-    # dataset = selectDataset('C',"{}_{}".format('tif',3072),parent='/home/dean/PythonWorkSpace/segmentation/dataset')
     dataset = dataset_tools.selectDataset('C2',"{}_{}".format('tif',3072),parent='/home/dean/PythonWorkSpace/Segmentation/dataset')
-
     data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
 
-
     pre_file = r'h5'
-    epochs = 160
+    epochs = 80
     period = max(1,epochs/10) # 每1/10 epochs保存一次
-    # train_step,val_step,test_step = [dataset.getSize(type)//batch_size for type in ['train','val','test']]
-    train_step,val_step,test_step = 500,26,26
-
+    train_step,val_step,test_step = [dataset.getSize(type)//batch_size for type in ['train','val','test']]
+    # train_step,val_step,test_step = 3,2,1
 
     # 获取模型
     model = Model.getModel('mysegnet_4',target_size,n_labels=2)
@@ -95,17 +135,27 @@ def getNetwork_Model(log=True):
 
 @Tools.Decorator.timer(flag=True)
 def main():
+    tf.print("开始训练".center(20,'*'))
     model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = getNetwork_Model(log=True)
-    model = complie(model,lr=0.001,num_classes=num_classes)
-    model = fit(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,callbacks=callback)
+    model = Evaluate.complie(model,lr=0.001,num_classes=num_classes)
+    model = train_on_batch(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,log_dir=h5_dir)
+    model = test_on_batch(model,test_data,test_step)
+    tf.print("训练结束".center(20,'*'))
 
-
+@Tools.Decorator.timer(flag=True)
+def main2():
+    tf.print("开始训练".center(20,'*'))
+    model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = getNetwork_Model(log=True)
+    model = myDefine(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,log_dir=h5_dir)
+    tf.print("训练结束".center(20,'*'))
 if __name__ == '__main__':
-    ret, time = main()
-    # try:
-    #     ret, time = main()
-    #     msg ="The job had cost about {:.2f}小时".format(time//3600)
-    # except Exception as error:
-    #     msg = '程序错误，终止！\n{}'.format(error)
-    # finally:
-    #     Tools.sendMessage(msg)
+    msg = ""
+    try:
+        ret, time = main()
+        m, s = divmod(time, 60)
+        h, m = divmod(m, 60)
+        msg ="The job had cost about {}h{}m{}s".format(h,m,int(s))
+    except Exception as error:
+        msg = '程序错误，终止！\n{}'.format(error)
+    finally:
+        Tools.sendMessage(msg)

@@ -10,6 +10,29 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import backend as K
 
+class MyMeanIOU(tf.keras.metrics.MeanIoU):
+    def update_state(self, y_true, y_pred, sample_weight=None):
+        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
+class MyPrecusion(tf.keras.metrics.Precision):
+    def update_state(self, y_true, y_pred, sample_weight=None):
+        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
+class MyRecall(tf.keras.metrics.Recall):
+    def update_state(self, y_true, y_pred, sample_weight=None):
+        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
+
+def complie(model,lr,num_classes):
+    model.compile(
+        loss="categorical_crossentropy",
+        optimizer=keras.optimizers.Adam(lr=lr),
+        metrics=[
+            tf.metrics.CategoricalAccuracy(),
+            MyMeanIOU(num_classes=num_classes),
+            MyPrecusion(),
+            MyRecall(),
+        ]
+    )
+    return model
+
 def getCallBack(log_dir, h5_dir, event_dir, period):
 
     tensorBoardDir = keras.callbacks.TensorBoard(log_dir=event_dir)
@@ -36,45 +59,3 @@ def getCallBack(log_dir, h5_dir, event_dir, period):
 
     learningRateScheduler = tf.keras.callbacks.LearningRateScheduler(scheduler)
     return [tensorBoardDir, checkpoint]
-
-class MyMeanIOU(tf.keras.metrics.MeanIoU):
-    def update_state(self, y_true, y_pred, sample_weight=None):
-        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
-class MyAccuracy(tf.keras.metrics.Accuracy):
-    def update_state(self, y_true, y_pred, sample_weight=None):
-        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
-class MyPrecusion(tf.keras.metrics.Precision):
-    def update_state(self, y_true, y_pred, sample_weight=None):
-        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
-class MyRecall(tf.keras.metrics.Recall):
-    def update_state(self, y_true, y_pred, sample_weight=None):
-        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
-
-
-
-
-
-def P(y_true, y_pred):
-    y_true,y_pred = K.cast(K.argmax(y_true,axis=-1),'float32'),K.cast(K.argmax(y_pred,axis=-1),'float32')
-    true_positives = K.sum(K.cast(K.greater(K.clip(y_true * y_pred, 0, 1), 0.20), 'float32'))
-    pred_positives = K.sum(K.cast(K.greater(K.clip(y_pred, 0, 1), 0.20), 'float32'))
-
-    precision = true_positives / (pred_positives + K.epsilon())
-    return precision
-
-
-def R(y_true, y_pred):
-    y_true,y_pred = K.cast(K.argmax(y_true,axis=-1),'float32'),K.cast(K.argmax(y_pred,axis=-1),'float32')
-    true_positives = K.sum(K.cast(K.greater(K.clip(y_true * y_pred, 0, 1), 0.20), 'float32'))
-    poss_positives = K.sum(K.cast(K.greater(K.clip(y_true, 0, 1), 0.20), 'float32'))
-    recall = true_positives / (poss_positives + K.epsilon())
-    return recall
-
-
-# f-measure
-def F(y_true, y_pred):
-    p_val = P(y_true, y_pred)
-    r_val = R(y_true, y_pred)
-    f_val = 2*p_val*r_val / (p_val + r_val)
-
-    return f_val

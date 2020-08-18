@@ -55,7 +55,9 @@ class CountrySide2(Dataset.Dataset):
             lines = f.readlines()
         length = len(lines)
         train,val,test= lines[0:int(length/10*8)],lines[int(length/10*8):int(length/10*9)],lines[int(length/10*9):length]
-
+        self.size['train'].append(len(train))
+        self.size['test'].append(len(test))
+        self.size['val'].append(len(val))
         train_img = self.getGernerator(type='img',size=target_size,batch_size=batch_size,lines=train)
         train_label = self.getGernerator(type='label_png',size=target_size,batch_size=batch_size,lines=train)
         val_img = self.getGernerator(type='img',size=target_size,batch_size=batch_size,lines=val)
@@ -78,13 +80,13 @@ class CountrySide2(Dataset.Dataset):
                 for _ in range(batch_size):
                     image = Image.open(lines[i])
 
-                    images = image.resize(size)
-                    images = np.array(images)
-                    img.append(images)
+                    image_1 = image.resize(size)
+                    image_1 = np.array(image_1)
+                    img.append(image_1)
 
-                    images = images.resize((3072,3072))
-                    images = np.array(images)
-                    img2.append(images)
+                    image_2 = image.resize((3072,3072))
+                    image_2 = np.array(image_2)
+                    img2.append(image_2)
 
                     if i == (len(lines)-1):
                         i=0
@@ -113,6 +115,11 @@ class CountrySide2(Dataset.Dataset):
         else:
             print("根据文件创作生成器失败")
             exit()
+    def getSize(self,data_type):
+        if self.size[data_type] == []:
+            print("数据读取错误")
+            exit();
+        return self.size.get(data_type)[0]
 if __name__ == '__main__':
     dataset = CountrySide(parent= './dataset',data_size='tif_576')
     print(dataset.train_dir)
