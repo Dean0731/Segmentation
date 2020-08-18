@@ -17,7 +17,7 @@ def myDefine(model,data,steps_per_epoch,epochs,validation_data,validation_steps,
     valid_loss = tf.metrics.Mean(name='valid_loss')
     valid_metric_acc = tf.metrics.CategoricalAccuracy(name='valid_accuracy')
 
-    @tf.function
+    # @tf.function,加上会多占内存
     def train_step(model, features, labels):
         with tf.GradientTape() as tape:
             predictions = model(features,training = True)
@@ -28,7 +28,7 @@ def myDefine(model,data,steps_per_epoch,epochs,validation_data,validation_steps,
         train_metric_acc.update_state(labels, predictions)
 
 
-    @tf.function
+    # @tf.function
     def valid_step(model, features, labels):
         predictions = model(features)
         batch_loss = loss_func(labels, predictions)
