@@ -121,57 +121,6 @@ class CountrySide2(Dataset.Dataset):
             print("数据读取错误")
             exit();
         return self.size.get(data_type)[0]
-class CountrySide3(Dataset.Dataset):
-
-    def __init__(self,parent,dir=('img', 'label_png'),shapeToOneDimension = False,data_size='tif_576'):
-        Dataset.Dataset.__init__(self,parent,dir,shapeToOneDimension,data_size)
-    def getData(self,target_size=(64, 64),mask_size=(64,64),batch_size = 4,num_classes=2):
-        dataset = tf.data.Dataset.from_generator(self.getGernerator,output_types=((tf.int8,tf.int8),tf.int8),args=(batch_size,target_size,mask_size,num_classes))
-        return dataset
-    def getGernerator(self,batch_size,target_size=(576,576),mask_size=(576,576),num_classes=2):
-        with open(os.path.join(self.parent,'dom/data.txt'),encoding='utf-8') as f:
-            lines = f.readlines()
-        lines_x = []
-        lines_y = []
-
-        for k in lines:
-            lines_x.append(os.path.join(self.parent,k.strip().split(';')[0]))
-            lines_y.append(os.path.join(self.parent,k.strip().split(';')[1]))
-        i=0
-        while 1:
-            x_1 =[]
-            x_2 = []
-            y = []
-            for _ in range(batch_size):
-                image = Image.open(lines_x[i])
-                image_1 = image.resize(target_size)
-                image_1 = np.array(image_1)
-                x_1.append(image_1)
-
-                image_2 = image.resize((3072,3072))
-                image_2 = np.array(image_2)
-                x_2.append(image_2)
-
-                label = Image.open(lines_y[i])
-
-                label = label.resize(mask_size)
-                label = np.array(label)
-                new_label = np.zeros(label.shape + (num_classes,)).astype(int)  # (w,h,num_classes)
-                for m, n in zip(range(num_classes), [0,1]):
-                    new_label[:, :, m] = (n == label[:, :])
-                y.append(new_label)
-
-                if i == (len(lines)-1):
-                    i=0
-                else:
-                    i=i+1
-            yield ((np.array(x_1),np.array(x_2)),y)
-
-    def getSize(self,data_type):
-        if self.size[data_type] == []:
-            print("数据读取错误")
-            exit();
-        return self.size.get(data_type)[0]
 if __name__ == '__main__':
     dataset = CountrySide(parent= './dataset',data_size='tif_576')
     print(dataset.train_dir)
