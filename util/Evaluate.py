@@ -8,7 +8,6 @@
 import os
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras import backend as K
 
 class MyMeanIOU(tf.keras.metrics.MeanIoU):
     def update_state(self, y_true, y_pred, sample_weight=None):
@@ -25,10 +24,10 @@ def complie(model,lr,num_classes):
         loss="categorical_crossentropy",
         optimizer=keras.optimizers.Adam(lr=lr),
         metrics=[
-            # tf.metrics.CategoricalAccuracy(),
-            # MyMeanIOU(num_classes=num_classes),
-            # MyPrecusion(),
-            # MyRecall(),
+            tf.metrics.CategoricalAccuracy(),
+            MyMeanIOU(num_classes=num_classes),
+            MyPrecusion(),
+            MyRecall(),
         ]
     )
     return model

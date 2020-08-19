@@ -151,14 +151,16 @@ def main2():
     model = myDefine(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,log_dir=h5_dir)
     tf.print("训练结束".center(20,'*'))
 if __name__ == '__main__':
-    main()
-    # msg = ""
-    # try:
-    #     ret, time = main()
-    #     m, s = divmod(time, 60)
-    #     h, m = divmod(m, 60)
-    #     msg ="The job had cost about {}h{}m{}s".format(h,m,int(s))
-    # except Exception as error:
-    #     msg = '程序错误，终止！\n{}'.format(error)
-    # finally:
-    #     Tools.sendMessage(msg)
+    msg = ""
+    try:
+        ret, time = main()
+        m, s = divmod(time, 60)
+        h, m = divmod(m, 60)
+        msg ="The job had cost about {}h{}m{}s".format(h,m,int(s))
+    except Exception as error:
+        msg = '程序错误，终止！\n{}'.format(error)
+    finally:
+        if msg==None:
+            Tools.sendMessage(msg)
+        else:
+            Tools.sendMessage("msg为空")
