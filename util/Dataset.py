@@ -66,7 +66,7 @@ class Dataset:
                 new_label_numpy[:, :, m] = (n == label_numpy[:, :])
             y = new_label_numpy
             if i == (len(lines_x)-1):
-                i=0
+                break
             else:
                 i=i+1
             yield (x,y)
@@ -111,7 +111,7 @@ class CountrySide(Dataset):
             y = new_label_numpy
 
             if i == (len(lines_x)-1):
-                i=0;
+                break
             else:
                 i=i+1
             yield ((x_1,x_2),y)

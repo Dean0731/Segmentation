@@ -118,6 +118,7 @@ def get_dir(parent=None):
         if not os.path.exists(i):
             os.makedirs(i)
     return log_dir,h5_dir,event_dir
+
 def getNumbySize(num,n):
     if type(num) == 'float':
         return round(num,n)

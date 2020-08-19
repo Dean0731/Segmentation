@@ -1,7 +1,7 @@
 from PIL import Image
 import numpy as np
 import os
-from network import Segnet,Unet,Mine_Segnet_1
+from network import Model
 np.set_printoptions(threshold = 1e6)
 
 def main():
@@ -12,7 +12,7 @@ def main():
     set='testSet'
     set='M-testSet'
 
-    model = Segnet.Segnet(target_size[0], target_size[1], 3, n_labels=num_classes)
+    model = Model.getModel("segnet",target_size,n_labels=num_classes)
     model.load_weights(h5)
 
     dir = os.path.join('source\images\img',set)

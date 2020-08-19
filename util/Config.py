@@ -8,7 +8,8 @@
 import os
 import tensorflow as tf
 from tensorflow import keras
-
+from util import Tools
+from network import Model
 class MyMeanIOU(tf.keras.metrics.MeanIoU):
     def update_state(self, y_true, y_pred, sample_weight=None):
         return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
@@ -32,7 +33,7 @@ def complie(model,lr,num_classes):
     )
     return model
 
-def getCallBack(log_dir, h5_dir, event_dir, period):
+def getCallBack(h5_dir, event_dir, period):
 
     tensorBoardDir = keras.callbacks.TensorBoard(log_dir=event_dir)
     checkpoint = keras.callbacks.ModelCheckpoint(
@@ -58,3 +59,29 @@ def getCallBack(log_dir, h5_dir, event_dir, period):
 
     learningRateScheduler = tf.keras.callbacks.LearningRateScheduler(scheduler)
     return [tensorBoardDir, checkpoint]
+
+def getNetwork_Model(model,dataset,batch_size,target_size,num_classes,log=True):
+    # 必写参数
+
+    data,validation_data,test_data = dataset.getTrainValTestDataset()
+    data = data.batch(batch_size)
+    validation_data = validation_data.batch(batch_size)
+    test_data =test_data.batch(batch_size)
+
+    pre_file = r'h5'
+    epochs = 80
+    period = max(1,epochs/10) # 每1/10 epochs保存一次
+    train_step,val_step,test_step =[ i//batch_size for i in[dataset.train_size,dataset.val_size,dataset.test_size]]
+
+    # 获取模型
+    model = Model.getModel(model,target_size,n_labels=num_classes)
+    # 是否有与预训练文件，有的话导入
+    if os.path.exists(pre_file):
+        model.load_weights(pre_file)
+    # 生成参数日志文件夹
+    if log:
+        log_dir,h5_dir,event_dir = Tools.get_dir()
+        callback = getCallBack(h5_dir,event_dir,period)
+    else:
+        callback,h5_dir = None,None
+    return model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir

@@ -1,7 +1,7 @@
 import numpy as np
-from tensorflow import keras
-from util import Evaluate, Dataset
-from network import Segnet
+import tensorflow as tf
+from util import Config, Dataset
+from network import Model
 np.set_printoptions(threshold = 1e6)
 def main():
     target_size = (576,576)
@@ -9,19 +9,25 @@ def main():
     num_classes = 2
     batch_size = 2
     h5 = 'last.h5'
-    dataset = 'M'
-    print("dataset:",dataset)
-    dataset = Dataset.selectDataset('M', "{}_{}".format('tif', target_size[0]))
-    data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
-    train_step,val_step,test_step = [dataset.getSize(type)//batch_size for type in ['train','val','testNetwork']]
-    model = Segnet.Segnet(target_size[0],target_size[1],3,n_labels=num_classes)
+
+
+    dataset = Dataset.Dataset(r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation/data.txt',target_size,mask_size,num_classes)
+    data,validation_data,test_data = dataset.getTrainValTestDataset()
+    data = data.batch(batch_size)
+    validation_data = validation_data.batch(batch_size)
+    test_data =test_data.batch(batch_size)
+    train_step,val_step,test_step =[ i//batch_size for i in[dataset.train_size,dataset.val_size,dataset.test_size]]
+
+    model = Model.getModel("segnet",target_size,n_labels=num_classes)
     print("model name:",model.name)
     model.load_weights(h5)
-    model.compile(loss="categorical_crossentropy",optimizer=keras.optimizers.Adam(lr=0.001),
-                  metrics=[Evaluate.MyMeanIOU(num_classes=2), "acc"]
-                  #metrics=['acc']
+    model.compile(loss="categorical_crossentropy",optimizer=tf.keras.optimizers.Adam(lr=0.001),
+                  metrics=[
+                        Config.MyMeanIOU(num_classes=2),
+                        tf.metrics.CategoricalAccuracy(),
+                  ]
     )
-    model.evaluate(test_data,steps=test_step,)
+    model.evaluate(test_data,steps=test_step)
 
 if __name__ == '__main__':
     main()
