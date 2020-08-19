@@ -60,7 +60,7 @@ def getCallBack(h5_dir, event_dir, period):
     learningRateScheduler = tf.keras.callbacks.LearningRateScheduler(scheduler)
     return [tensorBoardDir, checkpoint]
 
-def getNetwork_Model(model,dataset,batch_size,target_size,num_classes,log=True):
+def getNetwork_Model(dataset,batch_size,target_size,num_classes,log=True):
     # 必写参数
 
     data,validation_data,test_data = dataset.getTrainValTestDataset()
@@ -68,11 +68,12 @@ def getNetwork_Model(model,dataset,batch_size,target_size,num_classes,log=True):
     validation_data = validation_data.batch(batch_size)
     test_data =test_data.batch(batch_size)
 
+    model="mysegnet_3"
     pre_file = r'h5'
-    epochs = 80
+    epochs= 80
     period = max(1,epochs/10) # 每1/10 epochs保存一次
     train_step,val_step,test_step =[ i//batch_size for i in[dataset.train_size,dataset.val_size,dataset.test_size]]
-
+    # train_step,val_step,test_step = 3,2,1
     # 获取模型
     model = Model.getModel(model,target_size,n_labels=num_classes)
     # 是否有与预训练文件，有的话导入
@@ -85,3 +86,9 @@ def getNetwork_Model(model,dataset,batch_size,target_size,num_classes,log=True):
     else:
         callback,h5_dir = None,None
     return model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir
+
+class Path:
+    Shiyanshi_benji = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\dom\segmentation\data.txt'
+    Shiyanshi_hu= r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation/data.txt'
+    lENOVO_PC = r'G:\AI_dataset\dom\segmentation\data.txt'
+    Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation/data.txt'

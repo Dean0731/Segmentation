@@ -124,11 +124,14 @@ def getNumbySize(num,n):
         return round(num,n)
     else:
         return [ round(i,n) for i in num]
-
+def getSecondToTime(seconds):
+    m, s = divmod(seconds, 60)
+    h, m = divmod(m, 60)
+    return h,m,s
 from network import Model
 if __name__ == '__main__':
     # model = Model.getModel('mysegnet',(2816,2816),n_labels=2)
-    target_size = 512,512
-    model = Model.getModel('mysegnet_4',target_size,n_labels=2)
+    target_size = 256,256
+    model = Model.getModel('mysegnet_3',target_size,n_labels=2)
     # model.summary()
     computerNetworkSize(model)

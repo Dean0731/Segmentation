@@ -87,83 +87,58 @@ def train_on_batch(model,data,steps_per_epoch,epochs,validation_data,validation_
                         break
                 f.write(json.dumps(temp_train)+"\n")
                 f2.write(json.dumps(temp_val)+"\n")
-                f.flush()
-                f2.flush()
                 if epoch%10==0:
-                    model.save_weight("epoch_{}.h5".format(epochs))
+                    model.save("epoch_{}.h5".format(epochs))
     return model
 
 def test_on_batch(model,data,test_steps):
     model.reset_metrics()
     step=1
+    test_result=None
     for x,y in data:
         test_result = model.test_on_batch(x, y,reset_metrics=False)
         step = step + 1
         if step==test_steps+1:
-            break;
+            break
     tf.print("test - step:{: >3}/{} - {}".format(step-1,test_steps,dict(zip(model.metrics_names,Tools.getNumbySize(test_result,4)))))
-    return model;
+    return model
 
 # model.fit  compile --->train
 @Tools.Decorator.timer(flag=True)
-def main():
-    # 获取数据
-    target_size = (512,512)
-    mask_size = (512,512)
-    num_classes = 2
-    batch_size = 2
-    # dataset = Dataset.Dataset(r'G:\AI_dataset\dom\segmentation\data.txt',target_size,mask_size,num_classes)
-    dataset = Dataset.Dataset(r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation/data.txt',target_size,mask_size,num_classes)
-    #dataset = Dataset.CountrySide(r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation/data.txt',target_size,mask_size,num_classes)
-
+def main(target_size,batch_size,num_classes,dataset):
     tf.print("开始训练".center(20,'*'))
-    model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = Config.getNetwork_Model("mysegnet_4", dataset, batch_size, target_size, num_classes)
+    model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = Config.getNetwork_Model(dataset, batch_size, target_size, num_classes)
     model = Config.complie(model, lr=0.001, num_classes=num_classes)
     model.fit(data, validation_data=validation_data,steps_per_epoch=train_step,validation_steps=val_step,epochs=epochs,callbacks=callback,verbose=1)
     model.save_weights(os.path.join(h5_dir, 'last.h5'))
     model.evaluate(test_data,steps=test_step)
     tf.print("训练结束".center(20,'*'))
-
 # model.train_on_batch compile    ----> train（自己可以控制）
 @Tools.Decorator.timer(flag=True)
-def main1():
-    # 获取数据
-    target_size = (512,512)
-    mask_size = (512,512)
-    num_classes = 2
-    batch_size = 2
-    # dataset = Dataset.Dataset(r'G:\AI_dataset\dom\segmentation\data.txt',target_size,mask_size,num_classes)
-    dataset = Dataset.Dataset(r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation/data.txt',target_size,mask_size,num_classes)
-    #dataset = Dataset.CountrySide(r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation/data.txt',target_size,mask_size,num_classes)
-    #dataset = Dataset.CountrySide(r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\dom\segmentation\data.txt',target_size,mask_size,num_classes)
-
+def main1(target_size,batch_size,num_classes,dataset):
     tf.print("开始训练".center(20,'*'))
-    model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = Config.getNetwork_Model("mysegnet_4", dataset, batch_size, target_size, num_classes)
+    model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = Config.getNetwork_Model(dataset, batch_size, target_size, num_classes)
     model = Config.complie(model, lr=0.001, num_classes=num_classes)
     model = train_on_batch(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,log_dir=h5_dir)
     tf.print("训练结束".center(20,'*'))
     tf.print("测试集开始测试".center(20,'*'))
     model = test_on_batch(model,test_data,test_step)
-
 # 自定义 compile 自定义train
 @Tools.Decorator.timer(flag=True)
-def main2():
-    # 获取数据
-    target_size = (512,512)
-    mask_size = (512,512)
-    num_classes = 2
-    batch_size = 2
-    # dataset = Dataset.Dataset(r'G:\AI_dataset\dom\segmentation\data.txt',target_size,mask_size,num_classes)
-    dataset = Dataset.Dataset(r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation/data.txt',target_size,mask_size,num_classes)
-    #dataset = Dataset.CountrySide(r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation/data.txt',target_size,mask_size,num_classes)
-
+def main2(target_size,batch_size,num_classes,dataset):
     tf.print("开始训练".center(20,'*'))
-    model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = Config.getNetwork_Model("mysegnet_4", dataset, batch_size, target_size, num_classes)
+    model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = Config.getNetwork_Model(dataset, batch_size, target_size, num_classes)
     model = myDefine(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,log_dir=h5_dir)
     tf.print("训练结束".center(20,'*'))
 if __name__ == '__main__':
-    ret, time = main2()
-    m, s = divmod(time, 60)
-    h, m = divmod(m, 60)
-    msg ="The job had cost about {}h{}m{}s".format(h,m,int(s))
+    # 获取数据
+    target_size = (256,256)
+    mask_size = target_size
+    num_classes = 2
+    batch_size = 2
+    data_txt_path = Config.Path.Shiyanshi_hu
+    dataset = Dataset.CountrySide(data_txt_path,target_size,mask_size,num_classes)
+
+    ret, seconds = main1(target_size,batch_size,num_classes,dataset)
+    msg ="The job had cost about {}h{}m{}s".format(Tools.getSecondToTime(seconds))
     Tools.sendMessage(msg)

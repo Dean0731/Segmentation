@@ -12,8 +12,7 @@ def main():
     batch_size = 2
 
     # 获取数据
-    # dataset = Dataset.Dataset(r'G:\AI_dataset\dom\segmentation\data.txt',target_size,mask_size,num_classes)
-    dataset = Dataset.Dataset(r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation/data.txt',target_size,mask_size,num_classes)
+    dataset = Dataset.Dataset(Config.Path.Shiyanshi_hu,target_size,mask_size,num_classes)
     tf.print("开始训练".center(20,'*'))
     model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = Config.getNetwork_Model("segnet", dataset, batch_size, target_size, num_classes)
     model = Config.complie(model, lr=0.001, num_classes=num_classes)
