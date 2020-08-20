@@ -46,7 +46,7 @@ def myDefine(model,data,steps_per_epoch,epochs,validation_data,validation_steps,
             if step==steps_per_epoch+1:
                 break
         step=1
-        for x,y in data:
+        for x,y in validation_data:
             valid_step(model,x,y)
             tf.print("val - step:{: >3}/{} - {{loss:{:4f},categorical_accuracy:{:4f}}}".format(step,validation_steps,valid_loss.result(),valid_metric_acc.result()))
             step = step+1
@@ -105,40 +105,47 @@ def test_on_batch(model,data,test_steps):
 
 # model.fit  compile --->train
 @Tools.Decorator.timer(flag=True)
-def main(target_size,batch_size,num_classes,dataset):
-    tf.print("开始训练".center(20,'*'))
-    model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = Config.getNetwork_Model(dataset, batch_size, target_size, num_classes)
-    model = Config.complie(model, lr=0.001, num_classes=num_classes)
-    model.fit(data, validation_data=validation_data,steps_per_epoch=train_step,validation_steps=val_step,epochs=epochs,callbacks=callback,verbose=1)
-    model.save_weights(os.path.join(h5_dir, 'last.h5'))
-    model.evaluate(test_data,steps=test_step)
-    tf.print("训练结束".center(20,'*'))
-# model.train_on_batch compile    ----> train（自己可以控制）
-@Tools.Decorator.timer(flag=True)
-def main1(target_size,batch_size,num_classes,dataset):
-    tf.print("开始训练".center(20,'*'))
-    model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = Config.getNetwork_Model(dataset, batch_size, target_size, num_classes)
-    model = Config.complie(model, lr=0.001, num_classes=num_classes)
-    model = train_on_batch(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,log_dir=h5_dir)
-    tf.print("训练结束".center(20,'*'))
-    tf.print("测试集开始测试".center(20,'*'))
-    model = test_on_batch(model,test_data,test_step)
-# 自定义 compile 自定义train
-@Tools.Decorator.timer(flag=True)
-def main2(target_size,batch_size,num_classes,dataset):
-    tf.print("开始训练".center(20,'*'))
-    model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = Config.getNetwork_Model(dataset, batch_size, target_size, num_classes)
-    model = myDefine(model,data,steps_per_epoch=train_step,validation_data=validation_data,validation_steps=val_step,epochs=epochs,log_dir=h5_dir)
-    tf.print("训练结束".center(20,'*'))
-if __name__ == '__main__':
+def main():
     # 获取数据
+    model = "mysegnet_3"
     target_size = (256,256)
     mask_size = target_size
     num_classes = 2
-    batch_size = 2
-    data_txt_path = Config.Path.Shiyanshi_hu
-    dataset = Dataset.CountrySide(data_txt_path,target_size,mask_size,num_classes)
-
-    ret, seconds = main1(target_size,batch_size,num_classes,dataset)
+    tf.print("开始训练".center(20,'*'))
+    model,learning_rate,callback,data,validation_data,test_data,epochs,h5_dir = Config.getNetwork_Model(model,target_size,mask_size,num_classes)
+    model = Config.complie(model, lr=learning_rate, num_classes=num_classes)
+    model.fit(data, validation_data=validation_data,epochs=epochs,callbacks=callback,verbose=1)
+    model.save_weights(os.path.join(h5_dir, 'last.h5'))
+    model.evaluate(test_data)
+    tf.print("训练结束".center(20,'*'))
+# model.train_on_batch compile    ----> train（自己可以控制）
+@Tools.Decorator.timer(flag=True)
+def main1():
+    # 获取数据
+    model = "mysegnet_3"
+    target_size = (256,256)
+    mask_size = target_size
+    num_classes = 2
+    tf.print("开始训练".center(20,'*'))
+    model,learning_rate,callback,data,validation_data,test_data,epochs,h5_dir = Config.getNetwork_Model(model,target_size,mask_size,num_classes)
+    model = Config.complie(model, lr=0.001, num_classes=num_classes)
+    model = train_on_batch(model,data,steps_per_epoch=len(data)//2,validation_data=validation_data,validation_steps=len(validation_data//2),epochs=epochs,log_dir=h5_dir)
+    tf.print("训练结束".center(20,'*'))
+    tf.print("测试集开始测试".center(20,'*'))
+    model = test_on_batch(model,test_data,len(test_data//2))
+# 自定义 compile 自定义train
+@Tools.Decorator.timer(flag=True)
+def main2():
+    # 获取数据
+    model = "mysegnet_3"
+    target_size = (256,256)
+    mask_size = target_size
+    num_classes = 2
+    tf.print("开始训练".center(20,'*'))
+    model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir = Config.getNetwork_Model(model,target_size,mask_size,num_classes)
+    model = myDefine(model,data,steps_per_epoch=len(data)//2,validation_data=validation_data,validation_steps=len(validation_data//2),epochs=epochs,log_dir=h5_dir)
+    tf.print("训练结束".center(20,'*'))
+if __name__ == '__main__':
+    ret, seconds = main()
     msg ="The job had cost about {}h{}m{}s".format(Tools.getSecondToTime(seconds))
     Tools.sendMessage(msg)

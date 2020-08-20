@@ -8,7 +8,7 @@
 import os
 import tensorflow as tf
 from tensorflow import keras
-from util import Tools
+from util import Tools,Dataset
 from network import Model
 class MyMeanIOU(tf.keras.metrics.MeanIoU):
     def update_state(self, y_true, y_pred, sample_weight=None):
@@ -60,20 +60,22 @@ def getCallBack(h5_dir, event_dir, period):
     learningRateScheduler = tf.keras.callbacks.LearningRateScheduler(scheduler)
     return [tensorBoardDir, checkpoint]
 
-def getNetwork_Model(dataset,batch_size,target_size,num_classes,log=True):
+def getNetwork_Model(model,target_size,mask_size,num_classes,log=True):
     # 必写参数
-
+    learning_rate = 0.001
+    batch_size = 2
+    # 获取数据
+    # dataset = Dataset(Path.Shiyanshi_hu,target_size,mask_size,num_classes)
+    # dataset = Dataset.Dataset(Path.lENOVO_PC,target_size,mask_size,num_classes)
+    dataset = Dataset.CountrySide(Path.lENOVO_PC,target_size,mask_size,num_classes)
     data,validation_data,test_data = dataset.getTrainValTestDataset()
     data = data.batch(batch_size)
     validation_data = validation_data.batch(batch_size)
-    test_data =test_data.batch(batch_size)
+    test_data = test_data.batch(batch_size)
 
-    model="mysegnet_3"
     pre_file = r'h5'
     epochs= 80
     period = max(1,epochs/10) # 每1/10 epochs保存一次
-    train_step,val_step,test_step =[ i//batch_size for i in[dataset.train_size,dataset.val_size,dataset.test_size]]
-    # train_step,val_step,test_step = 3,2,1
     # 获取模型
     model = Model.getModel(model,target_size,n_labels=num_classes)
     # 是否有与预训练文件，有的话导入
@@ -85,10 +87,10 @@ def getNetwork_Model(dataset,batch_size,target_size,num_classes,log=True):
         callback = getCallBack(h5_dir,event_dir,period)
     else:
         callback,h5_dir = None,None
-    return model,callback,data,validation_data,test_data,train_step,val_step,test_step,num_classes,epochs,h5_dir
+    return model,learning_rate,callback,data,validation_data,test_data,epochs,h5_dir
 
 class Path:
     Shiyanshi_benji = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\dom\segmentation\data.txt'
     Shiyanshi_hu= r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation/data.txt'
-    lENOVO_PC = r'G:\AI_dataset\dom\segmentation\data.txt'
+    lENOVO_PC = r'G:\AI_dataset\dom\segmentation3\data.txt'
     Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation/data.txt'

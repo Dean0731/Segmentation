@@ -16,6 +16,13 @@
           </advancedOptions>
         </fileTransfer>
       </webServer>
+      <webServer id="3c3623dd-5a7a-4059-8a2f-a534591db997" name="超算">
+        <fileTransfer accessType="SFTP" host="192.168.1.5" port="22" sshConfigId="80ed0852-ebe0-45fa-8edd-4dd03fb0b1c0" sshConfig="weiht@192.168.1.5:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>
