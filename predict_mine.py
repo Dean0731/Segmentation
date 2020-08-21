@@ -5,8 +5,6 @@ import tensorflow as tf
 from network import Model
 np.set_printoptions(threshold = 1e6)
 
-# 保存的是权重 save_weights
-
 
 def getModel(h5,type,target_size,num_classes):
     if type=="save_weights":

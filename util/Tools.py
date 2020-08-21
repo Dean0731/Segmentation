@@ -40,6 +40,7 @@ class Decorator:
     def sendMessage(data=None):
         def inner(f):
             def inner2(*args,**kwargs):
+                # print(data)
                 f(*args,**kwargs)
                 if data == None:
                     ret = requests.get("https://python.api.dean0731.top/message/sendMessage")
@@ -54,6 +55,7 @@ def sendMessage(data=None):
     """
     向企业我的微信发送信息
     """
+    print(data)
     if data == None:
         ret = requests.get("https://python.api.dean0731.top/message/sendMessage")
     else:

@@ -2,7 +2,7 @@
 # @File     : Dataset
 # @Email    : dean0731@qq.com
 # @Software : PyCharm
-# @Desc     : 数据集父类
+# @Desc     : 数据集读取
 # @History  :
 #   2020/7/19 Dean First Release
 import numpy as np
@@ -11,6 +11,9 @@ import os
 import numpy as np
 import tensorflow as tf
 class Dataset:
+    """
+    单输入数据读取
+    """
     def __init__(self,data_txt_path,target_size,mask_size,num_classes,):
         if os.path.exists(data_txt_path):
             self.data_txt_path = data_txt_path
@@ -65,12 +68,12 @@ class Dataset:
         return x,y
 
 class CountrySide(Dataset):
+    """
+    双输入
+    """
     def __init__(self,data_txt_path,target_size,mask_size,num_classes):
         Dataset.__init__(self,data_txt_path,target_size,mask_size,num_classes)
     def getGenerator(self,line_x,line_y):
-        """
-        双输入
-        """
         image = tf.io.read_file(line_x)
         image = tf.image.decode_png(image)
         image_1 = tf.image.resize(image,self.target_size,method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
