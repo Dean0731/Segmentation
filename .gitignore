@@ -1,10 +1,9 @@
+/.idea/
 /source/
 /dataset/
 /util/__pycache__/
 /network/__pycache__/
 /train.log
 /last.h5
-/event
-/.idea/
-/.gitignore
+/event/
 /test/

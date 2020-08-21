@@ -11,10 +11,10 @@ from tensorflow import keras
 from util import Tools,Dataset
 from network import Model
 class Path:
-    Shiyanshi_benji = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\dom\segmentation\data.txt'
-    Shiyanshi_hu= r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation/data.txt'
+    Shiyanshi_benji = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\dom\segmentation2\data.txt'
+    Shiyanshi_hu= r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation2/data.txt'
     lENOVO_PC = r'G:\AI_dataset\dom\segmentation2\data.txt'
-    Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation/data.txt'
+    Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation2/data.txt'
 
 class MyMeanIOU(tf.keras.metrics.MeanIoU):
     def update_state(self, y_true, y_pred, sample_weight=None):
@@ -165,7 +165,7 @@ def getNetwork_Model(model,target_size,mask_size,num_classes,log=True):
     # 必写参数
     learning_rate = 0.001
     batch_size = 2
-    data_txt_path = Path.lENOVO_PC
+    data_txt_path = Path.Shiyanshi_hu
     # 获取数据
     if str(model).startswith("mysegnet"):
         dataset = Dataset.CountrySide(data_txt_path,target_size,mask_size,num_classes)
