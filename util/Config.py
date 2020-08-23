@@ -171,12 +171,12 @@ def getNetwork_Model(model,target_size,mask_size,num_classes,log=True):
         dataset = Dataset.CountrySide(data_txt_path,target_size,mask_size,num_classes)
     else:
         dataset = Dataset.Dataset(data_txt_path,target_size,mask_size,num_classes)
-    data,validation_data,test_data = dataset.getTrainValTestDataset()
+    data,validation_data,test_data = dataset.getTrainValTestDataset(seed=7)
     data = data.batch(batch_size)
     validation_data = validation_data.batch(batch_size)
     test_data = test_data.batch(batch_size)
 
-    pre_file = r'h5'
+    pre_file = r'last.h5'
     epochs= 80
     period = max(1,epochs/10) # 每1/10 epochs保存一次
     # 获取模型,与数据集
