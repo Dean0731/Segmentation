@@ -60,5 +60,5 @@ def main2():
     model.save_weights(os.path.join(h5_dir, 'last.h5'))
 if __name__ == '__main__':
     ret, seconds = main()
-    msg ="The job had cost about {}h{}m{}s".format(Tools.getSecondToTime(seconds))
+    msg ="The job had cost about {}h{}m{}s".format(*Tools.getSecondToTime(seconds))
     Tools.sendMessage(msg)
