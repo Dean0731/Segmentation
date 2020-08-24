@@ -130,8 +130,9 @@ def getSecondToTime(seconds):
     m, s = divmod(seconds, 60)
     h, m = divmod(m, 60)
     return h,m,s
-from network import Model
+
 if __name__ == '__main__':
+    from network import Model
     # model = Model.getModel('mysegnet',(2816,2816),n_labels=2)
     target_size = 256,256
     model = Model.getModel('mysegnet_3',target_size,n_labels=2)

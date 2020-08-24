@@ -10,11 +10,15 @@ import tensorflow as tf
 from tensorflow import keras
 from util import Tools,Dataset
 from network import Model
+import socket
+import getpass
+
 class Path:
     Shiyanshi_benji = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\dom\segmentation2\data.txt'
     Shiyanshi_hu= r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation2/data.txt'
     lENOVO_PC = r'G:\AI_dataset\dom\segmentation2\data.txt'
     Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation2/data.txt'
+    Aistudio = r'/home/aistudio/work/dataset/dom/data.txt'
 
 class MyMeanIOU(tf.keras.metrics.MeanIoU):
     def update_state(self, y_true, y_pred, sample_weight=None):
@@ -25,7 +29,16 @@ class MyPrecusion(tf.keras.metrics.Precision):
 class MyRecall(tf.keras.metrics.Recall):
     def update_state(self, y_true, y_pred, sample_weight=None):
         return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
-
+def getPathByUsername():
+    user_name = getpass.getuser()
+    if user_name == 'aistudio':
+        return Path.Aistudio
+    elif user_name == 'Administrator':
+        return Path.lENOVO_PC
+    elif user_name == 'dean':
+        return Path.Shiyanshi_hu
+    else:
+        return Path.Shiyanshi_benji
 def complie(model,lr,num_classes):
     model.compile(
         loss="categorical_crossentropy",
@@ -164,8 +177,8 @@ def getCallBack(h5_dir, event_dir, period):
 def getNetwork_Model(model,target_size,mask_size,num_classes,log=True):
     # 必写参数
     learning_rate = 0.001
-    batch_size = 2
-    data_txt_path = Path.Shiyanshi_hu
+    batch_size = 4
+    data_txt_path = getPathByUsername()
     # 获取数据
     if str(model).startswith("mysegnet"):
         dataset = Dataset.CountrySide(data_txt_path,target_size,mask_size,num_classes)
@@ -177,7 +190,7 @@ def getNetwork_Model(model,target_size,mask_size,num_classes,log=True):
     test_data = test_data.batch(batch_size)
 
     pre_file = r'h5'
-    epochs= 80
+    epochs= 160
     period = max(1,epochs/10) # 每1/10 epochs保存一次
     # 获取模型,与数据集
     model = Model.getModel(model,target_size,n_labels=num_classes)
@@ -192,3 +205,5 @@ def getNetwork_Model(model,target_size,mask_size,num_classes,log=True):
         callback,h5_dir = None,None
     return model,learning_rate,callback,data,validation_data,test_data,epochs,h5_dir
 
+if __name__ == '__main__':
+    print(getPathByUsername())
