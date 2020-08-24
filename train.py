@@ -26,5 +26,5 @@ def main():
 
 if __name__ == '__main__':
     ret, seconds = main()
-    msg ="The job had cost about {}h{}m{}s".format(Tools.getSecondToTime(seconds))
+    msg ="The job had cost about {}h{}m{}s".format(*Tools.getSecondToTime(seconds))
     Tools.sendMessage(msg)
