@@ -132,9 +132,10 @@ def getSecondToTime(seconds):
     return h,m,s
 
 if __name__ == '__main__':
-    from network import Model
+    from tf.network import Model
+
     # model = Model.getModel('mysegnet',(2816,2816),n_labels=2)
     target_size = 256,256
-    model = Model.getModel('mysegnet_3',target_size,n_labels=2)
+    model = Model.getModel('mysegnet_3', target_size, n_labels=2)
     # model.summary()
     computerNetworkSize(model)

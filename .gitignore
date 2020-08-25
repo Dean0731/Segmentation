@@ -2,7 +2,7 @@
 /source/
 /dataset/
 /util/__pycache__/
-/network/__pycache__/
+/tf/network/__pycache__/
 /train.log
 /last.h5
 /event/
