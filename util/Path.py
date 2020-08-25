@@ -26,8 +26,10 @@ class DatasetPath:
 
     def __getMinst(self):
         self.lENOVO_PC = r'G:\AI_dataset\MNIST'
+        self.Aistudio = r'/home/aistudio/work/dataset/MNIST'
     def getFashionMinst(self):
         self.lENOVO_PC = r'G:\AI_dataset\fashion-mnist'
+        self.Aistudio = r'/home/aistudio/work/dataset/fashion-mnist'
     def getPath(self):
         user_name = getpass.getuser()
         if user_name == 'aistudio':
