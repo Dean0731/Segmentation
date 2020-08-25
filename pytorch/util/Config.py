@@ -7,6 +7,7 @@
 #   2020/8/25 Dean First Release
 from util.Path import DatasetPath
 import torch.nn as nn
+import torch
 import torch.nn.functional as F
 from torchvision import datasets,transforms
 class Net(nn.Module):
@@ -49,4 +50,20 @@ batch_size = 32
 learning_rate = 1e-2
 momentum = 0.5
 num_epochs = 2
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+train_dataloader = torch.utils.data.DataLoader(
+    dataset=train_dataset,
+    batch_size=batch_size,
+    shuffle=True,
+    # num_workers=4,
+    pin_memory=True, # 可以加速计算
+)
+test_dataloader = torch.utils.data.DataLoader(
+    dataset=test_dataset,
+    batch_size=batch_size,
+    shuffle=False,
+    # num_workers=1,
+    pin_memory=True, # 可以加速计算
+)
+
 

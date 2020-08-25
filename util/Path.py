@@ -10,6 +10,8 @@ class DatasetPath:
     def __init__(self,dataset='dom'):
             if dataset.lower() == 'dom':
                 self.__getDom()
+            elif dataset.lower() == 'fashion_mnist':
+                self.__getFashionMinst()
             elif dataset.lower() == 'mnist':
                 self.__getMinst()
             else:
@@ -23,6 +25,8 @@ class DatasetPath:
         self.Aistudio = r'/home/aistudio/work/dataset/dom/data.txt'
 
     def __getMinst(self):
+        self.lENOVO_PC = r'G:\AI_dataset\MNIST'
+    def getFashionMinst(self):
         self.lENOVO_PC = r'G:\AI_dataset\fashion-mnist'
     def getPath(self):
         user_name = getpass.getuser()
