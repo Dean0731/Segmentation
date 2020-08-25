@@ -1,12 +1,13 @@
 import os
 from util import Tools
-from tf.util import Config1
-Config1.getPathByUsername()
+from tf.util import Config
+Config.getPathByUsername()
 import tensorflow as tf
 tf.get_logger().setLevel('WARNING')
 tf.autograph.set_verbosity(2)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
+@Tools.Decorator.sendMessage()
 @Tools.Decorator.timer(flag=True)
 def main():
     model = "segnet"
@@ -27,6 +28,4 @@ def main():
 
 
 if __name__ == '__main__':
-    ret, seconds = main()
-    msg ="The job had cost about {}h{}m{}s".format(*Tools.getSecondToTime(seconds))
-    Tools.sendMessage(msg)
+    main()

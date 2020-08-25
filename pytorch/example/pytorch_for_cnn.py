@@ -9,6 +9,7 @@ import torch
 import torch.optim as optim
 import torch.nn.functional as F
 from pytorch.util import Config
+from util import Tools
 print("Pytorch Version",torch.__version__)
 def train(model,device,train_dataloader,optimizer,epoch):
     model.train()
@@ -30,7 +31,7 @@ def test(model,device,test_dataloader):
             data,target = data.to(device),target.to(device)
             pred = model(data) # batch_size * 10
             total_loss += F.nll_loss(pred,target,reduction="sum").item()
-            correct += pred.argmax(dim=1).eq(target.view_as(pred)).sum().item()
+            correct += pred.argmax(dim=1).eq(target).sum().item()
         print("test Accuracy:{}, loss:{}".format(correct/len(test_dataloader.dataset),total_loss/len(test_dataloader.dataset)))
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 train_dataloader = torch.utils.data.DataLoader(
@@ -47,11 +48,17 @@ test_dataloader = torch.utils.data.DataLoader(
     # num_workers=1,
     pin_memory=True, # 可以加速计算
 )
-
-model = Config.Net().to(device)
-optimizer =optim.SGD(model.parameters(),lr=Config.learning_rate,momentum=Config.momentum)
-for epoch in range(Config.num_epochs):
-    train(model,device,train_dataloader,optimizer,epoch)
-test(model,device,test_dataloader)
+@Tools.Decorator.sendMessage()
+@Tools.Decorator.timer()
+def main():
+    model = Config.Net().to(device)
+    optimizer =optim.SGD(model.parameters(),lr=Config.learning_rate,momentum=Config.momentum)
+    for epoch in range(Config.num_epochs):
+        train(model,device,train_dataloader,optimizer,epoch)
+    test(model,device,test_dataloader)
 
 # torch.save(model.state_dict(),"mnist_cnn.pt")
+
+
+if __name__ == '__main__':
+    main()

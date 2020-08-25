@@ -21,7 +21,7 @@ class Decorator:
             return inner2
         return inner
     @staticmethod
-    def timer(flag=False):
+    def timer(flag=True):
         def outer(f):
             def inner(*args,**kwargs):
                 if flag:
@@ -40,13 +40,11 @@ class Decorator:
     def sendMessage(data=None):
         def inner(f):
             def inner2(*args,**kwargs):
-                # print(data)
-                f(*args,**kwargs)
-                if data == None:
-                    ret = requests.get("https://python.api.dean0731.top/message/sendMessage")
-                else:
-                    ret = requests.get("https://python.api.dean0731.top/message/sendMessage?content={}".format(data))
-                print(ret.content.decode('utf-8'))
+                ret,seconds = f(*args,**kwargs)
+                msg ="任务耗时{}小时{}分钟{}秒,{}".format(*getSecondToTime(seconds),data if data!=None else "")
+                url = "https://python.api.dean0731.top/message/sendMessage?content={}".format(msg)
+                print(url)
+                requests.get(url)
                 return ret
             return inner2
         return inner
@@ -129,7 +127,7 @@ def getNumbySize(num,n):
 def getSecondToTime(seconds):
     m, s = divmod(seconds, 60)
     h, m = divmod(m, 60)
-    return h,m,s
+    return int(h),int(m),round(s,2)
 
 if __name__ == '__main__':
     from tf.network import Model
