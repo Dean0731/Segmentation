@@ -15,13 +15,15 @@ input_size = (576,576)
 in_channels = 3
 out_channels = 2
 target_size = input_size
-batch_size = 2
+batch_size = 8
 path = DatasetPath('dom')
 learning_rate = 1e-4
 num_epochs = 2
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = Segnet(in_channels,out_channels)
 loss = torch.nn.CrossEntropyLoss()
+txt = 'train.txt'
+
 def toNumpy(x):
     return np.array(x,dtype=np.int)
 def jiangwei(x):

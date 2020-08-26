@@ -5,5 +5,7 @@
 # @Desc     :
 # @History  :
 #   2020/8/26 Dean First Release
-a = [1,2,3,4,5,6]
-print(a[3:])
+from torch import  nn
+import torch
+loss = nn.CrossEntropyLoss()
+print(torch.tensor(1)*8)
