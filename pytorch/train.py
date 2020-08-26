@@ -11,7 +11,6 @@ from pytorch.util import Config
 import torch
 import torch.optim as optim
 from pytorch.util import Config
-import os
 from utils import Tools
 print("Pytorch Version",torch.__version__)
 def acc(y,y_pred):
@@ -80,10 +79,10 @@ def main():
     model = Config.model.to(Config.device)
     optimizer = optim.Adam(model.parameters(), lr=Config.learning_rate)
     with open('train.txt','w',encoding='UTF-8') as f:
-        # for epoch in range(Config.num_epochs):
-        #     train_log = train(model, Config.device, Config.train_dataloader, optimizer, epoch)
-        #     val_log = val(model, Config.device, Config.test_dataloader)
-        #     f.write("{};{}\n".format(train_log,val_log))
+        for epoch in range(Config.num_epochs):
+            train_log = train(model, Config.device, Config.train_dataloader, optimizer, epoch)
+            val_log = val(model, Config.device, Config.test_dataloader)
+            f.write("{};{}\n".format(train_log,val_log))
         test(model, Config.device, Config.test_dataloader)
 
 # torch.save(model.state_dict(),"mnist_cnn.pt")
