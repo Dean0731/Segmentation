@@ -16,7 +16,7 @@ from utils import Tools
 print("Pytorch Version",torch.__version__)
 def acc(y,y_pred):
     shape = y.shape
-    return y_pred.argmax(dim=1).eq(y).sum()/(shape[1]*shape[2])
+    return torch.true_divide(y_pred.argmax(dim=1).eq(y).sum(),(shape[1]*shape[2]))
 def iou(y,y_pred):
     y_pred = y_pred.argmax(dim=1)
     iou = 0
