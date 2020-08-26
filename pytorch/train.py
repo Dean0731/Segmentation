@@ -6,8 +6,6 @@
 # @History  :
 #   2020/8/26 Dean First Release
 
-from pytorch.util import Config
-
 import torch
 import torch.optim as optim
 from pytorch.util import Config
@@ -52,8 +50,8 @@ def val(model,device,val_dataloader):
         total_iou = total_iou/(len(val_dataloader.dataset))
         total_loss = total_loss/len(val_dataloader.dataset)
         correct = correct/len(val_dataloader.dataset)
-        print("Val - loss:{} - acc:{}".format(total_loss,correct))
-        return "{{loss:{} - acc:{}} - miou:{}}".format(total_loss,correct,total_iou)
+        print("Val - loss:{} - acc:{} - miou:{}".format(total_loss,correct,total_iou))
+        return "{{loss:{} - acc:{} - miou:{}}}".format(total_loss,correct,total_iou)
 
 def test(model,device,test_dataloader):
     model.eval()
@@ -70,8 +68,8 @@ def test(model,device,test_dataloader):
         total_iou = total_iou/len(test_dataloader.dataset)
         total_loss = total_loss/len(test_dataloader.dataset)
         correct = correct/len(test_dataloader.dataset)
-        print("Test - loss:{} - acc:{}".format(total_loss,correct))
-        return "{{loss:{} - acc:{}} - miou:{}}".format(total_loss,correct,total_iou)
+        print("Test - loss:{} - acc:{} - miou:{}".format(total_loss,correct,total_iou))
+        return "{{loss:{} - acc:{} - miou:{}}}".format(total_loss,correct,total_iou)
 
 @Tools.Decorator.sendMessage()
 @Tools.Decorator.timer()
@@ -83,7 +81,8 @@ def main():
             train_log = train(model, Config.device, Config.train_dataloader, optimizer, epoch)
             val_log = val(model, Config.device, Config.test_dataloader)
             f.write("{};{}\n".format(train_log,val_log))
-        test(model, Config.device, Config.test_dataloader)
+        test_log = test(model, Config.device, Config.test_dataloader)
+        f.write(test_log)
 
 # torch.save(model.state_dict(),"mnist_cnn.pt")
 
