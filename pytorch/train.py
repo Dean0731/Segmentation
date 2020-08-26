@@ -79,7 +79,7 @@ def main():
     with open('train.txt','w',encoding='UTF-8') as f:
         for epoch in range(Config.num_epochs):
             train_log = train(model, Config.device, Config.train_dataloader, optimizer, epoch)
-            val_log = val(model, Config.device, Config.test_dataloader)
+            val_log = val(model, Config.device, Config.val_dataloader)
             f.write("{};{}\n".format(train_log,val_log))
         test_log = test(model, Config.device, Config.test_dataloader)
         f.write(test_log)
