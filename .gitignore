@@ -1,7 +1,7 @@
 /.idea/
 /source/
 /dataset/
-/util/__pycache__/
+/utils/__pycache__/
 /tf/network/__pycache__/
 /train.log
 /last.h5

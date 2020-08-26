@@ -14,7 +14,7 @@ class Dataset:
     """
     单输入数据读取
     """
-    def __init__(self,data_txt_path,target_size,mask_size,num_classes,):
+    def __init__(self,data_txt_path,target_size,mask_size,num_classes):
         if os.path.exists(data_txt_path):
             self.data_txt_path = data_txt_path
             self.target_size = target_size

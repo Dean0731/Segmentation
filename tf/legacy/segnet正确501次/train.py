@@ -45,7 +45,7 @@ def adjustData(img, mask, num_classes):
     mask = new_mask
     return (img, mask)
 
-from util import timer
+from utils import timer
 @timer(flag=True)
 def main(model):
     tensofboard_dzf = keras.callbacks.TensorBoard(log_dir=event_dir)

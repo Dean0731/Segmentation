@@ -43,7 +43,7 @@ def loss(y_true, y_pred):
     loss = keras.losses.binary_crossentropy(y_true,y_pred)
     return loss
 
-# from util import decorator
+# from utils import decorator
 def main():
     # 权重信息，tensorboard文件保存路径
     log_dir = 'logs/'

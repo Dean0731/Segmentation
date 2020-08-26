@@ -1,69 +1,45 @@
-# @Time     : 2020/8/25 18:36
+# @Time     : 2020/8/26 17:23
 # @File     : Config
 # @Email    : dean0731@qq.com
 # @Software : PyCharm
 # @Desc     :
 # @History  :
-#   2020/8/25 Dean First Release
-from util.Path import DatasetPath
-import torch.nn as nn
+#   2020/8/26 Dean First Release
+from utils.Path import DatasetPath
+from pytorch.util.Dataset import Dataset
+from torchvision import transforms
+from pytorch.network.Segnet import Segnet
+import numpy as np
 import torch
-import torch.nn.functional as F
-from torchvision import datasets,transforms
-class Net(nn.Module):
-    def __init__(self):
-        super(Net,self).__init__()
-        self.conv1 = nn.Conv2d(1,20,5,1)
-        self.conv2 = nn.Conv2d(20,50,5,1)
-        self.fc1 = nn.Linear(4*4*50,500)
-        self.fc2 = nn.Linear(500,10)
-    def forward(self,x):
-        x = self.conv1(x)
-        x = F.relu(x)
-        x = F.max_pool2d(x,2,2)
-        x = self.conv2(x)
-        x = F.relu(x)
-        x = F.max_pool2d(x,2,2)
-        x = x.view(-1,4*4*50)
-        x = self.fc1(x)
-        x = F.relu(x)
-        x = self.fc2(x)
-        return F.log_softmax(x,dim=1)
-
-train_dataset = datasets.MNIST(
-    DatasetPath('mnist').getPath(),
-    train=True,
-    download=True,
-    transform=transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.1307),(0.3081))
-    ]))
-test_dataset = datasets.MNIST(
-    DatasetPath('mnist').getPath(),
-    train=False,
-    download=True,
-    transform=transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.1307),(0.3081))
-    ]))
-batch_size = 32
-learning_rate = 1e-2
-momentum = 0.5
+input_size = (576,576)
+in_channels = 3
+out_channels = 2
+target_size = input_size
+batch_size = 2
+path = DatasetPath('dom')
+learning_rate = 1e-4
 num_epochs = 2
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-train_dataloader = torch.utils.data.DataLoader(
-    dataset=train_dataset,
-    batch_size=batch_size,
-    shuffle=True,
-    # num_workers=4,
-    pin_memory=True, # 可以加速计算
-)
-test_dataloader = torch.utils.data.DataLoader(
-    dataset=test_dataset,
-    batch_size=batch_size,
-    shuffle=False,
-    # num_workers=1,
-    pin_memory=True, # 可以加速计算
-)
+model = Segnet(in_channels,out_channels)
+loss = torch.nn.CrossEntropyLoss()
+def toNumpy(x):
+    return np.array(x,dtype=np.int)
+def jiangwei(x):
+    return torch.squeeze(x,dim=0)
+transform = [
+    transforms.Resize(input_size,interpolation=0),
+    transforms.ToTensor()
+]
+target_transforms = [
+    transforms.Resize(target_size,interpolation=0),
+    transforms.Lambda(toNumpy),
+    transforms.ToTensor(),
+    transforms.Lambda(jiangwei)
+]
 
-
+train_dataset = Dataset(path.getPath(),type='train',transform=transform,target_transform= target_transforms)
+train_dataloader = torch.utils.data.DataLoader(dataset=train_dataset,batch_size=batch_size,shuffle=True,pin_memory=True)
+val_dataset = Dataset(path.getPath(),type='val',transform=transform,target_transform= target_transforms)
+val_dataloader = torch.utils.data.DataLoader(dataset=val_dataset,batch_size=batch_size,shuffle=False,pin_memory=True)
+test_dataset = Dataset(path.getPath(),type='test',transform=transform,target_transform= target_transforms)
+test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset,batch_size=batch_size,shuffle=False,pin_memory=True)

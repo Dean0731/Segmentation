@@ -70,7 +70,7 @@ def adjustData(img, mask, num_classes):
     mask = new_mask
     return (img, mask)
 
-from util import timer
+from utils import timer
 @timer(flag=True)
 def main():
     # from network.Unet import make_generator_model
