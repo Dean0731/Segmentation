@@ -33,6 +33,7 @@ class Dataset(Dataset):
             lines = lines[b:]
         else:
             raise ValueError("未找到{}数据集".format(self.type))
+        np.random.shuffle(lines)
         return lines
     def data_txt_to_list(self,lines):
         lines_x = []
