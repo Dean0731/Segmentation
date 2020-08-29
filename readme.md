@@ -23,6 +23,7 @@
 |deeplabv3+	|2018.8.22	|	https://arxiv.org/pdf/1802.02611.pdf|https://github.com/tensorflow/models/tree/master/research/deeplab|
 |Gated-SCNN	|2019.7.12	|	https://arxiv.org/pdf/1907.05740v1.pdf||
 |<font color=red>北京大学提出的大分辨率图像,图像分割Semantic segmentation of high-resolution images </font>|2017| http://scis.scichina.com/en/2017/123101.pdf|modified joint  bilateral upsampling algorithm|
+|Bi-directional Cross-Modality Feature Propagation with Separation-and-Aggregation Gate for RGB-D Semantic Segmentation|2020.07.17|https://arxiv.org/pdf/2007.09183.pdf|https://github.com/charlesCXK/RGBD_Semantic_Segmentation_PyTorch|
 ## 2，学习率   
     supervised learning base method  
     region method   
