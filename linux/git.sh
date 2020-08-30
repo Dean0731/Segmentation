@@ -1,5 +1,6 @@
 #!/bin/bash
 git fetch --all && git reset --hard origin/master && git pull
+git fetch --all && git reset --hard origin/new_dataset && git pull
 
 #git rm -r --cached .
 #git add .
@@ -13,4 +14,5 @@ git remote -v 查看指定远程仓库地址
 
 # git branch 当前分支
 # git branch -a 所有当前分支
+git add . && git commit -m 'update' && git push
 

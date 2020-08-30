@@ -8,14 +8,14 @@
 import getpass
 class DatasetPath:
     def __init__(self,dataset='dom'):
-            if dataset.lower() == 'dom':
-                self.__getDom()
-            elif dataset.lower() == 'fashion_mnist':
-                self.__getFashionMinst()
-            elif dataset.lower() == 'mnist':
-                self.__getMinst()
-            else:
-                raise FileNotFoundError("数据集不存在")
+        if dataset.lower() == 'dom':
+            self.__getDom()
+        elif dataset.lower() == 'fashion_mnist':
+            self.__getFashionMinst()
+        elif dataset.lower() == 'mnist':
+            self.__getMinst()
+        else:
+            raise FileNotFoundError("数据集不存在")
     def __getDom(self):
         self.Shiyanshi_benji = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\dom\segmentation2\data.txt'
         self.Shiyanshi_hu= r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation2/data.txt'
@@ -23,20 +23,23 @@ class DatasetPath:
         self.Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation2/data.txt'
         self.Aistudio = r'/home/aistudio/work/dataset/dom/data.txt'
         self.Aliyun = r'/home/admin/jupyter/dataset/dom/data.txt'
+        self.Huawei = r'/home/ma-user/work/dataset/dom/segmentation2\data.txt'
     def __getMinst(self):
-        self.lENOVO_PC = r'G:\AI_dataset\MNIST'
-        self.Aistudio = r'/home/aistudio/work/dataset/MNIST'
-        self.Aliyun = r'/home/admin/jupyter/dataset/MNIST'
-        self.Chaosuan = r''
         self.Shiyanshi_benji = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\MNIST'
         self.Shiyanshi_hu= r''
-    def getFashionMinst(self):
-        self.lENOVO_PC = r'G:\AI_dataset\fashion-mnist'
-        self.Aistudio = r'/home/aistudio/work/dataset/fashion-mnist'
-        self.Aliyun = r'/home/admin/jupyter/dataset/fashion-mnist'
+        self.lENOVO_PC = r'G:\AI_dataset\MNIST'
         self.Chaosuan = r''
+        self.Aistudio = r'/home/aistudio/work/dataset/MNIST'
+        self.Aliyun = r'/home/admin/jupyter/dataset/MNIST'
+        self.Huawei = r'/home/ma-user/work/dataset/MNIST'
+    def __getFashionMinst(self):
         self.Shiyanshi_benji = r''
         self.Shiyanshi_hu= r''
+        self.lENOVO_PC = r'G:\AI_dataset\fashion-mnist'
+        self.Chaosuan = r''
+        self.Aistudio = r'/home/aistudio/work/dataset/fashion-mnist'
+        self.Aliyun = r'/home/admin/jupyter/dataset/fashion-mnist'
+        self.Huawei = r'/home/ma-user/work/dataset/fashion-mnist'
     def getPath(self):
         user_name = getpass.getuser()
         if user_name == 'aistudio':
@@ -51,5 +54,7 @@ class DatasetPath:
             return self.Shiyanshi_benji
         elif user_name =='weiht':
             return self.Chaosuan
+        elif user_name == 'ma-user':
+            return self.Huawei
         else:
             raise FileNotFoundError("根据环境选数据集位置失败")
