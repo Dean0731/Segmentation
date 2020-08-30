@@ -5,12 +5,12 @@
 # @Desc     :
 # @History  :
 #   2020/8/26 Dean First Release
-from utils.Path import DatasetPath
 from pytorch.util.Dataset import Dataset
 from torchvision import transforms
 from pytorch.network.Segnet import Segnet
 import numpy as np
 import torch
+from utils.Path import DatasetPath
 input_size = (576,576)
 in_channels = 3
 out_channels = 2

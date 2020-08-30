@@ -15,21 +15,28 @@ class DatasetPath:
             elif dataset.lower() == 'mnist':
                 self.__getMinst()
             else:
-                print("未找到到数据集")
-                exit()
+                raise FileNotFoundError("数据集不存在")
     def __getDom(self):
         self.Shiyanshi_benji = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\dom\segmentation2\data.txt'
         self.Shiyanshi_hu= r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation2/data.txt'
         self.lENOVO_PC = r'G:\AI_dataset\dom\segmentation2\data.txt'
         self.Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation2/data.txt'
         self.Aistudio = r'/home/aistudio/work/dataset/dom/data.txt'
-
+        self.Aliyun = r'/home/admin/jupyter/dataset/dom/data.txt'
     def __getMinst(self):
         self.lENOVO_PC = r'G:\AI_dataset\MNIST'
         self.Aistudio = r'/home/aistudio/work/dataset/MNIST'
+        self.Aliyun = r'/home/admin/jupyter/dataset/MNIST'
+        self.Chaosuan = r''
+        self.Shiyanshi_benji = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\MNIST'
+        self.Shiyanshi_hu= r''
     def getFashionMinst(self):
         self.lENOVO_PC = r'G:\AI_dataset\fashion-mnist'
         self.Aistudio = r'/home/aistudio/work/dataset/fashion-mnist'
+        self.Aliyun = r'/home/admin/jupyter/dataset/fashion-mnist'
+        self.Chaosuan = r''
+        self.Shiyanshi_benji = r''
+        self.Shiyanshi_hu= r''
     def getPath(self):
         user_name = getpass.getuser()
         if user_name == 'aistudio':
@@ -38,5 +45,11 @@ class DatasetPath:
             return self.lENOVO_PC
         elif user_name == 'dean':
             return self.Shiyanshi_hu
-        else:
+        elif user_name =='admin':
+            return self.Aliyun
+        elif user_name =='root':
             return self.Shiyanshi_benji
+        elif user_name =='weiht':
+            return self.Chaosuan
+        else:
+            raise FileNotFoundError("根据环境选数据集位置失败")
