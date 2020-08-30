@@ -61,4 +61,10 @@
     图片缩放---》576 Segnet 2GB  
     图片卷积---》768 Segnet 5GB  
     图片卷积---》384 Segnet 2GB  
-
+# 云端IDE
+ - 华为云 https://console.huaweicloud.com/modelarts/ 适合学习，小数据集 ，大数据集无法上传
+   -  tf2.1 pytorch 1.0 cuda10.2
+ - 阿里云 https://dsw-dev.data.aliyun.com/ 可学习用，可训练大数据及集，但不能联网，数据集最好是tar.gz格式  
+   -  tf2.0 pytorch 1.3 cuda10
+ - 百度云 https://aistudio.baidu.com/aistudio/projectdetail/194452 也可训练大数据集
+   - cuda 10.1

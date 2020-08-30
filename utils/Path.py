@@ -17,13 +17,13 @@ class DatasetPath:
         else:
             raise FileNotFoundError("数据集不存在")
     def __getDom(self):
-        self.Shiyanshi_benji = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\dom\segmentation2\data.txt'
-        self.Shiyanshi_hu= r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation2/data.txt'
-        self.lENOVO_PC = r'G:\AI_dataset\dom\segmentation2\data.txt'
-        self.Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation2/data.txt'
+        self.Shiyanshi_benji = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\dom\segmentation\data.txt'
+        self.Shiyanshi_hu= r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation/data.txt'
+        self.lENOVO_PC = r'G:\AI_dataset\dom\segmentation\data.txt'
+        self.Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation/data.txt'
         self.Aistudio = r'/home/aistudio/work/dataset/dom/data.txt'
         self.Aliyun = r'/home/admin/jupyter/dataset/dom/data.txt'
-        self.Huawei = r'/home/ma-user/work/dataset/dom/segmentation2\data.txt'
+        self.Huawei = r'/home/ma-user/work/dataset/dom/segmentation\data.txt'
     def __getMinst(self):
         self.Shiyanshi_benji = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\MNIST'
         self.Shiyanshi_hu= r''
