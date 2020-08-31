@@ -58,3 +58,5 @@ def toPic():
 if __name__ == '__main__':
     model = pdx.seg.DeepLabv3p(num_classes=2)
     print(type(model))
+
+    #!visualdl --logdir=output/vdl_log --port=8008,8040
