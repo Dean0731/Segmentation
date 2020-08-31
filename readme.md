@@ -1,6 +1,13 @@
-# 图像分割
-# 当前任务
-    查看图像分割领域的评价指标
+# 图片分割
+ - 语义分割：图片中的房子都是都是房子
+    - 实例分割：图片中的房子是房子但是是不同的房子
+# 图像分类
+每类图片对应一个文件夹
+# 目标检测
+每张图片对应一个xml或txt，里面对应多个对象信息，一个对象（类别，四个坐标）
+# 评价指标
+ - IOU:多分类，验证集中每张图片中n各类别，求出每个图片中某一类的iou，做平均得到iou_class1，iou = [iou_class1,iou_class1...]
+ - MIOU:将IOU除以类别数即可
 # 论文参考
 ## 基础网络
 |名称|时间|论文|详细|
@@ -24,6 +31,7 @@
 |Gated-SCNN	|2019.7.12	|	https://arxiv.org/pdf/1907.05740v1.pdf||
 |<font color=red>北京大学提出的大分辨率图像,图像分割Semantic segmentation of high-resolution images </font>|2017| http://scis.scichina.com/en/2017/123101.pdf|modified joint  bilateral upsampling algorithm|
 |Bi-directional Cross-Modality Feature Propagation with Separation-and-Aggregation Gate for RGB-D Semantic Segmentation|2020.07.17|https://arxiv.org/pdf/2007.09183.pdf|https://github.com/charlesCXK/RGBD_Semantic_Segmentation_PyTorch|
+|ICENT，适合高分图像|2018.08.20|https://arxiv.org/pdf/1704.08545.pdf||
 ## 2，学习率   
     supervised learning base method  
     region method   
@@ -65,6 +73,6 @@
  - 华为云 https://console.huaweicloud.com/modelarts/ 适合学习，小数据集 ，大数据集无法上传
    -  tf2.1 pytorch 1.0 cuda10.2
  - 阿里云 https://dsw-dev.data.aliyun.com/ 可学习用，可训练大数据及集，但不能联网，数据集最好是tar.gz格式  
-   -  tf2.0 pytorch 1.3 cuda10
+   -  cuda10 环境版本可更新，但通常更新后无法使用
  - 百度云 https://aistudio.baidu.com/aistudio/projectdetail/194452 也可训练大数据集
    - cuda 10.1
