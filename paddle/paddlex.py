@@ -4,7 +4,6 @@ matplotlib.use('Agg')
 import os
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 import paddlex as pdx
-
 # 图像预处理流程
 target_size = 512
 log = 'output/deeplab'
@@ -47,7 +46,9 @@ def main():
         learning_rate=0.01,
         save_interval_epochs=5,
         save_dir= log,
-        use_vdl=True)
+        use_vdl=True,
+        # resume_checkpoint='',
+    )
     model.evaluate(test_dataset)
 def toPic():
     model = pdx.load_model(os.path.join(log,'best_model'))
