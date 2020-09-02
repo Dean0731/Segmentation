@@ -9,3 +9,5 @@
           - https://go.microsoft.com/fwlink/?LinkId=691126
         - linux
           - pip install pycocotools
+# 模型导出
+  - https://paddlex.readthedocs.io/zh_CN/develop/deploy/export_model.html          

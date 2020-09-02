@@ -17,6 +17,7 @@ val_dataset
 ('miou', 0.8369415116718525), ('category_iou', array([0.90280283, 0.7710802 ])),
 ('macc', 0.9267759055734794), ('category_acc', array([0.9354054 , 0.90378408])),
 ('kappa', 0.8197597921855168)
+
 Deeplabv3+
 
 FastSCNN
