@@ -9,22 +9,23 @@
 
 没有预训练参数 使用的是二分类算是函数，1024
 Unet 80轮
-test_dataset
-('miou', 0.8379292263308996), ('category_iou', array([0.89564145, 0.78021701])),
-('macc', 0.9238518229070699), ('category_acc', array([0.93238948, 0.9038431 ])),
-('kappa', 0.8215622159584229)
-val_dataset
-('miou', 0.8369415116718525), ('category_iou', array([0.90280283, 0.7710802 ])),
-('macc', 0.9267759055734794), ('category_acc', array([0.9354054 , 0.90378408])),
-('kappa', 0.8197597921855168)
-
+    test_dataset:('miou', 0.8379292263308996), ('category_iou', array([0.89564145, 0.78021701])),('macc', 0.9238518229070699), ('category_acc', array([0.93238948, 0.9038431 ])),('kappa', 0.8215622159584229)
+    val_dataset:('miou', 0.8369415116718525), ('category_iou', array([0.90280283, 0.7710802 ])),('macc', 0.9267759055734794), ('category_acc', array([0.9354054 , 0.90378408])),('kappa', 0.8197597921855168)
 Deeplabv3+
-
-FastSCNN
+    test_dataset:('miou', 0.8471398244355972), ('category_iou', array([0.90738305, 0.7868966 ])),('macc', 0.9309855398730696), ('category_acc', array([0.94576907, 0.89391227])),('kappa', 0.8321988097508398)
+    val_dataset:('miou', 0.8423385879577234), ('category_iou', array([0.89649113, 0.78818605])),('macc', 0.9252734904019337), ('category_acc', array([0.94228073, 0.88797029])),('kappa', 0.8269731676237052)
+FastSCNN:快速语义分割模型
+    test_dataset:
+    val_dataset:
 HRNet
-
+    test_dataset:
+    val_dataset:
 SEGNet
+    test_dataset:
+    val_dataset:
 ICNet
+    test_dataset:
+    val_dataset:
 
 
 
