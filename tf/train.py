@@ -1,5 +1,5 @@
 import os
-from utils import Tools
+from util import Tools
 from tf.util import Config
 Config.getPathByUsername()
 import tensorflow as tf

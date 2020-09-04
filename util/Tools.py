@@ -8,6 +8,7 @@
 import requests
 import os
 import time
+import json
 import datetime
 class Decorator:
     @staticmethod
@@ -59,7 +60,25 @@ def sendMessage(data=None):
     else:
         ret = requests.get("https://python.api.dean0731.top/message/sendMessage?content={}".format(data))
     return ret
-
+def sendMessageToDingTalk(message=None,tels:list=None,all=False):
+    """
+    :params tels @的用户电话号码
+    :params all 为True时，就是@所有人
+    """
+    baseUrl = "https://oapi.dingtalk.com/robot/send?access_token=d56372a6b99d506794c1fede726c4448773cdced052c3be3d3e2cb7be716b57d"
+    HEADERS = {
+        "Content-Type": "application/json ;charset=utf-8 "
+    }
+    stringBody ={
+        "msgtype": "text",
+        "text": {"content": message},
+        "at": {
+            "atMobiles": tels,
+            "isAtAll": all   #@所有人 时为true，上面的atMobiles就失效了
+        }
+    }
+    ret = requests.post(url=baseUrl, data=json.dumps(stringBody), headers=HEADERS)
+    return ret
 def countNumOfFolder(path):
     file = 0
     folder = 0

@@ -10,7 +10,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 from pytorch.example import Config
 
-from utils import Tools
+from util import Tools
 print("Pytorch Version",torch.__version__)
 def train(model,device,train_dataloader,optimizer,epoch):
     model.train()

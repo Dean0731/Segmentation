@@ -8,8 +8,8 @@
 import os,json
 import tensorflow as tf
 from tensorflow import keras
-from utils import Tools
-from utils.Path import DatasetPath
+from util import Tools
+from util.Path import DatasetPath
 from tf.util import Dataset
 from tf.network import Model
 

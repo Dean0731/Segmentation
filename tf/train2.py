@@ -1,6 +1,6 @@
 import os
 import tensorflow as tf
-from utils import Tools
+from util import Tools
 from tf.util import Config
 
 tf.get_logger().setLevel('WARNING')

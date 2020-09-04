@@ -9,7 +9,7 @@
 import torch
 import torch.optim as optim
 from pytorch.util import Config
-from utils import Tools
+from util import Tools
 print("Pytorch Version",torch.__version__)
 def acc(y,y_pred):
     shape = y.shape

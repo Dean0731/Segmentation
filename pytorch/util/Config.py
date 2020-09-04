@@ -10,7 +10,7 @@ from torchvision import transforms
 from pytorch.network.Segnet import Segnet
 import numpy as np
 import torch
-from utils.Path import DatasetPath
+from util.Path import DatasetPath
 input_size = (576,576)
 in_channels = 3
 out_channels = 2
