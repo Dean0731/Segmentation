@@ -18,8 +18,9 @@ FastSCNN:快速语义分割模型
     test_dataset:('miou', 0.8335083162528178), ('category_iou', array([0.90022247, 0.76679416])), ('macc', 0.9248705177663643), ('category_acc', array([0.9356998 , 0.89640333])), ('kappa', 0.815571508316844)
     val_dataset:('miou', 0.8284648071638616), ('category_iou', array([0.88813951, 0.7687901 ])), ('macc', 0.9184657312789053), ('category_acc', array([0.93284401, 0.88586201])), ('kappa', 0.8100699727959987)
 HRNet:姿态估计
-    test_dataset:
-    val_dataset:
+    test_dataset:('miou', 0.8436810316998193), ('category_iou', array([0.9062959 , 0.78106616])), ('macc', 0.9297727246150792), ('category_acc', array([0.94037327, 0.90220077])), ('kappa', 0.8279753679481162)
+    val_dataset:('miou', 0.8443779805759559), ('category_iou', array([0.89850038, 0.79025558])), ('macc', 0.9265783507868929), ('category_acc', array([0.94055237, 0.89532506])), ('kappa', 0.8293931619156155)
+
 SEGNet
     test_dataset:
     val_dataset:
