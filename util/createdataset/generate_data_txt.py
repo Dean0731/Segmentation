@@ -10,7 +10,8 @@ def generate(src):
     with open(os.path.join(src,'data.txt'),'w',encoding='utf-8') as f:
         for root, dirs, files in os.walk(src, topdown=False):
             for name in files:
-                f.write("{};{}\n".format(os.path.join(root,name),os.path.join(root.replace('img','label_png'),name)))
+                if not 'Target' in root:
+                    f.write("{};{}\n".format(os.path.join(root,name),os.path.join(root.replace('Input images','Target maps'),name)))
 if __name__ == '__main__':
-    src = r'G:\AI_dataset\dom\segmentation3'
+    src = r'G:\AI_dataset\massachusetts\Massachusetts576'
     generate(src)
