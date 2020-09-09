@@ -8,12 +8,12 @@
 
 
 
-
-Unet 80轮
-    没有预训练
+dom数据集
+Unet ：
+    没有预训练：80轮
         test_dataset:('miou', 0.8379292263308996), ('category_iou', array([0.89564145, 0.78021701])),('macc', 0.9238518229070699), ('category_acc', array([0.93238948, 0.9038431 ])),('kappa', 0.8215622159584229)
         val_dataset:('miou', 0.8369415116718525), ('category_iou', array([0.90280283, 0.7710802 ])),('macc', 0.9267759055734794), ('category_acc', array([0.9354054 , 0.90378408])),('kappa', 0.8197597921855168)
-    有训练
+    有训练：40轮
         test_dataset:('miou', 0.8489725323714268), ('category_iou', array([0.90791602, 0.79002905])), ('macc', 0.9316109095778421), ('category_acc', array([0.94892636, 0.88909726])), ('kappa', 0.8344390527730675)
         val_dataset:('miou', 0.848866204919595), ('category_iou', array([0.89990774, 0.79782467])), ('macc', 0.9282484684350356), ('category_acc', array([0.949144  , 0.88391322])), ('kappa', 0.8348630780796625)
 
@@ -51,6 +51,26 @@ ICNet
     test_dataset:
     val_dataset:
 
+
+
+
+mass数据集
+Unet 80轮
+    test_dataset:
+    val_dataset:
+FastSCNN:快速语义分割模型
+
+Deeplabv3+
+
+HRNet:姿态估计
+
+SEGNet
+    test_dataset:
+    val_dataset:
+
+ICNet
+    test_dataset:
+    val_dataset:
 
 
 
