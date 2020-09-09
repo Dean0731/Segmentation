@@ -54,10 +54,12 @@ ICNet
 
 
 
-mass数据集
+mass数据集，512，有预训练
 Unet 80轮
-    test_dataset:
-    val_dataset:
+    test_dataset:('miou', 0.8158612293907048), ('category_iou', array([0.93853051, 0.69319195])), ('macc', 0.94602646866465), ('category_acc', array([0.96361039, 0.84217371])), ('kappa', 0.7871183888506726)])
+    val_dataset:('miou', 0.8021306354120123), ('category_iou', array([0.93430093, 0.66996034])), ('macc', 0.9420318603515625), ('category_acc', array([0.95902926, 0.83798449])), ('kappa', 0.7684733734564942)])
+
+
 FastSCNN:快速语义分割模型
 
 Deeplabv3+
