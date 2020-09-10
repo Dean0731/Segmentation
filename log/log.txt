@@ -82,3 +82,19 @@ ICNet
 
 
 
+aera数据集，512，
+Unet 80轮
+FastSCNN:快速语义分割模型
+Deeplabv3+
+    没有预训练
+    testdataset:[('miou', 0.8181536019744065), ('category_iou', array([0.90604272, 0.73026448])), ('macc', 0.925096271994585), ('category_acc', array([0.95812244, 0.82393664])), ('kappa', 0.7948518015781935)])
+    valdataset:('miou', 0.8186482364847669), ('category_iou', array([0.90222719, 0.73506928])), ('macc', 0.9230909118652344), ('category_acc', array([0.9565138 , 0.82698459])), ('kappa', 0.7959506383612426)])
+HRNet:姿态估计
+
+SEGNet
+    test_dataset:
+    val_dataset:
+
+ICNet
+    test_dataset:
+    val_dataset:
