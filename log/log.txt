@@ -96,7 +96,9 @@ Deeplabv3+
     testdataset:[('miou', 0.8181536019744065), ('category_iou', array([0.90604272, 0.73026448])), ('macc', 0.925096271994585), ('category_acc', array([0.95812244, 0.82393664])), ('kappa', 0.7948518015781935)])
     valdataset:('miou', 0.8186482364847669), ('category_iou', array([0.90222719, 0.73506928])), ('macc', 0.9230909118652344), ('category_acc', array([0.9565138 , 0.82698459])), ('kappa', 0.7959506383612426)])
 HRNet:姿态估计
-
+    没有预训练
+    testdataset:('miou', 0.8591451598554962), ('category_iou', array([0.93065563, 0.78763469])), ('macc', 0.9448417313322574), ('category_acc', array([0.96132034, 0.88965787])), ('kappa', 0.8452898839940156)
+    valdataset:[('miou', 0.8619494790083934), ('category_iou', array([0.92898471, 0.79491425])), ('macc', 0.9443129119873047), ('category_acc', array([0.9606855 , 0.89295161])), ('kappa', 0.8489289610010697)]
 SEGNet
     test_dataset:
     val_dataset:
