@@ -31,6 +31,7 @@
 |ICENT，适合高分图像|2018.08.20|https://arxiv.org/pdf/1704.08545.pdf||
 |deeplabv3+	|2018.8.22	|	https://arxiv.org/pdf/1802.02611.pdf|https://github.com/tensorflow/models/tree/master/research/deeplab|
 |Fast SCNN|2019.02.12|https://arxiv.org/pdf/1902.04502.pdf||
+|hrnet|2019.02.25|https://arxiv.org/pdf/1902.09212.pdf||
 |Gated-SCNN	|2019.7.12	|	https://arxiv.org/pdf/1907.05740v1.pdf||
 |Bi-directional Cross-Modality Feature Propagation with Separation-and-Aggregation Gate for RGB-D Semantic Segmentation|2020.07.17|https://arxiv.org/pdf/2007.09183.pdf|https://github.com/charlesCXK/RGBD_Semantic_Segmentation_PyTorch|
 
