@@ -13,8 +13,8 @@
 |名称|时间|论文|详细|
 |---|---|---|---|
 |FNC||| |
-|Unet||    |
-|segnet2015|||  |
+|Unet|2015.5.18|https://arxiv.org/pdf/1505.04597.pdf|
+|segnet|2016.10|https://arxiv.org/pdf/1511.00561.pdf|  |
 |DeepMask|2015.11|https://arxiv.org/abs/1506.06204   | |
 |ParseNet|	2015.11.9|||
 |LSTM-CF|		2016|||
