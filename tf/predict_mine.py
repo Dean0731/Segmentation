@@ -3,10 +3,7 @@ import numpy as np
 import os
 import tensorflow as tf
 from tf.network import Model
-
 np.set_printoptions(threshold = 1e6)
-
-
 def getModel(h5,type,target_size,num_classes):
     if type=="save_weights":
         model = Model.getModel("segnet", target_size, n_labels=num_classes)

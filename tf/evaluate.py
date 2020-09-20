@@ -1,5 +1,5 @@
 import numpy as np
-from tf.util import Config1, Dataset
+from tf.util import Config, Dataset
 from tf.network import Model
 
 np.set_printoptions(threshold = 1e6)

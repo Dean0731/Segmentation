@@ -208,5 +208,5 @@ def Deeplabv3(width,height,channel = 3, n_labels=2):
 
     return model
 if __name__ == '__main__':
-    model = Deeplabv3(576,576,3)
+    model = Deeplabv3(512,512,3)
     model.summary(line_length=200)

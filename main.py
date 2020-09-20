@@ -13,5 +13,7 @@
 # from pytorch import test
 # from pytorch import train
 # train.main()
-from pytorch.example import pytorch_for_cnn
-pytorch_for_cnn.main()
+# from pytorch.example import pytorch_for_cnn
+# pytorch_for_cnn.main()
+
+from tf import test4

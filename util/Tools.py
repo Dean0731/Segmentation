@@ -6,7 +6,7 @@
 # @History  :
 #   2020/7/19 Dean First Release
 import requests
-import os
+import os,numpy as np
 import time
 import json
 import datetime
@@ -132,7 +132,20 @@ def getSecondToTime(seconds):
     m, s = divmod(seconds, 60)
     h, m = divmod(m, 60)
     return int(h),int(m),round(s,2)
-
+def data_txt_to_list(data_txt_path,seed):
+    with open(data_txt_path,encoding='utf-8') as f:
+        lines = f.readlines()
+    if seed !=None:
+        np.random.seed(seed)
+        np.random.shuffle(lines)
+        np.random.seed(seed-1)
+        np.random.shuffle(lines)
+    lines_x = []
+    lines_y = []
+    for k in lines:
+        lines_x.append(os.path.join(os.path.dirname(data_txt_path),k.strip().split(';')[0]))
+        lines_y.append(os.path.join(os.path.dirname(data_txt_path),k.strip().split(';')[1]))
+    return lines_x,lines_y
 if __name__ == '__main__':
     from tf.network import Model
 

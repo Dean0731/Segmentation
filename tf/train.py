@@ -10,13 +10,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 @Tools.Decorator.sendMessage()
 @Tools.Decorator.timer(flag=True)
 def main():
-    model = "segnet"
-    target_size = (576,576)
-    mask_size = (576,576)
-    num_classes = 2
-
-    model,learning_rate,callback,train_data,validation_data,test_data,epochs,h5_dir = Config1.getNetwork_Model(model, target_size, mask_size, num_classes)
-    model = Config1.complie(model, lr=learning_rate, num_classes=num_classes)
+    model,learning_rate,callback,train_data,validation_data,test_data,epochs,h5_dir,num_classes = Config.getNetwork_Model()
+    model = Config.complie(model, lr=learning_rate, num_classes=num_classes)
 
     tf.print("开始训练".center(20,'*'))
     model.fit(train_data,validation_data=validation_data,epochs=epochs,callbacks=callback)
