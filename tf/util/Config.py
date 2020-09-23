@@ -22,6 +22,8 @@ class MyPrecusion(tf.keras.metrics.Precision):
 class MyRecall(tf.keras.metrics.Recall):
     def update_state(self, y_true, y_pred, sample_weight=None):
         return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
+def my_loss(y_true,y_pred):
+    pass
 def complie(model,lr,num_classes):
     model.compile(
         loss="categorical_crossentropy",
