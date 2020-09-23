@@ -98,27 +98,27 @@ def transform_double_input(line_x,line_y):
     return (x_1,x_2),y
 
 train_model = "segnet"
-target_size = (576,576)
-mask_size = (576,576)
+target_size = (512,512)
+mask_size = (512,512)
 num_classes = 2
 log = True
 def getNetwork_Model():
     # 必写参数
     learning_rate = 0.001
-    batch_size = 4
+    batch_size = 2
     data_txt_path = DatasetPath('dom').getPath()
     # 获取数据
-    dataset =  Dataset(DatasetPath("dom").getPath(),target_size,mask_size,num_classes)
-    if train_model.startswith("mysegnet"):
-        data,validation_data,test_data = dataset.getDataset(transform=transform_double_input)
-    else:
-        data,validation_data,test_data = dataset.getDataset(transform=transform_common)
+    dataset = Dataset(DatasetPath("dom").getPath(),target_size,mask_size,num_classes)
+
+    # data,validation_data,test_data = dataset.getDataset(transform=transform_double_input)
+    data,validation_data,test_data = dataset.getDataset(transform=transform_common,seed=7)
+
     data = data.batch(batch_size)
     validation_data = validation_data.batch(batch_size)
     test_data = test_data.batch(batch_size)
 
     pre_file = r'h5'
-    epochs= 160
+    epochs= 80
     period = max(1,epochs/10) # 每1/10 epochs保存一次
     # 获取模型,与数据集
     model = Model.getModel(train_model, target_size, n_labels=num_classes)

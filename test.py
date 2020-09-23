@@ -1,38 +1,13 @@
-from random import randint
+import tensorflow as tf
+import math
+a = math.log2(0.95)
+b = math.log2(0.01)
+c = math.log2(4)
 
-
-
-path = r'C:\Users\root\Desktop\1_json\test.png'
-
-
-
-#
-
-
-import os
-from PIL import Image
-def randomPalette(length, min, max):
-    return [randint(min, max) for x in range(length)]
-src=r'C:\Users\root\Desktop\1_json'
-k = 1
-for root, dirs, files in os.walk(src, topdown=False):
-    for name in files:
-        path = os.path.join(root,name)
-        if '22828930' in path:
-            img = Image.open(path)
-            img = img.convert('P')
-            i = randomPalette(0, 0, 0)
-            img.putpalette(i)
-            img.save(path)
-            print(i,path)
-            k = k+1
-
-from PIL import Image
-img = Image.open(r'C:\Users\root\Desktop\1_json\22828930_15_000.tif.png')
-
-import numpy as np
-img = np.asarray(img)
-for i in range(300):
-    for j in range(200):
-        print(img[i][j],end='')
-    print()
+print(a)
+print(b)
+y_true = [[0, 1, 0], [0, 0, 1]]
+y_pred = [[0.05, 0.95, 0], [0.1, 0.8, 0.1]]
+loss = tf.keras.losses.categorical_crossentropy(y_true, y_pred)
+assert loss.shape == (2,)
+print(loss.numpy())

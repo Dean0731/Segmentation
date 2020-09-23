@@ -44,13 +44,14 @@ def reformate(src):
             path = os.path.join(root,newname)
             img.save(path)
             print(i,path)
-def generate(src,filter):
+def generate(src,img,label):
     with open(os.path.join(src,'data.txt'),'w',encoding='utf-8') as f:
         for root, dirs, files in os.walk(src, topdown=False):
             for name in files:
-                if not filter in root:
-                    f.write("{};{}\n".format(os.path.join(root,name),os.path.join(root.replace('images',filter),name)))
+                if not label in root and not 'data.txt' in name:
+                    root = root.replace(src,'')
+                    f.write("{};{}\n".format(os.path.join(root,name),os.path.join(root.replace(img,label),name)))
 
 if __name__ == '__main__':
-    src = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\aerialImage\AerialImage576'
-    generate(src,'gt')
+    src = r'E:\DeepLearning\AI_dataset\dom\png_png\\'
+    generate(src,'img','label_png')

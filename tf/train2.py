@@ -9,6 +9,7 @@ tf.autograph.set_verbosity(2)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # model.fit  compile --->train
+@Tools.Decorator.sendMessage()
 @Tools.Decorator.timer(flag=True)
 def main():
     model,learning_rate,callback,data,validation_data,test_data,epochs,h5_dir, num_classes = Config.getNetwork_Model()
@@ -21,7 +22,10 @@ def main():
     model.evaluate(test_data)
     tf.print("保存模型".center(20,'*'))
     model.save_weights(os.path.join(h5_dir, 'last.h5'))
+
+
 # model.train_on_batch compile    ----> train（自己可以控制）
+@Tools.Decorator.sendMessage()
 @Tools.Decorator.timer(flag=True)
 def main1():
     model,learning_rate,callback,data,validation_data,test_data,epochs,h5_dir, num_classes = Config.getNetwork_Model()
@@ -34,6 +38,8 @@ def main1():
     model = TrainMethod.test_on_batch(model, test_data, len(test_data // 2))
     tf.print("保存模型".center(20,'*'))
     model.save_weights(os.path.join(h5_dir, 'last.h5'))
+
+
 # 自定义 compile 自定义train
 @Tools.Decorator.sendMessage()
 @Tools.Decorator.timer(flag=True)
