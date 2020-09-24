@@ -7,7 +7,9 @@
 #   2020/7/19 Dean First Release
 import os
 import tensorflow as tf
-from util import Tools
+
+from util.func import data_txt_to_list
+
 class Dataset:
     """
     单输入数据读取
@@ -21,7 +23,7 @@ class Dataset:
         else:
             raise FileNotFoundError("错误,未找到数据集txt文件，{}不存在".format(data_txt_path))
     def getDataset(self,transform,seed,split=(0.8,0.1,0.1)):
-        lines_x,lines_y = Tools.data_txt_to_list(self.data_txt_path,seed)
+        lines_x,lines_y = data_txt_to_list(self.data_txt_path, seed)
         dataset = tf.data.Dataset.from_tensor_slices((lines_x,lines_y)).map(transform)
         dataset_sum = len(dataset)
         if split == None:

@@ -6,7 +6,7 @@
 # @History  :
 #   2020/8/25 Dean First Release
 
-from util.Path import DatasetPath
+from util.cls import DatasetPath
 import torch
 from torchvision import datasets,transforms
 from pytorch.network import SimpleNet

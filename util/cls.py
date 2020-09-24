@@ -7,6 +7,10 @@
 #   2020/8/25 Dean First Release
 import getpass
 import socket
+import time
+import logging
+from .func import getSecondToTime,getUrlAndLog
+
 class DatasetPath:
     def __init__(self,dataset='dom'):
         if dataset.lower() == 'dom':
@@ -63,3 +67,54 @@ class DatasetPath:
             return self.TI1050
         else:
             raise FileNotFoundError("根据环境选数据集位置失败")
+
+class Decorator:
+    @staticmethod
+    def _messageHandler(seconds,message):
+        return "任务耗时{}小时{}分钟{}秒,{}".format(*getSecondToTime(seconds),message)
+    @staticmethod
+    def sendEmail(receivers='1028968939@qq.com',message="任务已完成，请抓紧时间处理"):
+        def inner(f):
+            def inner2(*args,**kwargs):
+                ret,seconds = f(*args,**kwargs)
+                msg = Decorator._messageHandler(seconds,message)
+                url = "https://python.api.dean0731.top/message/sendEmail?receivers={}&txt={}".format(receivers,msg)
+                return getUrlAndLog(url)
+            return inner2
+        return inner
+    @staticmethod
+    def timer(flag=True):
+        def outer(f):
+            def inner(*args,**kwargs):
+                if flag:
+                    start = time.time()
+                    ret = f(*args,**kwargs)
+                    time.sleep(1)
+                    end = time.time()
+                    logging.debug("程序运行{}s".format(end-start))
+                    return (ret,end-start)
+                else:
+                    ret = f(*args,**kwargs)
+                return ret
+            return inner
+        return outer
+    @staticmethod
+    def sendMessageWeChat(message=''):
+        def inner(f):
+            def inner2(*args,**kwargs):
+                ret,seconds = f(*args,**kwargs)
+                msg = Decorator._messageHandler(seconds,message)
+                url = "https://python.api.dean0731.top/message/sendMessage?content={}".format(msg)
+                return getUrlAndLog(url)
+            return inner2
+        return inner
+    @staticmethod
+    def sendMessageDingTalk(message=None,tels:str=None,all:str=False):
+        def inner(f):
+            def inner2(*args,**kwargs):
+                ret,seconds = f(*args,**kwargs)
+                msg = Decorator._messageHandler(seconds,message)
+                url = "https://python.api.dean0731.top//message/sendMessageToDingTalk?message={}&tels={}&all={}".format(msg,tels,all)
+                return getUrlAndLog(url)
+            return inner2
+        return inner

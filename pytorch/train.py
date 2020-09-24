@@ -9,7 +9,7 @@
 import torch
 import torch.optim as optim
 from pytorch.util import Config
-from util import Tools
+from util import func
 print("Pytorch Version",torch.__version__)
 def acc(y,y_pred):
     shape = y.shape
@@ -71,8 +71,8 @@ def test(model,device,test_dataloader):
         print("Test - loss:{} - acc:{} - miou:{}".format(total_loss,correct,total_iou))
         return "{{loss:{} - acc:{} - miou:{}}}".format(total_loss,correct,total_iou)
 
-@Tools.Decorator.sendMessage()
-@Tools.Decorator.timer()
+@func.Decorator.sendMessage()
+@func.Decorator.timer()
 def main():
     model = Config.model.to(Config.device)
     optimizer = optim.Adam(model.parameters(), lr=Config.learning_rate)

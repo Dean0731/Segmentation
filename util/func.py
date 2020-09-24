@@ -7,63 +7,35 @@
 #   2020/7/19 Dean First Release
 import requests
 import os,numpy as np
-import time
-import json
+import sys
+import logging
 import datetime
-class Decorator:
-    @staticmethod
-    def sendEmail(receivers=['1028968939@qq.com'],txt="任务已完成，请抓紧时间处理"):
-        def inner(f):
-            def inner2(*args,**kwargs):
-                f(*args,**kwargs)
-                ret = requests.get("https://python.api.dean0731.top/message/sendEmail?receivers={}&txt={}".format(receivers,txt))
-                print(ret.content.decode('utf-8'))
-                return ret
-            return inner2
-        return inner
-    @staticmethod
-    def timer(flag=True):
-        def outer(f):
-            def inner(*args,**kwargs):
-                if flag:
-                    start = time.time()
-                    ret = f(*args,**kwargs)
-                    time.sleep(1)
-                    end = time.time()
-                    print("程序运行{}s".format(end-start))
-                    return (ret,end-start)
-                else:
-                    ret = f(*args,**kwargs)
-                return ret
-            return inner
-        return outer
-    @staticmethod
-    def sendMessage(data=None):
-        def inner(f):
-            def inner2(*args,**kwargs):
-                ret,seconds = f(*args,**kwargs)
-                msg ="任务耗时{}小时{}分钟{}秒,{}".format(*getSecondToTime(seconds),data if data!=None else "")
-                url = "https://python.api.dean0731.top/message/sendMessage?content={}".format(msg)
-                print(url)
-                requests.get(url)
-                return ret
-            return inner2
-        return inner
 
-def sendMessage(data=None):
+def sendEmail(receivers='1028968939@qq.com',txt="任务已完成，请抓紧时间处理"):
+    """
+    发邮件
+    """
+    url = "https://python.api.dean0731.top/message/sendEmail?receivers={}&txt={}".format(receivers,txt);
+    return getUrlAndLog(url)
+
+def sendMessageDingTalk(message=None,tels:str=None,all:str=False):
+    """
+    向钉钉发送消息
+    """
+    url = "https://python.api.dean0731.top//message/sendMessageToDingTalk?message={}&tels={}&all={}".format(message,tels,all)
+    return getUrlAndLog(url)
+def sendMessageWeChat(message=''):
     """
     向企业我的微信发送信息
     """
-    print(data)
-    if data == None:
-        ret = requests.get("https://python.api.dean0731.top/message/sendMessage")
-    else:
-        ret = requests.get("https://python.api.dean0731.top/message/sendMessage?content={}".format(data))
+    url = "https://python.api.dean0731.top/message/sendMessage?content={}".format(message)
+    return getUrlAndLog(url)
+
+def getUrlAndLog(url):
+    ret = requests.get(url).content.decode('utf-8')
+    logging.debug(ret)
     return ret
-def sendMessageToDingTalk(message=None,tels:str=None,all:str=False):
-    baseUrl = "https://python.api.dean0731.top//message/sendMessageToDingTalk?message={}&tels={}&all={}".format(message,tels,all)
-    ret = requests.get(baseUrl)
-    return ret
+
 def countNumOfFolder(path):
     file = 0
     folder = 0
@@ -132,6 +104,16 @@ def getSecondToTime(seconds):
     m, s = divmod(seconds, 60)
     h, m = divmod(m, 60)
     return int(h),int(m),round(s,2)
+def getCmdDict():
+    argv = sys.argv
+    keys = argv[1:-1:2]
+    for i,key in enumerate(keys):
+        if key.startswith('--'):
+            keys[i] = key[2:len(key)]
+        else:
+            raise Exception("参数格式不正确:{}".format(key))
+    values = argv[2:len(argv):2]
+    return dict(zip(keys,values))
 def data_txt_to_list(data_txt_path,seed):
     with open(data_txt_path,encoding='utf-8') as f:
         lines = f.readlines()

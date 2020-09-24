@@ -36,7 +36,7 @@
 import os
 import numpy as np
 from torchvision import datasets,transforms,models,utils
-from util.Path import DatasetPath
+from util.cls import DatasetPath
 from pytorch.util.Dataset import Dataset
 import torch
 p = DatasetPath('dom')

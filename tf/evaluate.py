@@ -9,7 +9,7 @@ def main():
     num_classes = 2
     batch_size = 2
     h5 = 'last.h5'
-    dataset = Dataset.Dataset(Config1.Path.lENOVO_PC, target_size, mask_size, num_classes)
+    dataset = Dataset.Dataset(Config.Path.lENOVO_PC, target_size, mask_size, num_classes)
     data,validation_data,test_data = dataset.getTrainValTestDataset()
     data = data.batch(batch_size)
     validation_data = validation_data.batch(batch_size)

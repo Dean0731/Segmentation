@@ -1,6 +1,6 @@
 import os
 import tensorflow as tf
-from util import Tools
+import util
 from tf.util import Config
 from tf.util import TrainMethod
 
@@ -9,8 +9,8 @@ tf.autograph.set_verbosity(2)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # model.fit  compile --->train
-@Tools.Decorator.sendMessage()
-@Tools.Decorator.timer(flag=True)
+@util.cls.Decorator.sendMessageWeChat()
+@util.cls.Decorator.timer(flag=True)
 def main():
     model,learning_rate,callback,data,validation_data,test_data,epochs,h5_dir, num_classes = Config.getNetwork_Model()
     model = Config.complie(model, lr=learning_rate, num_classes=num_classes)
@@ -25,8 +25,8 @@ def main():
 
 
 # model.train_on_batch compile    ----> train（自己可以控制）
-@Tools.Decorator.sendMessage()
-@Tools.Decorator.timer(flag=True)
+@util.cls.Decorator.sendMessageWeChat()
+@util.cls.Decorator.timer(flag=True)
 def main1():
     model,learning_rate,callback,data,validation_data,test_data,epochs,h5_dir, num_classes = Config.getNetwork_Model()
     model = Config.complie(model, lr=0.001, num_classes=num_classes)
@@ -41,8 +41,8 @@ def main1():
 
 
 # 自定义 compile 自定义train
-@Tools.Decorator.sendMessage()
-@Tools.Decorator.timer(flag=True)
+@util.cls.Decorator.sendMessageWeChat()
+@util.cls.Decorator.timer(flag=True)
 def main2():
     model,learning_rate,callback,data,validation_data,test_data,epochs,h5_dir, num_classes = Config.getNetwork_Model()
 

@@ -5,11 +5,13 @@
 # @Desc     : 网络一些属性配置脚本
 # @History  :
 #   2020/7/19 Dean First Release
-import os,json
+import os
 import tensorflow as tf
 from tensorflow import keras
-from util import Tools
-from util.Path import DatasetPath
+
+from util.func import get_dir
+from util.cls import DatasetPath
+
 from tf.util.Dataset import Dataset
 from tf.network import Model
 
@@ -129,7 +131,7 @@ def getNetwork_Model():
         model.load_weights(pre_file)
     # 生成参数日志文件夹
     if log:
-        log_dir,h5_dir,event_dir = Tools.get_dir()
+        log_dir,h5_dir,event_dir = get_dir()
         callback = getCallBack(h5_dir,event_dir,period)
     else:
         callback,h5_dir = None,None

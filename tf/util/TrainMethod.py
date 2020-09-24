@@ -8,7 +8,7 @@
 import tensorflow as tf
 import os
 import json
-from util import Tools
+from util.func import getNumbySize
 # train_on_batch
 def train_on_batch(model,data,steps_per_epoch,epochs,validation_data,validation_steps,log_dir):
     with open(os.path.join(log_dir,'train.log'),'w',encoding='UTF-8')as f:
@@ -23,7 +23,7 @@ def train_on_batch(model,data,steps_per_epoch,epochs,validation_data,validation_
                 step= 1
                 for x,y in data:
                     train_result = model.train_on_batch(x, y)
-                    temp_train = dict(zip(model.metrics_names,Tools.getNumbySize(train_result,4)))
+                    temp_train = dict(zip(model.metrics_names, getNumbySize(train_result, 4)))
                     tf.print("train - epoch:{:>3}/{} - step:{: >3}/{} - {}".format(epoch,epochs,step,steps_per_epoch,temp_train))
                     step = step + 1
                     if step==steps_per_epoch+1:
@@ -31,7 +31,7 @@ def train_on_batch(model,data,steps_per_epoch,epochs,validation_data,validation_
                 step=1
                 for x,y in validation_data:
                     valid_result = model.test_on_batch(x, y,reset_metrics=False)
-                    temp_val = dict(zip(model.metrics_names,Tools.getNumbySize(valid_result,4)))
+                    temp_val = dict(zip(model.metrics_names, getNumbySize(valid_result, 4)))
                     tf.print("val - step:{: >3}/{} - {}".format(step,validation_steps,temp_val))
                     step = step + 1
                     if step==validation_steps+1:
@@ -51,7 +51,7 @@ def test_on_batch(model,data,test_steps):
         step = step + 1
         if step==test_steps+1:
             break
-    tf.print("test - step:{: >3}/{} - {}".format(step-1,test_steps,dict(zip(model.metrics_names,Tools.getNumbySize(test_result,4)))))
+    tf.print("test - step:{: >3}/{} - {}".format(step - 1, test_steps, dict(zip(model.metrics_names, func.getNumbySize(test_result, 4)))))
     return model
 # 自定义，不能用因为，写的不好，OOM异常
 def define_on_train(model,data,steps_per_epoch,epochs,validation_data,validation_steps,log_dir):
