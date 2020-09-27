@@ -10,6 +10,8 @@ import os,numpy as np
 import sys
 import logging
 import datetime
+import cv2
+from PIL import Image
 
 def sendEmail(receivers='1028968939@qq.com',txt="任务已完成，请抓紧时间处理"):
     """
@@ -128,6 +130,23 @@ def data_txt_to_list(data_txt_path,seed):
         lines_x.append(os.path.join(os.path.dirname(data_txt_path),k.strip().split(';')[0]))
         lines_y.append(os.path.join(os.path.dirname(data_txt_path),k.strip().split(';')[1]))
     return lines_x,lines_y
+def printImagePIL(img_path):
+    img = Image.open(img_path)
+    img = img.resize((64,64),resample=0)
+    array = np.asarray(img)
+    print(img.mode)
+    for i in range(64):
+        for j in range(64):
+            print(array[i,j],end='')
+        print()
+def printImagecv2(img_path):
+    img = cv2.imread(img_path)
+    img = cv2.resize(img,(64,64),interpolation=cv2.INTER_NEAREST)
+    array = np.asarray(img)
+    for i in range(64):
+        for j in range(64):
+            print(array[i,j],end='')
+        print()
 if __name__ == '__main__':
     from tf.network import Model
 

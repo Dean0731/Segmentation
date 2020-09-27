@@ -106,6 +106,7 @@ target_size = (512,512)
 mask_size = (512,512)
 num_classes = 2
 log = True
+EPOCH_NUM = 20
 def getNetwork_Model():
     # 必写参数
     learning_rate = 0.001
