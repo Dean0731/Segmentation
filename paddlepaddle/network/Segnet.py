@@ -19,7 +19,7 @@ from __future__ import print_function
 
 from collections import OrderedDict
 
-import paddlepaddle.fluid as fluid
+import paddle.fluid as fluid
 from paddlex.cv.nets.segmentation.model_utils.libs import scope, name_scope
 from paddlex.cv.nets.segmentation.model_utils.libs import bn, bn_relu, relu
 from paddlex.cv.nets.segmentation.model_utils.libs import conv, max_pool, deconv

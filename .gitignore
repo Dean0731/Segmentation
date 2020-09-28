@@ -1,5 +1,4 @@
 .idea
-source/
 train.log
 last.h5
 *__pycache__*
