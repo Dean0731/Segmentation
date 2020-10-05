@@ -2,3 +2,7 @@
 train.log
 last.h5
 *__pycache__*
+source
+test
+test.py
+*http.log*

@@ -29,7 +29,7 @@ class DatasetPath:
         self.lENOVO_PC = r'G:\AI_dataset\dom\segmentation'
         self.TI1050 = '/home/dean/dataset/dom/png_png'
         self.Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation'
-        self.Aistudio = r'/home/aistudio/work/dataset/dom'
+        self.Aistudio = r'/home/aistudio/dataset/dom'
         self.Aliyun = r'/home/admin/jupyter/dataset/dom'
         self.Huawei = r'/home/ma-user/work/dataset/dom/segmentation'
     def __getMinst(self):
@@ -37,7 +37,7 @@ class DatasetPath:
         self.P2000= r''
         self.lENOVO_PC = r'G:\AI_dataset\MNIST'
         self.Chaosuan = r''
-        self.Aistudio = r'/home/aistudio/work/dataset/MNIST'
+        self.Aistudio = r'/home/aistudio/dataset/MNIST'
         self.Aliyun = r'/home/admin/jupyter/dataset/MNIST'
         self.Huawei = r'/home/ma-user/work/dataset/MNIST'
     def __getFashionMinst(self):
@@ -45,7 +45,7 @@ class DatasetPath:
         self.P2000= r''
         self.lENOVO_PC = r'G:\AI_dataset\fashion-mnist'
         self.Chaosuan = r''
-        self.Aistudio = r'/home/aistudio/work/dataset/fashion-mnist'
+        self.Aistudio = r'/home/aistudio/dataset/fashion-mnist'
         self.Aliyun = r'/home/admin/jupyter/dataset/fashion-mnist'
         self.Huawei = r'/home/ma-user/work/dataset/fashion-mnist'
     def getPath(self,type):
