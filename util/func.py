@@ -11,8 +11,13 @@ import sys
 import logging
 import datetime
 import cv2
+import getpass
+import socket
 from PIL import Image
-
+def get_name_hostname():
+    user_name = getpass.getuser()
+    host_name = socket.gethostname()
+    return user_name,host_name
 def sendEmail(receivers='1028968939@qq.com',txt="任务已完成，请抓紧时间处理"):
     """
     发邮件

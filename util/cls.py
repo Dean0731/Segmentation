@@ -5,13 +5,15 @@
 # @Desc     :
 # @History  :
 #   2020/8/25 Dean First Release
-import getpass
-import socket
+
 import time
 import logging
-from .func import getSecondToTime,getUrlAndLog
-
+import os
+from .func import getSecondToTime,getUrlAndLog,get_name_hostname
 class DatasetPath:
+    TRAIN = 0
+    VAL = 1
+    TEST = 2
     def __init__(self,dataset='dom'):
         if dataset.lower() == 'dom':
             self.__getDom()
@@ -22,14 +24,14 @@ class DatasetPath:
         else:
             raise FileNotFoundError("数据集不存在")
     def __getDom(self):
-        self.Shiyanshi = r'E:\DeepLearning\AI_dataset\dom\png_png\data.txt'
-        self.P2000= r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation/data.txt'
-        self.lENOVO_PC = r'G:\AI_dataset\dom\segmentation\data.txt'
-        self.TI1050 = '/home/dean/dataset/dom/png_png/data.txt'
-        self.Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation/data.txt'
-        self.Aistudio = r'/home/aistudio/work/dataset/dom/data.txt'
-        self.Aliyun = r'/home/admin/jupyter/dataset/dom/data.txt'
-        self.Huawei = r'/home/ma-user/work/dataset/dom/segmentation\data.txt'
+        self.Shiyanshi = r'E:\DeepLearning\AI_dataset\dom\png_png'
+        self.P2000= r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation'
+        self.lENOVO_PC = r'G:\AI_dataset\dom\segmentation'
+        self.TI1050 = '/home/dean/dataset/dom/png_png'
+        self.Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation'
+        self.Aistudio = r'/home/aistudio/work/dataset/dom'
+        self.Aliyun = r'/home/admin/jupyter/dataset/dom'
+        self.Huawei = r'/home/ma-user/work/dataset/dom/segmentation'
     def __getMinst(self):
         self.Shiyanshi = r'E:\Workspace\PythonWorkSpace\Segmentation\dataset\MNIST'
         self.P2000= r''
@@ -46,29 +48,35 @@ class DatasetPath:
         self.Aistudio = r'/home/aistudio/work/dataset/fashion-mnist'
         self.Aliyun = r'/home/admin/jupyter/dataset/fashion-mnist'
         self.Huawei = r'/home/ma-user/work/dataset/fashion-mnist'
-    def getPath(self):
-        user_name = getpass.getuser()
-        host_name = socket.gethostname();
+    def getPath(self,type):
+        user_name,host_name = get_name_hostname()
+        if type == DatasetPath.TRAIN:
+            file = 'data_train.txt'
+        elif type == DatasetPath.VAL:
+            file = 'data_val.txt'
+        elif type == DatasetPath.TEST:
+            file = 'data_test.txt'
+        else:
+            file = 'data.txt'
         if user_name == 'aistudio':
-            return self.Aistudio
+            parent = self.Aistudio
         elif user_name == 'Administrator':
-            return self.lENOVO_PC
+            parent = self.lENOVO_PC
         elif user_name == 'dean' and host_name == 'P2000':
-            return self.P2000
+            parent = self.P2000
         elif user_name =='admin':
-            return self.Aliyun
+            parent = self.Aliyun
         elif user_name =='root':
-            return self.Shiyanshi
+            parent =  self.Shiyanshi
         elif user_name =='weiht':
-            return self.Chaosuan
+            parent = self.Chaosuan
         elif user_name == 'ma-user':
-            return self.Huawei
+            parent = self.Huawei
         elif host_name == 'dean-1050TI':
-            return self.TI1050
+            parent = self.TI1050
         else:
             raise FileNotFoundError("根据环境选数据集位置失败")
-    def __str__(self):
-        return self.getPath()
+        return os.path.join(parent,file)
 class Decorator:
     @staticmethod
     def _messageHandler(seconds,message):

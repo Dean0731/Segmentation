@@ -1,10 +1,16 @@
 import numpy as np
+import paddle
 from PIL import Image
+
+
 from paddlepaddle.util.Dataset import Dataset
 from paddlepaddle.network import Segnet
-import util
-import paddle
+from util.cls import DatasetPath
+
+# device = paddle.set_device('gpu')
+# paddle.disable_static(device)
 paddle.disable_static()
+
 import paddle.nn.functional as F
 def transpose(image,mode='image'):
     image = Image.open(image)
@@ -39,6 +45,7 @@ mask_size = (512, 512)
 num_classes = 2
 EPOCH_NUM = 20
 log_dir='source/test'
-train_dataset = Dataset(util.cls.DatasetPath("dom").getPath(),transform=transpose)
-val_dataset,test_dataset=train_dataset,train_dataset
+train_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.TRAIN),transform=transpose)
+val_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.VAL),transform=transpose)
+test_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.TEST),transform=transpose)
 model = paddle.Model(Segnet.UNet(num_classes))

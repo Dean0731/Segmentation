@@ -35,8 +35,3 @@ class Dataset(Dataset):
         返回数据集总数
         """
         return len(self.line_x)
-    def getDataset(self,split=(0.8,0.1,0.1)):
-        num = len(self)
-        a = int(num*split[0])
-        b = int(num*split[1])
-        return self[0:a],self[a:a+b],self[a+b:]
