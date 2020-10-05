@@ -16,5 +16,7 @@
 # from pytorch.example import pytorch_for_cnn
 # pytorch_for_cnn.main()
 
-from tf import train
+# from tf import train
+# train.main()
+from paddlepaddle import train
 train.main()

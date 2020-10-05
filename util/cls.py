@@ -67,7 +67,8 @@ class DatasetPath:
             return self.TI1050
         else:
             raise FileNotFoundError("根据环境选数据集位置失败")
-
+    def __str__(self):
+        return self.getPath()
 class Decorator:
     @staticmethod
     def _messageHandler(seconds,message):
