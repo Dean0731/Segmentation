@@ -1,18 +1,11 @@
 # Pragram:
-# 	Segnet网络使用深度可分离卷积代替，参数量缩小约八倍
+# 	Segnet 继承Model版本，但init中定义的网络层不能复用，复用会报错
 # History:
 # 2020-07-06 Dean First Release
-# Email:dean0731@qq.com
+# Email:dean07kernel_size1@qq.com
 from tensorflow.keras.layers import Conv2D,BatchNormalization,Activation,Lambda
 import tensorflow as tf
 
-
-dic = {
-    "conv":(64,3),"bn":None,"activate":"relu","conv":(64,3),"bn":None,"activate":"relu","pool":{"ksize": (1,2,2,1), "strides":(1,2,2,1)},
-    "conv":(128,3),"bn":None,"activate":"relu","conv":(64,3),"bn":None,"activate":"relu","pool":{"ksize": (1,2,2,1), "strides":(1,2,2,1)},
-    "conv":(256,3),"bn":None,"activate":"relu","conv":(64,3),"bn":None,"activate":"relu","pool":{"ksize": (1,2,2,1), "strides":(1,2,2,1)},
-    "conv":(512,3),"bn":None,"activate":"relu","conv":(64,3),"bn":None,"activate":"relu","pool":{"ksize": (1,2,2,1), "strides":(1,2,2,1)},
- }
 class Segnet(tf.keras.Model):
     def MaxPool2DWithArgmax(self,input_tensor, ksize, strides):
         p, m = tf.nn.max_pool_with_argmax(input_tensor, ksize=ksize, strides=strides, padding="SAME", include_batch_in_index=True)
@@ -29,138 +22,68 @@ class Segnet(tf.keras.Model):
         t = tf.reshape(t, (-1, mask.shape[1]*factor[1], mask.shape[2]*factor[2], mask.shape[3]))  # 恢复四维
         return t
 
+
     def __init__(self):
         super(Segnet, self).__init__()
+        pool_args = {"ksize": (1,2,2,1), "strides":(1,2,2,1)}
+        unpool_args = {"factor": (1,2,2,1)}
+        activate = 'relu'
+        kernel_size = 3
+        self.layer = [
+            ("conv",(64,kernel_size)),("bn",None),("activate",activate),("conv",(64,kernel_size)),("bn",None),("activate",activate),("pool",pool_args),
+            ("conv2",(128,kernel_size)),("bn",None),("activate",activate),("conv2",(128,kernel_size)),("bn",None),("activate",activate),("pool",pool_args),
+            ("conv3",(256,kernel_size)),("bn",None),("activate",activate),("conv3",(256,kernel_size)),("bn",None),("activate",activate),("conv4",(256,1)),("bn",None),("activate",activate),("pool",pool_args),
+            ("conv5",(512,kernel_size)),("bn",None),("activate",activate),("conv5",(512,kernel_size)),("bn",None),("activate",activate),("conv6",(512,1)),("bn",None),("activate",activate),("pool",pool_args),
+            ("conv5",(512,kernel_size)),("bn",None),("activate",activate),("conv5",(512,kernel_size)),("bn",None),("activate",activate),("conv6",(512,1)),("bn",None),("activate",activate),("pool",pool_args),
+            ("unpool",unpool_args), ("conv5",(512,kernel_size)),("bn",None),("activate",activate), ("conv5",(512,kernel_size)),("bn",None),("activate",activate), ("conv5",(512,kernel_size)),("bn",None),("activate",activate),
+            ("unpool",unpool_args), ("conv5",(512,kernel_size)),("bn",None),("activate",activate), ("conv5",(512,kernel_size)),("bn",None),("activate",activate), ("conv4",(256,kernel_size)),("bn",None),("activate",activate),
+            ("unpool",unpool_args), ("conv3",(256,kernel_size)),("bn",None),("activate",activate), ("conv3",(256,kernel_size)),("bn",None),("activate",activate), ("conv2",(128,kernel_size)),("bn",None),("activate",activate),
+            ("unpool",unpool_args), ("conv2",(128,kernel_size)),("bn",None),("activate",activate),("conv",(64,kernel_size)),("bn",None),("activate",activate),
+            ("unpool",unpool_args), ("conv",(64,kernel_size)),("bn",None),("activate",activate), ("conv7",(2,1)),("bn",None),("activate",activate),
+        ]
+        self.conv = Conv2D(64,kernel_size,padding="same")
+        self.conv2 = Conv2D(128,kernel_size,padding="same")
+        self.conv3 = Conv2D(256,kernel_size,padding="same")
+        self.conv4 = Conv2D(256,1,padding="same")
+        self.conv5 = Conv2D(512,kernel_size,padding="same")
+        self.conv6 = Conv2D(512,1,padding="same")
+        self.conv7 = Conv2D(2,1,padding="same")
 
+        self.pool = Lambda(self.MaxPool2DWithArgmax, arguments=pool_args)
+        self.unpool = Lambda(self.Unpool2D, arguments=unpool_args)
         self.bn = BatchNormalization()
-        self.activate = Activation('relu')
-
-        self.d2 = Dense(10, activation='softmax')
-
-    def call(self, x):
+        self.activate = Activation(activate)
+    def call(self, x, training=False):
         l = []
-        for i in (self.conv1,self.conv2,self.conv3,self.conv4)
-            x = self.conv1(x)
-            x = self.bn(x)
-            x = self.activate(x)
-            x, mask_1 = Lambda(self.MaxPool2DWithArgmax, arguments={"ksize": (1,2,2,1), "strides":(1,2,2,1)})(x)
-            l.append(mask_1)
-
-        return self.d2(x)
-model = Segnet()
-
-
-
-
-def Segnet(height=576,width=576,channel=3,n_labels=2):
-    input_shape = (height, width, channel)
-    kernel = 3
-    args = {"ksize": (1,2,2,1), "strides":(1,2,2,1)}
-    pool_size = (1,2,2,1)
-
-
-
-
-
-
-    x = Conv2D(256, (kernel, kernel), padding="same")(pool_2)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(256, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(256, (1, 1), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-
-    pool_3, mask_3 = Lambda(MaxPool2DWithArgmax, arguments=args)(x)
-
-    x = Conv2D(512, (kernel, kernel), padding="same")(pool_3)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(512, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(512, (1, 1), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-
-    pool_4, mask_4 = Lambda(MaxPool2DWithArgmax, arguments=args)(x)
-
-    x = Conv2D(512, (kernel, kernel), padding="same")(pool_4)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(512, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(512, (1, 1), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-
-    pool_5, mask_5 = Lambda(MaxPool2DWithArgmax, arguments=args)(x)
-
-
-    # ======================================================================
-
-    x = Lambda(Unpool2D, arguments={"factor": pool_size})([pool_5, mask_5])
-
-    x = Conv2D(512, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(512, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(512, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-
-    x = Lambda(Unpool2D, arguments={"factor": pool_size})([x, mask_4])
-
-    x = Conv2D(512, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(512, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(256, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-
-    x = Lambda(Unpool2D, arguments={"factor": pool_size})([x, mask_3])
-
-    x = Conv2D(256, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(256, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(128, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-
-    x = Lambda(Unpool2D, arguments={"factor": pool_size})([x, mask_2])
-
-    x = Conv2D(128, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    x = Conv2D(64, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-
-    x = Lambda(Unpool2D, arguments={"factor": pool_size})([x, mask_1])
-
-    x = Conv2D(64, (kernel, kernel), padding="same")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-
-    x = Conv2D(n_labels, (1, 1), padding="valid")(x)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
-    # x = Reshape(
-    #     (input_shape[0] * input_shape[1], n_labels),
-    #     input_shape=(input_shape[0], input_shape[1], n_labels),
-    # )(x)
-
-    outputs = Activation("softmax")(x)
-
-    return Model(inputs=inputs, outputs=outputs, name="SegNet")
+        for name,args in self.layer:
+            if name == 'conv':
+                x = self.conv(x)
+            elif name == 'conv2':
+                x = self.conv2(x)
+            elif name == 'conv3':
+                x = self.conv3(x)
+            elif name == 'conv4':
+                x = self.conv4(x)
+            elif name == 'conv5':
+                x = self.conv5(x)
+            elif name == 'conv6':
+                x = self.conv6(x)
+            elif name == 'conv7':
+                x = self.conv7(x)
+            elif name == 'bn':
+                x = self.bn(x)
+            elif name == 'activate':
+                x = self.activate(x)
+            elif name == 'pool':
+                x,mask = self.pool(x)
+                l.append(mask)
+            elif name == 'unpool':
+                x = self.unpool([x, l.pop()])
+            else:
+                tf.print("错误！{}层不存在".format(name))
+            print(name,args,x.shape)
+        return Activation("softmax")(x)
+if __name__ == '__main__':
+    model = Segnet()
+    model.build(input_shape=(4,512,512,3))
+    model.summary()
