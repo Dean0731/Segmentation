@@ -14,6 +14,7 @@ class DatasetPath:
     TRAIN = 0
     VAL = 1
     TEST = 2
+    ALL = 3
     def __init__(self,dataset='dom'):
         if dataset.lower() == 'dom':
             self.__getDom()
