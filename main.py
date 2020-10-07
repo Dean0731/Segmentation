@@ -6,17 +6,21 @@
 # @History  :
 #   2020/8/26 Dean First Release
 
-# import sys
-# sys.path.append('D:\desktop\Files\Workspace\PythonWorkSpace\DeepLearning\Segmentation')
-# from pytorch.example import pytorch_for_cnn
-# pytorch_for_cnn.main()
-# from pytorch import test
-# from pytorch import train
-# train.main()
-# from pytorch.example import pytorch_for_cnn
-# pytorch_for_cnn.main()
 
-# from tf import train
-# train.main()
-from paddlepaddle import train
-train.main()
+
+# from pytorch.example import pytorch_for_cnn
+# pytorch_for_cnn.main()
+import util
+dic = util.getCmdDict()
+type = dic.get("type")
+if type == 'tf':
+    from tf import train
+    train.main()
+elif type == 'torch':
+    from pytorch import train
+    train.main()
+elif type == 'paddlepaddle':
+    from paddlepaddle import train
+    train.main()
+else:
+    print("启动出错")

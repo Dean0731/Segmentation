@@ -13,7 +13,6 @@ from util.func import get_dir
 from util.cls import DatasetPath
 
 from tf.util.Dataset import Dataset
-from tf.util import Transform
 from tf.network import Model
 
 class MyMeanIOU(tf.keras.metrics.MeanIoU):
@@ -69,7 +68,8 @@ loss = "categorical_crossentropy",
 period = max(1,EPOCH_NUM/10) # 每1/10 epochs保存一次
 dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.ALL),target_size,mask_size,num_classes)
 # data,validation_data,test_data = dataset.getDataset(transform=Transform.transform_double_input)
-data,validation_data,test_data = [dataset.batchs(batch_size) for dataset in dataset.getDataset(transform=Transform.transform_common,seed=7)]
+from tf.util import Transform
+data,validation_data,test_data = [dataset.batch(batch_size) for dataset in dataset.getDataset(transform=Transform.transform_common,seed=7)]
 model = Model.getModel(train_model, target_size, n_labels=num_classes)
 model.compile(
     loss=loss,
@@ -90,4 +90,4 @@ else:
     callback,h5_dir = None,None
 
 if __name__ == '__main__':
-    print(DatasetPath('dom').getPath())
+    print(DatasetPath('dom').getPath(DatasetPath.ALL))
