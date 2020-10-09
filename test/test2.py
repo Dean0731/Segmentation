@@ -22,12 +22,13 @@
 #     FN = P-TP # FN=P-TP
 #     recall = TP / (TP + FN + tf.cast(K.epsilon(),tf.int64)) # TP/(TP+FN)
 #     return recall
-import train
+from tf import train
+
 target_size = (576,576)
 mask_size = (576,576)
 num_classes = 2
 batch_size = 4
-dataset = train.selectDataset('A',"{}_{}".format('tif',576),parent='E:\Workspace\PythonWorkSpace\Segmentation\dataset')
+dataset = train.selectDataset('A', "{}_{}".format('tif', 576), parent='E:\Workspace\PythonWorkSpace\Segmentation\dataset')
 data,validation_data,test_data = dataset.getData(target_size=target_size,mask_size=mask_size,batch_size=batch_size)
 data1 = data.__next__()
 data1 = test_data.__next__()

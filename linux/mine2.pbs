@@ -1,0 +1,19 @@
+#PBS -N Segmentation
+#PBS -e /public1/data/weiht/dzf/out/$PBS_JOBID.err
+#PBS -o /public1/data/weiht/dzf/out/$PBS_JOBID.out
+#PBS -l nodes=2:ppn=8
+#PBS -l walltime=1200:00:00
+#PBS -q batch
+
+# working directory
+cd $PBS_O_WORKDIR
+
+# tensorflow-gpu1.4 keras 2.0.8
+# tensorflow1.14 keras 2.3.1
+# tensorflow2.1.0 keras 2.3.1
+
+
+#/home/weiht/anaconda3/envs/Sp3/bin/python	/home/weiht/MDT/dzf/workspace/U-net/train.py
+#/home/weiht/anaconda3/envs/faster/bin/python	/home/weiht/MDT/dzf/workspace/U-net/train.py
+#/home/weiht/anaconda3/envs/tf1.14/bin/python	/home/weiht/MDT/dzf/workspace/U-net/train.py
+/home/weiht/anaconda3/envs/tf2/bin/python	/public1/data/weiht/dzf/workspace/Segmentation/train2.py

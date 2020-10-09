@@ -1,5 +1,5 @@
 #!/bin/bash
-train='/home/dean/PythonWorkSpace/Segmentation/train.py'
+train='/home/dean/PythonWorkSpace/Segmentation/main.py'
 dir=''
 if [ -z $1 ]; then
   dir='train.log'

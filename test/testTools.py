@@ -1,6 +1,6 @@
-import tensorflow as tf
-from tensorflow.keras.layers import Input,Conv2D
-from tensorflow.keras import Model
+import tf as tf
+from tf.keras.layers import Input,Conv2D
+from tf.keras import Model
 
 input = Input((3072,3072,3))
 
