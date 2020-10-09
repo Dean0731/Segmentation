@@ -135,23 +135,30 @@ def data_txt_to_list(data_txt_path,seed):
         lines_x.append(os.path.join(os.path.dirname(data_txt_path),k.strip().split(';')[0]))
         lines_y.append(os.path.join(os.path.dirname(data_txt_path),k.strip().split(';')[1]))
     return lines_x,lines_y
-def printImagePIL(img_path):
+def printImagePIL(img_path,all=False):
     img = Image.open(img_path)
-    img = img.resize((64,64),resample=0)
-    array = np.asarray(img)
-    print(img.mode)
-    for i in range(64):
-        for j in range(64):
-            print(array[i,j],end='')
-        print()
-def printImagecv2(img_path):
-    img = cv2.imread(img_path)
-    img = cv2.resize(img,(64,64),interpolation=cv2.INTER_NEAREST)
-    array = np.asarray(img)
-    for i in range(64):
-        for j in range(64):
-            print(array[i,j],end='')
-        print()
+    print("image size:{}".format(img.size))
+    print("image mode:{}".format(img.mode))
+    if not all:
+        img = img.resize((64,64),resample=0)
+    return np.array(img)
+def printArray(array:np.array):
+    print("打印像素值：",np.unique(array))
+    shape = array.shape
+    if len(shape) == 1:
+        for i in range(shape[0]):
+            print(array[i],end='')
+    elif len(shape) >= 2:
+        for i in range(shape[0]):
+            for j in range(shape[1]):
+                print(array[i,j],end='')
+            print()
+def printImagecv2(img_path,all=False):
+    img = cv2.imread(img_path,cv2.IMREAD_COLOR)
+    print("image size:{}".format(img.shape))
+    if not all:
+        img = cv2.resize(img,(64,64),interpolation=cv2.INTER_NEAREST)
+    return np.array(img)
 if __name__ == '__main__':
     from tf.network import Model
 
