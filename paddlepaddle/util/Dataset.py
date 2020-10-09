@@ -21,7 +21,7 @@ class Dataset(Dataset):
         else:
             raise FileNotFoundError("错误,未找到数据集txt文件，{}不存在".format(data_txt_path))
         self.transform = transform
-        self.line_x,self.line_y = util.data_txt_to_list(data_txt_path,seed)
+        self.line_x,self.line_y = util.data_txt_to_list(data_txt_path,seed,split=' ')
     def __getitem__(self, idx):
         """
         返回 image, label

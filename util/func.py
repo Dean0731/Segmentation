@@ -121,7 +121,7 @@ def getCmdDict():
             raise Exception("参数格式不正确:{}".format(key))
     values = argv[2:len(argv):2]
     return dict(zip(keys,values))
-def data_txt_to_list(data_txt_path,seed):
+def data_txt_to_list(data_txt_path,seed,split):
     with open(data_txt_path,encoding='utf-8') as f:
         lines = f.readlines()
     if seed !=None:
@@ -132,8 +132,8 @@ def data_txt_to_list(data_txt_path,seed):
     lines_x = []
     lines_y = []
     for k in lines:
-        lines_x.append(os.path.join(os.path.dirname(data_txt_path),k.strip().split(';')[0]))
-        lines_y.append(os.path.join(os.path.dirname(data_txt_path),k.strip().split(';')[1]))
+        lines_x.append(os.path.join(os.path.dirname(data_txt_path),k.strip().split(split)[0]))
+        lines_y.append(os.path.join(os.path.dirname(data_txt_path),k.strip().split(split)[1]))
     return lines_x,lines_y
 def printImagePIL(img_path,all=False):
     img = Image.open(img_path)

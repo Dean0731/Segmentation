@@ -4,12 +4,12 @@ from PIL import Image
 
 
 from paddlepaddle.util.Dataset import Dataset
-from paddlepaddle.network import Segnet
+from paddlepaddle.network import Unet
 from util.cls import DatasetPath
 
-# device = paddle.set_device('gpu')
-# paddle.disable_static(device)
-paddle.disable_static()
+device = paddle.set_device(paddle.device.get_device())
+paddle.disable_static(device)
+print("使用设备：",device)
 
 import paddle.nn.functional as F
 def transpose(image,mode='image'):
@@ -48,4 +48,4 @@ log_dir='source/test'
 train_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.TRAIN),transform=transpose)
 val_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.VAL),transform=transpose)
 test_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.TEST),transform=transpose)
-model = paddle.Model(Segnet.UNet(num_classes))
+model = paddle.Model(Unet.UNet(num_classes))
