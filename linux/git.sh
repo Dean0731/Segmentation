@@ -1,6 +1,6 @@
 #!/bin/bash
 git fetch --all && git reset --hard origin/master && git pull
-git fetch --all && git reset --hard origin/new_dataset && git pull
+git fetch --all && git reset --hard origin/dev && git pull
 
 #git rm -r --cached .
 #git add .
