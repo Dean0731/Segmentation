@@ -1,16 +1,12 @@
 import numpy as np
 import paddle
 from PIL import Image
-
-
 from paddlepaddle.util.Dataset import Dataset
 from paddlepaddle.network import Unet
 from util.cls import DatasetPath
-
 device = paddle.set_device(paddle.device.get_device())
 paddle.disable_static(device)
 print("使用设备：",device)
-
 import paddle.nn.functional as F
 def transpose(image,mode='image'):
     image = Image.open(image)
@@ -39,11 +35,12 @@ class SoftmaxWithCrossEntropy(paddle.nn.Layer):
                                             axis=1)
         return paddle.mean(loss)
 
-BATCH_SIZE = 2
+BATCH_SIZE = 8
 target_size = (512,512)
 mask_size = (512, 512)
 num_classes = 2
 EPOCH_NUM = 20
+learning_rate = 0.001
 log_dir='source/test'
 train_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.TRAIN),transform=transpose)
 val_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.VAL),transform=transpose)
