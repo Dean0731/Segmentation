@@ -1,23 +1,21 @@
 import paddle
-class UNet(paddle.nn.Layer):
-    def __init__(self, num_classes):
-        super(UNet, self).__init__()
+from paddlepaddle.util import Callback
+from paddle.static import InputSpec
 
-        self.conv_1 = paddle.nn.Conv2d(3, 32,kernel_size=3,padding=0)
-        self.bn = paddle.nn.BatchNorm2d(32)
-        self.relu = paddle.nn.ReLU()
+inputs = [InputSpec([-1, 1, 28, 28], 'float32', 'image')]
+labels = [InputSpec([None, 1], 'int64', 'label')]
+
+train_dataset = paddle.vision.datasets.MNIST(mode='train')
+
+model = paddle.Model(paddle.vision.LeNet(classifier_activation=None),
+                     inputs, labels)
+
+optim = paddle.optimizer.Adam(0.001)
+model.prepare(optimizer=optim,
+              loss=paddle.nn.CrossEntropyLoss(),
+              metrics=(paddle.metric.Accuracy()))
+callback = [Callback.Visual(log_dir="source/visual")]
+model.fit(train_dataset, batch_size=64,epochs=2,callbacks=callback)
 
 
-    def forward(self, inputs):
-        y = self.conv_1(inputs)
-        y = self.bn(y)
-        y = self.relu(y)
 
-        return y
-if __name__ == '__main__':
-    device = paddle.set_device(paddle.device.get_device())
-    paddle.disable_static(device)
-    print("使用设备：",device)
-    num_classes = 4
-    model = paddle.Model(UNet(num_classes))
-    model.summary((3, 160, 160))

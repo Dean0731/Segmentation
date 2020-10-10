@@ -164,6 +164,6 @@ def generateTrainValTest(dir):
         f4.write('house')
 if __name__ == '__main__':
 
-    data_txt_dir = r'C:\Users\root\Desktop'
+    data_txt_dir = r'E:\DeepLearning\AI_dataset\dom\png_png'
     # generateDataTxT(data_txt_dir,'img','label_png')
     generateTrainValTest(data_txt_dir)

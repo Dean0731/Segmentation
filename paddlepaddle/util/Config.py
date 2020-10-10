@@ -1,13 +1,19 @@
 import numpy as np
 import paddle
+import os
+import logging
 from PIL import Image
+import paddle.nn.functional as F
+
 from paddlepaddle.util.Dataset import Dataset
+from paddlepaddle.util.Callback import Visual
 from paddlepaddle.network import Unet
 from util.cls import DatasetPath
+
 device = paddle.set_device(paddle.device.get_device())
 paddle.disable_static(device)
-print("使用设备：",device)
-import paddle.nn.functional as F
+logging.info("使用设备：{}".format(device))
+
 def transpose(image,mode='image'):
     image = Image.open(image)
     if mode == 'image':
@@ -39,9 +45,10 @@ BATCH_SIZE = 8
 target_size = (512,512)
 mask_size = (512, 512)
 num_classes = 2
-EPOCH_NUM = 20
+EPOCH_NUM = 40
 learning_rate = 0.001
-log_dir='source/test'
+log_dir='source/paddlepaddle/'
+callback = [Visual(log_dir=log_dir),paddle.callbacks.ModelCheckpoint(save_dir=os.path.join(log_dir,"checkpoint"))]
 train_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.TRAIN),transform=transpose)
 val_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.VAL),transform=transpose)
 test_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.TEST),transform=transpose)

@@ -40,7 +40,7 @@ def sendMessageWeChat(message=''):
 
 def getUrlAndLog(url):
     ret = requests.get(url).content.decode('utf-8')
-    logging.debug(ret)
+    logging.info(ret)
     return ret
 
 def countNumOfFolder(path):

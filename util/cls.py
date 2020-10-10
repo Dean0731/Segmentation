@@ -101,7 +101,7 @@ class Decorator:
                     ret = f(*args,**kwargs)
                     time.sleep(1)
                     end = time.time()
-                    logging.debug("程序运行{}s".format(end-start))
+                    logging.info("程序运行{}s".format(end-start))
                     return (ret,end-start)
                 else:
                     ret = f(*args,**kwargs)
@@ -114,7 +114,7 @@ class Decorator:
             def inner2(*args,**kwargs):
                 ret,seconds = f(*args,**kwargs)
                 msg = Decorator._messageHandler(seconds,message)
-                url = "https://python.api.dean0731.top/message/sendMessage?content={}".format(msg)
+                url = "https://python.api.dean0731.top/message/sendMessageWeChat?content={}".format(msg)
                 return getUrlAndLog(url)
             return inner2
         return inner

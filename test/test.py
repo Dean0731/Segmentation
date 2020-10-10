@@ -1,6 +1,4 @@
-import tf as tf
-y_true = [[0, 1], [0, 0]]
-y_pred = [[0.6, 0.4], [0.4, 0.6]]
-loss = tf.keras.losses.binary_crossentropy(y_true, y_pred)
-assert loss.shape == (2,)
-print(loss.numpy())
+logs = {"step":1,"loss":2,"acc":3,"iou":4}
+
+for key,value in {k:v for (k,v) in logs.items() if k not in["step","loss"]}.items():
+    print(key,value)

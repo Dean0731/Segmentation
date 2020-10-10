@@ -10,7 +10,11 @@
 
 # from pytorch.example import pytorch_for_cnn
 # pytorch_for_cnn.main()
+
+
 import util
+import logging
+logging.basicConfig(level=logging.INFO)
 dic = util.getCmdDict()
 type = dic.get("type")
 if type == 'tf':
@@ -24,3 +28,7 @@ elif type == 'paddlepaddle':
     train.main()
 else:
     print("启动出错")
+
+# python main.py --type paddlepaddle
+# python main.py --type tf
+# python main.py --type torch
