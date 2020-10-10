@@ -1,4 +1,8 @@
-1,所有的数据改为png格式 ，tensorflow不支持tif,完成
-2，检查所有代码， tensorflow 重新运行
-3，新方式实验，
+完成
+    所有的数据改为png格式 ，tensorflow不支持tif
+    检查所有代码， tensorflow 重新运行
+未完成
+    新方式实验，
+    paddlepaddle 其他评价指标iou
+    rgb-d网络
 git add . && git commit -m 'update' && git push

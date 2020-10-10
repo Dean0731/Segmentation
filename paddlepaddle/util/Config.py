@@ -48,7 +48,11 @@ num_classes = 2
 EPOCH_NUM = 40
 learning_rate = 0.001
 log_dir='source/paddlepaddle/'
-callback = [Visual(log_dir=log_dir),paddle.callbacks.ModelCheckpoint(save_dir=os.path.join(log_dir,"checkpoint"))]
+callback = [
+    Visual(log_dir=log_dir),
+    paddle.callbacks.ModelCheckpoint(save_freq=5,save_dir=os.path.join(log_dir,"checkpoint")),
+    paddle.callbacks.ProgBarLogger(log_freq=1,verbose=2)
+]
 train_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.TRAIN),transform=transpose)
 val_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.VAL),transform=transpose)
 test_dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.TEST),transform=transpose)
