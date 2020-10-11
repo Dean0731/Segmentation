@@ -1,6 +1,8 @@
 import util
-from tf.util.Config import *
-from tf.util.Config import model as mymodel
+import os
+
+import tensorflow as tf
+from tf.util.Config import config
 from tf.util import TrainMethod
 
 tf.get_logger().setLevel('WARNING')
@@ -9,22 +11,22 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # model.fit  compile --->train
 def main1():
-    model.fit(data,validation_data=validation_data,epochs=EPOCH_NUM,callbacks=callback)
+    config.model.fit(config.data,validation_data=config.validation_data,epochs=config.EPOCH_NUM,callbacks=config.callback)
 
     tf.print("测试集开始测试".center(20,'*'))
-    model.evaluate(test_data)
-    return model
+    config.model.evaluate(config.test_data)
+    return config.model
 
 # model.train_on_batch compile    ----> train（自己可以控制）
 def main2():
-    model = TrainMethod.train_on_batch(mymodel, data, steps_per_epoch=len(data) // 2, validation_data=validation_data, validation_steps=len(validation_data // 2), epochs=epochs, log_dir=h5_dir)
+    model = TrainMethod.train_on_batch(config.model, config.data, steps_per_epoch=len(config.data) // 2, validation_data=config.validation_data, validation_steps=len(config.validation_data // 2), epochs=config.epochs, log_dir=config.h5_dir)
     tf.print("测试集开始测试".center(20,'*'))
-    model = TrainMethod.test_on_batch(model, test_data, len(test_data // 2))
+    model = TrainMethod.test_on_batch(model, config.test_data, len(config.test_data // 2))
     return model
 
 # 自定义 compile 自定义train
 def main3():
-    model = TrainMethod.define_on_train(mymodel, data, steps_per_epoch=len(data) // 2, validation_data=validation_data, validation_steps=len(validation_data // 2), epochs=epochs, log_dir=h5_dir)
+    model = TrainMethod.define_on_train(config.model, config.data, steps_per_epoch=len(config.data) // 2, validation_data=config.validation_data, validation_steps=len(config.validation_data // 2), epochs=config.epochs, log_dir=config.h5_dir)
     return model
 
 
@@ -36,6 +38,6 @@ def main():
     # model = main2()
     # model = main3()
     tf.print("保存模型".center(20,'*'))
-    model.save_weights(os.path.join(h5_dir, 'last.h5'))
+    model.save_weights(os.path.join(config.h5_dir, 'last.h5'))
 if __name__ == '__main__':
     main()
