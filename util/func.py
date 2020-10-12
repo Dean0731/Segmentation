@@ -122,6 +122,12 @@ def getCmdDict():
     values = argv[2:len(argv):2]
     return dict(zip(keys,values))
 def data_txt_to_list(data_txt_path,seed,split):
+    if split == None:
+        name,host = get_name_hostname()
+        if name == 'aistudio':
+            split = ' '
+        else:
+            split = ';'
     with open(data_txt_path,encoding='utf-8') as f:
         lines = f.readlines()
     if seed !=None:
