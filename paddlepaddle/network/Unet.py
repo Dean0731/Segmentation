@@ -147,7 +147,7 @@ class UNet(paddle.nn.Layer):
                                             num_classes,
                                             kernel_size=3,
                                             padding='same')
-
+        self.softmax = paddle.nn.Softmax()
     def forward(self, inputs):
         y = self.conv_1(inputs)
         y = self.bn(y)
@@ -161,11 +161,11 @@ class UNet(paddle.nn.Layer):
 
         y = self.output_conv(y)
 
-        return y
+        return self.softmax(y)
 if __name__ == '__main__':
     from paddle.static import InputSpec
 
     paddle.disable_static()
     num_classes = 2
-    model = paddle.Model(UNet(num_classes))
+    model = paddle.Model(UNet(num_classes=num_classes))
     model.summary((3, 512, 512))

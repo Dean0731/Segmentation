@@ -28,26 +28,28 @@ def transpose(image,mode='image'):
 
     return img.transpose((2,0,1))
 
-class SoftmaxWithCrossEntropy(paddle.nn.Layer):
+class CrossEntropy(paddle.nn.Layer):
     """
     损失函数
     """
     def __init__(self):
-        super(SoftmaxWithCrossEntropy, self).__init__()
+        super(CrossEntropy, self).__init__()
 
     def forward(self, input, label):
-        loss = F.softmax_with_cross_entropy(input,
-                                            label,
-                                            return_softmax=False,
-                                            axis=1)
-        return paddle.mean(loss)
+        print(input[0,0,256,256].numpy(),input[0,1,256,256].numpy())
+        F.cross_entropy(input,label,reduction='mean')
+        return
 class MyAcc(paddle.metric.Accuracy):
     def compute(self, pred, label, *args):
-        x = paddle.flatten(pred,1,-1)
-        y = paddle.flatten(label,1,-1)
-        x = paddle.transpose(x,perm=(1,0))
-        y = paddle.transpose(y,perm=(1,0))
-        super(MyAcc, self).compute(x,y,args)
+        print(pred[0,0,256,256].numpy(),pred[0,1,256,256].numpy())
+        pred = paddle.flatten(pred,2,-1)
+        label = paddle.flatten(label,2,-1)
+        pred = paddle.transpose(pred,perm=(0,2,1))
+        label = paddle.transpose(label,perm=(0,2,1))
+        compute = 0
+        for i in range(len(pred)):
+            compute+= super(MyAcc, self).compute(pred[i],label[i],args)
+        return compute/len(pred)
 class MeanIOU(paddle.metric.Metric):
     def __init__(self,name=None, *args, **kwargs):
         super(MeanIOU, self).__init__(*args, **kwargs)
@@ -84,10 +86,10 @@ BATCH_SIZE = 8
 target_size = (512,512)
 mask_size = (512, 512)
 num_classes = 2
-EPOCH_NUM = int(flag.get('epoch')) or 40
+EPOCH_NUM = int(flag.get('epoch') or 40)
 learning_rate = 0.001
 log_dir='source/paddlepaddle/'
-loss = SoftmaxWithCrossEntropy()
+loss = CrossEntropy()
 metrics = [MyAcc(name='acc')]
 callback = [
     Visual(log_dir=log_dir),

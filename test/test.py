@@ -28,7 +28,22 @@ a = np.array([[
         [0.4,0.6,0.6,0.4],
         [0.4,0.4,0.4,0.4],
     ],
-]])
+],
+    [
+        [
+            [0.6,0.6,0.6,0.6],
+            [0.6,0.4,0.4,0.6],
+            [0.6,0.4,0.4,0.6],
+            [0.6,0.6,0.6,0.6],
+        ],
+        [
+            [0.4,0.4,0.4,0.4],
+            [0.4,0.6,0.6,0.4],
+            [0.4,0.6,0.6,0.4],
+            [0.4,0.4,0.4,0.4],
+        ],
+    ]
+])
 b = np.array([[
     [
         [0,0,0,0],
@@ -36,18 +51,32 @@ b = np.array([[
         [0,0,1,1],
         [0,0,0,0],
     ]
-]])
+],
+    [
+        [
+            [0,0,0,0],
+            [0,0,1,1],
+            [0,0,1,1],
+            [0,0,0,0],
+        ]
+    ]
+])
+
 x = paddle.to_tensor(a)
 y = paddle.to_tensor(b)
-# x = paddle.transpose(x,perm=(1,2,0))
-# y = paddle.transpose(y,perm=(1,2,0))
 print(x.shape)
 print(y.shape)
-print(x.numpy())
-print(y.numpy())
+# x = paddle.flatten(x,2,-1)
+# y = paddle.flatten(y,2,-1)
+# x = paddle.transpose(x,perm=(0,2,1))
+# y = paddle.transpose(y,perm=(0,2,1))
+# print(x.shape)
+# print(y.shape)
+# m = paddle.metric.Accuracy()
 
 import paddlepaddle.util.Config as C
 m = C.MyAcc()
+
 correct = m.compute(x, y)
 m.update(correct)
 res = m.accumulate()
