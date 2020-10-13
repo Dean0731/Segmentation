@@ -15,8 +15,7 @@
 import util
 import logging
 logging.basicConfig(level=logging.INFO)
-dic = util.getCmdDict()
-type = dic.get("type")
+type = util.flag.get("type")
 if type == 'tf':
     from tf import train
     train.main()

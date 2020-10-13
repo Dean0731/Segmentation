@@ -9,6 +9,7 @@ from paddlepaddle.util.Dataset import Dataset
 from paddlepaddle.util.Callback import Visual
 from paddlepaddle.network import Unet
 from util.cls import DatasetPath
+from util import flag
 
 device = paddle.set_device(paddle.device.get_device())
 paddle.disable_static(device)
@@ -40,6 +41,13 @@ class SoftmaxWithCrossEntropy(paddle.nn.Layer):
                                             return_softmax=False,
                                             axis=1)
         return paddle.mean(loss)
+class MyAcc(paddle.metric.Accuracy):
+    def compute(self, pred, label, *args):
+        x = paddle.flatten(pred,1,-1)
+        y = paddle.flatten(label,1,-1)
+        x = paddle.transpose(x,perm=(1,0))
+        y = paddle.transpose(y,perm=(1,0))
+        super(MyAcc, self).compute(x,y,args)
 class MeanIOU(paddle.metric.Metric):
     def __init__(self,name=None, *args, **kwargs):
         super(MeanIOU, self).__init__(*args, **kwargs)
@@ -76,11 +84,11 @@ BATCH_SIZE = 8
 target_size = (512,512)
 mask_size = (512, 512)
 num_classes = 2
-EPOCH_NUM = 40
+EPOCH_NUM = flag.get('epoch') or 40
 learning_rate = 0.001
 log_dir='source/paddlepaddle/'
 loss = SoftmaxWithCrossEntropy()
-metrics = [paddle.metric.Accuracy(name='acc')]
+metrics = [MyAcc(name='acc')]
 callback = [
     Visual(log_dir=log_dir),
     paddle.callbacks.ModelCheckpoint(save_freq=5,save_dir=os.path.join(log_dir,"checkpoint")),

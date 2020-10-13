@@ -166,6 +166,6 @@ if __name__ == '__main__':
     from paddle.static import InputSpec
 
     paddle.disable_static()
-    num_classes = 4
+    num_classes = 2
     model = paddle.Model(UNet(num_classes))
-    model.summary((3, 160, 160))
+    model.summary((3, 512, 512))
