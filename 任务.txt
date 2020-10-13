@@ -1,10 +1,12 @@
 完成
     所有的数据改为png格式 ，tensorflow不支持tif
     检查所有代码， tensorflow 重新运行
+    paddlepaddle acc(reduce_mean),loss(交叉熵)
 未完成
     新方式实验，
-    paddlepaddle 其他评价指标iou
     rgb-d网络
+    paddlepaddle 其他评价指标iou
+
 
 
 softamx 不属于网络结构，
