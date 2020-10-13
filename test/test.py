@@ -15,7 +15,7 @@ paddle.disable_static()
 # print(out)
 #
 import numpy as np
-a = np.array([
+a = np.array([[
     [
         [0.6,0.6,0.6,0.6],
         [0.6,0.4,0.4,0.6],
@@ -28,21 +28,17 @@ a = np.array([
         [0.4,0.6,0.6,0.4],
         [0.4,0.4,0.4,0.4],
     ],
-])
-b = np.array([
+]])
+b = np.array([[
     [
         [0,0,0,0],
         [0,0,1,1],
         [0,0,1,1],
         [0,0,0,0],
     ]
-])
+]])
 x = paddle.to_tensor(a)
 y = paddle.to_tensor(b)
-x = paddle.flatten(x,1,-1)
-y = paddle.flatten(y,1,-1)
-x = paddle.transpose(x,perm=(1,0))
-y = paddle.transpose(y,perm=(1,0))
 # x = paddle.transpose(x,perm=(1,2,0))
 # y = paddle.transpose(y,perm=(1,2,0))
 print(x.shape)
@@ -50,8 +46,8 @@ print(y.shape)
 print(x.numpy())
 print(y.numpy())
 
-
-m = paddle.metric.Accuracy(topk=(1,))
+import paddlepaddle.util.Config as C
+m = C.MyAcc()
 correct = m.compute(x, y)
 m.update(correct)
 res = m.accumulate()
