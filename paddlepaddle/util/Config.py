@@ -27,29 +27,32 @@ def transpose(image,mode='image'):
             img = np.expand_dims(img, axis=2)
 
     return img.transpose((2,0,1))
-
+def changeDimAndReshape(input,label):
+    input = paddle.flatten(input,2,-1)
+    label = paddle.flatten(label,2,-1)
+    input = paddle.transpose(input,perm=(0,2,1))
+    label = paddle.transpose(label,perm=(0,2,1))
+    return input,label
 class CrossEntropy(paddle.nn.Layer):
     """
     损失函数
     """
     def __init__(self):
         super(CrossEntropy, self).__init__()
-
     def forward(self, input, label):
-        print(input[0,0,256,256].numpy(),input[0,1,256,256].numpy())
-        F.cross_entropy(input,label,reduction='mean')
-        return
+        input,label = changeDimAndReshape(input,label)
+        sum = []
+        for i in range(len(input)):
+            sum.append(F.cross_entropy(input[i],label[i],reduction='mean'))
+        return paddle.tensor.stack(x=sum)
 class MyAcc(paddle.metric.Accuracy):
     def compute(self, pred, label, *args):
-        print(pred[0,0,256,256].numpy(),pred[0,1,256,256].numpy())
-        pred = paddle.flatten(pred,2,-1)
-        label = paddle.flatten(label,2,-1)
-        pred = paddle.transpose(pred,perm=(0,2,1))
-        label = paddle.transpose(label,perm=(0,2,1))
-        compute = 0
-        for i in range(len(pred)):
-            compute+= super(MyAcc, self).compute(pred[i],label[i],args)
-        return compute/len(pred)
+        acc = []
+        for x,y in zip(pred,label) :
+            x = paddle.argmax(x,axis=0)
+            res = paddle.cast(paddle.equal(x,y),dtype="float32")
+            acc.append(paddle.reduce_mean(res))
+        return paddle.tensor.stack(x=acc)
 class MeanIOU(paddle.metric.Metric):
     def __init__(self,name=None, *args, **kwargs):
         super(MeanIOU, self).__init__(*args, **kwargs)

@@ -61,9 +61,10 @@ b = np.array([[
         ]
     ]
 ])
-
+a = a[1]
+b = b[1]
 x = paddle.to_tensor(a)
-y = paddle.to_tensor(b)
+y = paddle.to_tensor(b,dtype="int64")
 print(x.shape)
 print(y.shape)
 # x = paddle.flatten(x,2,-1)
@@ -74,10 +75,15 @@ print(y.shape)
 # print(y.shape)
 # m = paddle.metric.Accuracy()
 
-import paddlepaddle.util.Config as C
-m = C.MyAcc()
+x = paddle.argmax(x,axis=0)
+# paddle.reduce_sum()
+res = paddle.cast(paddle.equal(x,y),dtype="float32")
 
-correct = m.compute(x, y)
-m.update(correct)
-res = m.accumulate()
-print(res) # 0.75
+# print(paddle.sum(res))
+# print(paddle.to_tensor(y.shape[0]*y.shape[1]*y.shape[2]))
+print(paddle.reduce_mean(res))
+
+paddle.stack()
+
+
+

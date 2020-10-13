@@ -5,4 +5,13 @@
     新方式实验，
     paddlepaddle 其他评价指标iou
     rgb-d网络
+
+
+softamx 不属于网络结构，
+    loss 需要用
+    acc 需要用
+
+
 git add . && git commit -m 'update' && git push
+git fetch --all && git reset --hard origin/dev && git pull
+
