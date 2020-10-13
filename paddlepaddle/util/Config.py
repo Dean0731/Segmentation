@@ -40,6 +40,37 @@ class SoftmaxWithCrossEntropy(paddle.nn.Layer):
                                             return_softmax=False,
                                             axis=1)
         return paddle.mean(loss)
+class MeanIOU(paddle.metric.Metric):
+    def __init__(self,name=None, *args, **kwargs):
+        super(MeanIOU, self).__init__(*args, **kwargs)
+        self._name = [name or 'miou']
+        self.reset()
+
+    def compute(self, pred, label, *args):
+        mean_iou, out_wrong, out_correct = paddle.metric.mean_iou(pred,label,2)
+        return mean_iou
+
+    def update(self, correct, *args):
+        return correct
+
+    def reset(self):
+        self.total = [0.] * len(self.topk)
+        self.count = [0] * len(self.topk)
+
+    def accumulate(self):
+        res = []
+        for t, c in zip(self.total, self.count):
+            r = float(t) / c if c > 0 else 0.
+            res.append(r)
+        res = res[0] if len(self.topk) == 1 else res
+        return res
+
+
+    def name(self):
+        """
+        Return name of metric instance.
+        """
+        return self._name
 
 BATCH_SIZE = 8
 target_size = (512,512)
@@ -48,6 +79,8 @@ num_classes = 2
 EPOCH_NUM = 40
 learning_rate = 0.001
 log_dir='source/paddlepaddle/'
+loss = SoftmaxWithCrossEntropy()
+metrics = [paddle.metric.Accuracy(name='acc')]
 callback = [
     Visual(log_dir=log_dir),
     paddle.callbacks.ModelCheckpoint(save_freq=5,save_dir=os.path.join(log_dir,"checkpoint")),
