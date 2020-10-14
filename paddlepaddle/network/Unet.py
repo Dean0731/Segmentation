@@ -160,8 +160,8 @@ class UNet(paddle.nn.Layer):
             y = decoder(y)
 
         y = self.output_conv(y)
-
-        return self.softmax(y)
+        # y = self.softmax(y)
+        return y
 if __name__ == '__main__':
     from paddle.static import InputSpec
 

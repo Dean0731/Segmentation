@@ -1,1 +1,1 @@
-nohup python main.py --type paddlepaddle >train.log 2>&1 &
+nohup python main.py --type paddlepaddle --epoch 20 >train.log 2>&1 &

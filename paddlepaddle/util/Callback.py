@@ -15,8 +15,9 @@ class Visual(paddle.callbacks.Callback):
         else:
             step = self.epoch
         for key in self.params.get("metrics"):
-            if key == 'loss':
-                self.writer.add_scalar(tag="{}_{}".format(type,key), step=step, value=logs.get(key)[0])
+            if not isinstance(logs.get(key),float):
+                for i,value in enumerate(logs.get(key)):
+                    self.writer.add_scalar(tag="{}_{}_{}".format(type,key,i), step=step, value=value)
             else:
                 self.writer.add_scalar(tag="{}_{}".format(type,key), step=step, value=logs.get(key))
     def on_epoch_begin(self, epoch, logs=None):

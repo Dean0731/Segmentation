@@ -2,10 +2,11 @@
     所有的数据改为png格式 ，tensorflow不支持tif
     检查所有代码， tensorflow 重新运行
     paddlepaddle acc(reduce_mean),loss(交叉熵)
+    paddlepaddle 其他评价指标iou
 未完成
     新方式实验，
     rgb-d网络
-    paddlepaddle 其他评价指标iou
+
 
 
 
@@ -14,6 +15,10 @@ softamx 不属于网络结构，
     acc 需要用
 
 
-git add . && git commit -m 'update' && git push
+nohup python main.py --type paddlepaddle --epoch 20 >train.log 2>&1 &
+
 git fetch --all && git reset --hard origin/dev && git pull
+
+git add . && git commit -m 'update' && git push
+
 
