@@ -5,6 +5,21 @@
 # @Desc     :
 # @History  :
 #   2020/8/25 Dean First Release
+
+from tensorflow.python.client import device_lib
 import tensorflow as tf
-print(tf.__version__)
-print(tf.test.is_gpu_available())
+tf.get_logger().setLevel(3)
+
+print("设备信息如下所示".center(20,'*'))
+local_device = device_lib.list_local_devices()
+[print(x) for x in local_device]
+print("Tensorflow version:",tf.__version__)
+# 2.3之前
+print("gpu-available:",tf.test.is_gpu_available())
+# 2.3及之后
+gpu = tf.config.get_visible_devices('CPU')
+cpu = tf.config.get_visible_devices('GPU')
+print("cpu:",cpu)
+print("gpu:",gpu)
+
+
