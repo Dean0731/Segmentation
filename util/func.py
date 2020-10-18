@@ -121,7 +121,7 @@ def getCmdDict():
             raise Exception("参数格式不正确:{}".format(key))
     values = argv[2:len(argv):2]
     return dict(zip(keys,values))
-def data_txt_to_list(data_txt_path,seed,split):
+def data_txt_to_list(data_txt_path,seed,split=None):
     if split == None:
         name,host = get_name_hostname()
         if name == 'aistudio':

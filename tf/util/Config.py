@@ -15,6 +15,7 @@ from util.cls import DatasetPath
 
 from tf.util.Dataset import Dataset
 from tf.network import Model
+from util import flag
 
 class MyMeanIOU(tf.keras.metrics.MeanIoU):
     def update_state(self, y_true, y_pred, sample_weight=None):
@@ -61,9 +62,9 @@ config.target_size = (512,512)
 config.mask_size = (512,512)
 config.num_classes = 2
 config.log = True
-config.EPOCH_NUM = 20
+config.EPOCH_NUM = int(flag.get('epochs') or 40)
 config.learning_rate = 0.001
-config.batch_size = 2
+config.batch_size = 4
 config.pre_file = r'h5'
 config.loss = "categorical_crossentropy",
 config.period = max(1,config.EPOCH_NUM/10) # 每1/10 epochs保存一次
@@ -87,6 +88,7 @@ if os.path.exists(config.pre_file):
 if config.log:
     _,h5_dir,event_dir = get_dir()
     config.callback = getCallBack()
+    config.h5_dir = h5_dir
 else:
     config.callback,config.h5_dir = None,None
 

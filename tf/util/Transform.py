@@ -7,18 +7,17 @@
 #   2020/10/7 Dean First Release
 
 from tf.util.Config import tf
-from tf.util.Config import target_size
-from tf.util.Config import mask_size
+from tf.util.Config import config
 # 数据集转换 普通转换
 def transform_common(line_x,line_y):
     image = tf.io.read_file(line_x)
     image = tf.image.decode_png(image)
-    image = tf.image.resize(image,target_size,method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+    image = tf.image.resize(image,config.target_size,method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
     x = image
 
     label = tf.io.read_file(line_y)
     label = tf.image.decode_png(label,channels=1)
-    label = tf.image.resize(label,mask_size,method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+    label = tf.image.resize(label,config.mask_size,method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
     label = tf.squeeze(label)
     label = tf.cast(label,dtype=tf.uint8)
     label = tf.one_hot(label,depth=2)   # 注意在进行one-hot前 原数组 的书应是【0,1,2,3】  不能是 【0,2,6】 中间不能空
@@ -32,13 +31,13 @@ def transform_common(line_x,line_y):
 def transform_double_input(line_x,line_y):
     image = tf.io.read_file(line_x)
     image = tf.image.decode_png(image)
-    image_1 = tf.image.resize(image,target_size,method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+    image_1 = tf.image.resize(image,config.target_size,method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
     image_2 = tf.image.resize(image,(3072,3072),method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
     x_1,x_2 = image_1,image_2
 
     label = tf.io.read_file(line_y)
     label = tf.image.decode_png(label,channels=1)
-    label = tf.image.resize(label,mask_size,method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+    label = tf.image.resize(label,config.mask_size,method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
     label = tf.squeeze(label)
     label = tf.cast(label,dtype=tf.uint8)
     label = tf.one_hot(label,depth=2)

@@ -15,4 +15,6 @@ git remote -v 查看指定远程仓库地址
 # git branch 当前分支
 # git branch -a 所有当前分支
 git add . && git commit -m 'update' && git push
+# 同步分支情况
+git remote prune origin
 

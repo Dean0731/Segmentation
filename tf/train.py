@@ -1,6 +1,5 @@
 import util
 import os
-
 import tensorflow as tf
 from tf.util.Config import config
 from tf.util import TrainMethod
@@ -12,7 +11,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # model.fit  compile --->train
 def main1():
     config.model.fit(config.data,validation_data=config.validation_data,epochs=config.EPOCH_NUM,callbacks=config.callback)
-
     tf.print("测试集开始测试".center(20,'*'))
     config.model.evaluate(config.test_data)
     return config.model

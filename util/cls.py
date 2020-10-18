@@ -26,7 +26,7 @@ class DatasetPath:
             raise FileNotFoundError("数据集不存在")
     def __getDom(self):
         self.Shiyanshi = r'E:\DeepLearning\AI_dataset\dom\png_png'
-        self.P2000= r'/home/dean/PythonWorkSpace/Segmentation/dataset/dom/segmentation'
+        self.P2000= r'/home/dean/dataset/dom/png_png'
         self.lENOVO_PC = r'G:\AI_dataset\dom\segmentation'
         self.TI1050 = '/home/dean/dataset/dom/png_png'
         self.Chaosuan = r'/public1/data/weiht/dzf/workspace/Segmentation/dataset/dom/segmentation'
@@ -64,6 +64,8 @@ class DatasetPath:
         elif user_name == 'Administrator':
             parent = self.lENOVO_PC
         elif user_name == 'dean' and host_name == 'P2000':
+            parent = self.P2000
+        elif user_name == 'dean' and host_name == '2070':
             parent = self.P2000
         elif user_name =='admin':
             parent = self.Aliyun
