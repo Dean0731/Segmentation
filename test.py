@@ -62,9 +62,6 @@ print(tf.argmax(a,axis=-1))
 y_true = [1, 2]
 y_pred = [[0.05, 0.95, 0], [0.1, 0.8, 0.1]]
 # Using 'auto'/'sum_over_batch_size' reduction type.
-scce = tf.keras.losses.SparseCategoricalCrossentropy()
+scce = tf.keras.losses.SparseCategoricalCrossentropy(reduction=tf.keras.losses.Reduction.NONE)
 print(scce(y_true, y_pred).numpy())
 print(scce(b,a).numpy())
-
-
-tf.keras.losses.sparse_categorical_crossentropy(y_true, y_pred)

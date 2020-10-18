@@ -66,7 +66,8 @@ config.EPOCH_NUM = int(flag.get('epochs') or 40)
 config.learning_rate = 0.001
 config.batch_size = 4
 config.pre_file = r'h5'
-config.loss = "categorical_crossentropy",
+config.loss = tf.keras.losses.SparseCategoricalCrossentropy()
+# config.loss = tf.keras.losses.CategoricalCrossentropy()
 config.period = max(1,config.EPOCH_NUM/10) # 每1/10 epochs保存一次
 config.dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.ALL),config.target_size,config.mask_size,config.num_classes)
 # data,validation_data,test_data = dataset.getDataset(transform=Transform.transform_double_input)
