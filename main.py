@@ -26,7 +26,7 @@ elif type == 'paddlepaddle':
     from paddlepaddle import train
     train.main()
 else:
-    print("启动出错")
+    print("启动参数出错")
 
 # python main.py --type paddlepaddle
 # python main.py --type tf

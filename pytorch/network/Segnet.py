@@ -14,14 +14,14 @@ activate = 'relu'
 kernel_size = 3
 layers = [
     ("conv",(3,64,kernel_size)),("bn",64),("activate",activate),("conv",(64,64,kernel_size)),("bn",64),("activate",activate),("pool",pool_args),
-    ("conv",(128,128,kernel_size)),("bn",128),("activate",activate),("conv",(128,128,kernel_size)),("bn",128),("activate",activate),("pool",pool_args),
-    ("conv",(128,256,kernel_size)),("bn",256),("activate",activate),("conv",(256,256,256,kernel_size)),("bn",256),("activate",activate),("conv",(256,256,256,1)),("bn",256),("activate",activate),("pool",pool_args),
-    ("conv",(512,512,512,kernel_size)),("bn",512),("activate",activate),("conv",(512,512,kernel_size)),("bn",512),("activate",activate),("conv",(512,512,1)),("bn",512),("activate",activate),("pool",pool_args),
+    ("conv",(64,128,kernel_size)),("bn",128),("activate",activate),("conv",(128,128,kernel_size)),("bn",128),("activate",activate),("pool",pool_args),
+    ("conv",(128,256,kernel_size)),("bn",256),("activate",activate),("conv",(256,256,kernel_size)),("bn",256),("activate",activate),("conv",(256,256,1)),("bn",256),("activate",activate),("pool",pool_args),
+    ("conv",(256,512,kernel_size)),("bn",512),("activate",activate),("conv",(512,512,kernel_size)),("bn",512),("activate",activate),("conv",(512,512,1)),("bn",512),("activate",activate),("pool",pool_args),
     ("conv",(512,512,kernel_size)),("bn",512),("activate",activate),("conv",(512,512,kernel_size)),("bn",512),("activate",activate),("conv",(512,512,1)),("bn",512),("activate",activate),("pool",pool_args),
     ("unpool",unpool_args), ("conv",(512,512,kernel_size)),("bn",512),("activate",activate), ("conv",(512,512,kernel_size)),("bn",512),("activate",activate), ("conv",(512,512,kernel_size)),("bn",512),("activate",activate),
-    ("unpool",unpool_args), ("conv",(512,512,kernel_size)),("bn",512),("activate",activate), ("conv",(512,512,kernel_size)),("bn",512),("activate",activate), ("conv",(256,256,kernel_size)),("bn",256),("activate",activate),
-    ("unpool",unpool_args), ("conv",(256,256,kernel_size)),("bn",256),("activate",activate), ("conv",(256,256,kernel_size)),("bn",256),("activate",activate), ("conv",(128,kernel_size)),("bn",128),("activate",activate),
-    ("unpool",unpool_args), ("conv",(128,128,kernel_size)),("bn",128),("activate",activate),("conv",(64,64,kernel_size)),("bn",64),("activate",activate),
+    ("unpool",unpool_args), ("conv",(512,512,kernel_size)),("bn",512),("activate",activate), ("conv",(512,512,kernel_size)),("bn",512),("activate",activate), ("conv",(512,256,kernel_size)),("bn",256),("activate",activate),
+    ("unpool",unpool_args), ("conv",(256,256,kernel_size)),("bn",256),("activate",activate), ("conv",(256,256,kernel_size)),("bn",256),("activate",activate), ("conv",(256,128,kernel_size)),("bn",128),("activate",activate),
+    ("unpool",unpool_args), ("conv",(128,128,kernel_size)),("bn",128),("activate",activate),("conv",(128,64,kernel_size)),("bn",64),("activate",activate),
     ("unpool",unpool_args), ("conv",(64,64,kernel_size)),("bn",64),("activate",activate), ("conv",(64,2,1)),("bn",2),("activate",activate),
 ]
 class MaxPoolIndex(nn.Module):
@@ -31,15 +31,15 @@ class MaxPoolIndex(nn.Module):
         self.stride = stride
         self.return_indices = return_indices
     def forward(self, x):
-        return nn.functional.max_pool2d(x,self.kernel_size,self.stride,self.return_indices)
+        return nn.functional.max_pool2d(x,kernel_size=self.kernel_size,stride = self.stride,return_indices=self.return_indices)
 
 class MaxUnPoolIndex(nn.Module):
     def __init__(self, kernel_size,stride):
         super(MaxUnPoolIndex, self).__init__()
         self.kernel_size = kernel_size
         self.stride = stride
-    def forward(self, x,x2):
-        return nn.functional.max_unpool2d(x,x2,self.kernel_size,self.stride)
+    def forward(self, x,x1):
+        return nn.functional.max_unpool2d(x,x1,kernel_size=self.kernel_size,stride=self.stride)
 
 class Segnet2(nn.Module):
     def __init__(self,input_channel,num_label,**kwargs):
@@ -47,7 +47,10 @@ class Segnet2(nn.Module):
         l = []
         for name,args in layers:
             if name == 'conv':
-                l.append(nn.Conv2d(*args,padding=1))
+                if(args[2]==1):
+                    l.append(nn.Conv2d(*args,padding=0))
+                else:
+                    l.append(nn.Conv2d(*args,padding=1))
             elif name == 'bn':
                 l.append(nn.BatchNorm2d(args))
             elif name == 'activate':
@@ -62,16 +65,14 @@ class Segnet2(nn.Module):
     def forward(self,x):
         idx = []
         for layer in self.layers:
-            print(x.shape,layer.__class__.__name__)
             if layer.__class__.__name__ == 'MaxUnPoolIndex':
-                x = layer((x,idx.pop()),**unpool_args)
+                x = layer(x,idx.pop())
             elif layer.__class__.__name__ == 'MaxPoolIndex':
-                x,t = layer(x,**pool_args)
+                x,t = layer(x)
                 idx.append(t)
             else:
                 x = layer(x)
         return x
-
 
 class Segnet(nn.Module):
     def __init__(self, input_num, label_num):
