@@ -1,67 +1,54 @@
-import numpy as np
+# @Time     : 2020/8/26 17:18
+# @File     : Segnet
+# @Email    : dean0731@qq.com
+# @Software : PyCharm
+# @Desc     :
+# @History  :
+#   2020/8/26 Dean First Release
+from torch import nn
+import torch
 
-a = np.array([
-    [
-        [
-            [0.6, 0.6, 0.6, 0.6],
-            [0.6, 0.4, 0.4, 0.6],
-            [0.6, 0.4, 0.4, 0.6],
-            [0.6, 0.6, 0.6, 0.6],
-        ],
-        [
-            [0.4, 0.4, 0.4, 0.4],
-            [0.4, 0.6, 0.6, 0.4],
-            [0.4, 0.6, 0.6, 0.4],
-            [0.4, 0.4, 0.4, 0.4],
-        ],
-    ],
-    # [
-    #     [
-    #         [0.6, 0.6, 0.6, 0.6],
-    #         [0.6, 0.4, 0.4, 0.6],
-    #         [0.6, 0.4, 0.4, 0.6],
-    #         [0.6, 0.6, 0.6, 0.6],
-    #     ],
-    #     [
-    #         [0.4, 0.4, 0.4, 0.4],
-    #         [0.4, 0.6, 0.6, 0.4],
-    #         [0.4, 0.6, 0.6, 0.4],
-    #         [0.4, 0.4, 0.4, 0.4],
-    #     ],
-    # ]
-])
-b = np.array([
-    [
-        [
-            [0, 0, 0, 0],
-            [0, 0, 1, 1],
-            [0, 0, 1, 1],
-            [0, 0, 0, 0],
-        ]
-    ],
-    # [
-    #     [
-    #         [0, 0, 0, 0],
-    #         [0, 0, 1, 1],
-    #         [0, 0, 1, 1],
-    #         [0, 0, 0, 0],
-    #     ]
-    # ]
-])
+pool_args = {"kernel_size":(2,2),"stride":(2,2),"return_indices":True}
+unpool_args = {"kernel_size":(2,2),"stride":(2,2)}
+activate = 'relu'
+kernel_size = 3
+layers = [
+    ("conv",(64,kernel_size)),("bn",64),("activate",activate),("conv",(64,kernel_size)),("bn",64),("activate",activate),("pool",pool_args),
+    ("conv",(128,kernel_size)),("bn",128),("activate",activate),("conv",(128,kernel_size)),("bn",128),("activate",activate),("pool",pool_args),
+    ("conv",(256,kernel_size)),("bn",256),("activate",activate),("conv",(256,kernel_size)),("bn",256),("activate",activate),("conv",(256,1)),("bn",256),("activate",activate),("pool",pool_args),
+    ("conv",(512,kernel_size)),("bn",512),("activate",activate),("conv",(512,kernel_size)),("bn",512),("activate",activate),("conv",(512,1)),("bn",512),("activate",activate),("pool",pool_args),
+    ("conv",(512,kernel_size)),("bn",512),("activate",activate),("conv",(512,kernel_size)),("bn",512),("activate",activate),("conv",(512,1)),("bn",512),("activate",activate),("pool",pool_args),
+    ("unpool",unpool_args), ("conv",(512,kernel_size)),("bn",512),("activate",activate), ("conv",(512,kernel_size)),("bn",512),("activate",activate), ("conv",(512,kernel_size)),("bn",512),("activate",activate),
+    ("unpool",unpool_args), ("conv",(512,kernel_size)),("bn",512),("activate",activate), ("conv",(512,kernel_size)),("bn",512),("activate",activate), ("conv",(256,kernel_size)),("bn",256),("activate",activate),
+    ("unpool",unpool_args), ("conv",(256,kernel_size)),("bn",256),("activate",activate), ("conv",(256,kernel_size)),("bn",256),("activate",activate), ("conv",(128,kernel_size)),("bn",128),("activate",activate),
+    ("unpool",unpool_args), ("conv",(128,kernel_size)),("bn",128),("activate",activate),("conv",(64,kernel_size)),("bn",64),("activate",activate),
+    ("unpool",unpool_args), ("conv",(64,kernel_size)),("bn",64),("activate",activate), ("conv",(2,1)),("bn",2),("activate",activate),
+]
+class MaxPoolIndex(nn.Module):
+    def __init__(self, kernel_size,stride,return_indices):
+        super(MaxPoolIndex, self).__init__()
+        self.kernel_size = kernel_size
+        self.stride = stride
+        self.return_indices = return_indices
+    def forward(self, x):
+        return nn.functional.max_pool2d(x,self.kernel_size,self.stride,self.return_indices)
 
-import tensorflow as tf
-a = tf.convert_to_tensor(a)
-b = tf.convert_to_tensor(b)
-a = tf.transpose(a,(0,2,3,1))
-b = tf.transpose(b,(0,2,3,1))
-a = tf.keras.layers.Softmax()(a)
-# b = tf.keras.layers.Softmax()(b)
-print(a.shape)
-print(b.shape)
-print(tf.argmax(a,axis=-1))
-y_true = [1, 2]
-y_pred = [[0.05, 0.95, 0], [0.1, 0.8, 0.1]]
-# Using 'auto'/'sum_over_batch_size' reduction type.
-scce = tf.keras.losses.SparseCategoricalCrossentropy(reduction=tf.keras.losses.Reduction.NONE)
-print(scce(y_true, y_pred).numpy())
-print(scce(b,a).numpy())
+class MaxUnPoolIndex(nn.Module):
+    def __init__(self, kernel_size,stride):
+        super(MaxUnPoolIndex, self).__init__()
+        self.kernel_size = kernel_size
+        self.stride = stride
+    def forward(self, x):
+        return nn.functional.max_unpool2d(*x,self.kernel_size,self.stride)
+
+class Segnet2(nn.Module):
+    def __init__(self,input_channel,num_label,**kwargs):
+        super(Segnet2,self).__init__(**kwargs)
+    def forword(self,x):
+        return x-x.mean()
+
+
+if __name__ == '__main__':
+    model = Segnet2(3,2)
+    from torchsummary import summary
+    summary(model,(3,512,512))

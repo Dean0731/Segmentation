@@ -9,15 +9,33 @@ import requests
 import os,numpy as np
 import sys
 import logging
-import datetime
 import cv2
 import getpass
 import socket
+import datetime
 from PIL import Image
 def get_name_hostname():
     user_name = getpass.getuser()
     host_name = socket.gethostname()
     return user_name,host_name
+def get_dir(parent=None):
+    """ 生成目录
+    工具脚本，生成文件目录，
+    ~/log-data-time
+        -event
+        -h5
+    """
+    time = datetime.datetime.now()
+    if parent == None:
+        parent = 'source'
+    log_dir = os.path.join(parent,'logs-{}-{}-{}-{}-{}-{}'.format(time.year,time.month,time.day,time.hour,time.minute,time.second))
+    # log_dir = os.path.join('source','logs')
+    h5_dir = os.path.join(log_dir,'h5')
+    event_dir = os.path.join(log_dir,'event')
+    for i in [log_dir,h5_dir,event_dir]:
+        if not os.path.exists(i):
+            os.makedirs(i)
+    return log_dir,h5_dir,event_dir
 def sendEmail(receivers='1028968939@qq.com',txt="任务已完成，请抓紧时间处理"):
     """
     发邮件
@@ -81,26 +99,7 @@ def computerNetworkSize(model):
     print("网络权重W占用总内存:",str(all_params_memory)+"M","网络特征图占用总内存:",str(all_feature_memory)+"M")
     print("网络总消耗内存:",str(all_params_memory+all_feature_memory)+"M")
 
-def get_dir(parent=None):
-    """ 生成目录
-    工具脚本，生成文件目录，
-    ~/log-data-time
-        -event
-        -h5
-    """
-    time = datetime.datetime.now()
-    if parent != None:
-        parent = os.path.join(parent,'source')
-    else:
-        parent = 'source'
-    log_dir = os.path.join(parent,'logs-{}-{}-{}-{}-{}-{}'.format(time.year,time.month,time.day,time.hour,time.minute,time.second))
-    # log_dir = os.path.join('source','logs')
-    h5_dir = os.path.join(log_dir,'h5')
-    event_dir = os.path.join(log_dir,'event')
-    for i in [log_dir,h5_dir,event_dir]:
-        if not os.path.exists(i):
-            os.makedirs(i)
-    return log_dir,h5_dir,event_dir
+
 
 def getNumbySize(num,n):
     if type(num) == 'float':
@@ -121,7 +120,7 @@ def getCmdDict():
             raise Exception("参数格式不正确:{}".format(key))
     values = argv[2:len(argv):2]
     return dict(zip(keys,values))
-def data_txt_to_list(data_txt_path,seed,split=None):
+def data_txt_to_list(data_txt_path,seed=None,split=None):
     if split == None:
         name,host = get_name_hostname()
         if name == 'aistudio':

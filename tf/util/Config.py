@@ -9,14 +9,11 @@ import os
 import easydict
 import tensorflow as tf
 from tensorflow import keras
-
 from util.func import get_dir
 from util.cls import DatasetPath
-
 from tf.util.Dataset import Dataset
 from tf.network import Model
 from util import flag
-
 class MyMeanIOU(tf.keras.metrics.MeanIoU):
     def update_state(self, y_true, y_pred, sample_weight=None):
         return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
