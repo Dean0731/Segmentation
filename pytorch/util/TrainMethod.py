@@ -47,8 +47,8 @@ def test(model,device,test_dataloader):
         for idx,(data,target) in enumerate(test_dataloader):
             data,target = data.to(device),target.to(device)
             pred = model(data) # batch_size * 10
-            total_iou = total_iou + iou(target,pred).item()
-            correct = correct + acc(target,pred).item()
+            total_iou = total_iou + Config.iou(target,pred).item()
+            correct = correct + Config.acc(target,pred).item()
         total_loss = total_loss + Config.loss(pred,target).item()*Config.batch_size
         total_iou = total_iou/len(test_dataloader.dataset)
         total_loss = total_loss/len(test_dataloader.dataset)

@@ -22,7 +22,7 @@ def main1():
             f.write("{};{}\n".format(train_log,val_log))
         test_log = TrainMethod.test(model, Config.device, Config.test_dataloader)
         f.write(test_log)
-    # torch.save(model.state_dict(),os.path.join(Config.h5_dir,"mnist_cnn.pt"))
+    torch.save(model.state_dict(),os.path.join(Config.h5_dir,"mnist_cnn.pt"))
 
 @util.cls.Decorator.sendMessageWeChat()
 @util.cls.Decorator.timer()

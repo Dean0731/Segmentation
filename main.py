@@ -16,10 +16,10 @@ import util
 import logging
 logging.basicConfig(level=logging.INFO)
 type = util.flag.get("type")
-if type == 'tf':
+if type == 'tensorflow':
     from tf import train
     train.main()
-elif type == 'torch':
+elif type == 'pytorch':
     from pytorch import train
     train.main()
 elif type == 'paddlepaddle':
