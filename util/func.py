@@ -164,6 +164,9 @@ def printImagecv2(img_path,all=False):
     if not all:
         img = cv2.resize(img,(64,64),interpolation=cv2.INTER_NEAREST)
     return np.array(img)
+def getParentDir():
+    return os.path.dirname(sys.path[0])
+
 if __name__ == '__main__':
     from tf.network import Model
 

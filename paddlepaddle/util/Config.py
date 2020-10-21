@@ -71,7 +71,7 @@ mask_size = (512, 512)
 num_classes = 2
 EPOCH_NUM = int(flag.get('epoch') or 40)
 learning_rate = 0.0001
-log_dir='source/paddlepaddle/'
+log_dir='~/source/paddlepaddle/'
 loss = SoftmaxWithCrossEntropy()
 metrics = [MyAcc(name='acc'),MeanIOU(name='iou')]
 callback = [
