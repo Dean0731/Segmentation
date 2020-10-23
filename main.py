@@ -7,27 +7,27 @@
 #   2020/8/26 Dean First Release
 
 
-
 # from pytorch.example import pytorch_for_cnn
 # pytorch_for_cnn.main()
 
-
 import util
 import logging
-logging.basicConfig(level=logging.INFO)
-type = util.flag.get("type")
-if type == 'tensorflow':
-    from tf import train
-    train.main()
-elif type == 'pytorch':
-    from pytorch import train
-    train.main()
-elif type == 'paddlepaddle':
-    from paddlepaddle import train
-    train.main()
-else:
-    print("启动参数出错")
-
-# python main.py --type paddlepaddle
-# python main.py --type tf
-# python main.py --type torch
+def main():
+    logging.basicConfig(level=logging.INFO)
+    type = util.flag.get("type")
+    try:
+        if type == 'tensorflow':
+            from tf import train
+            train.main()
+        elif type == 'pytorch':
+            from pytorch import train
+            train.main()
+        elif type == 'paddlepaddle':
+            from paddlepaddle import train
+            train.main()
+        else:
+            print("启动参数出错")
+    except Exception as e:
+        util.sendMessageWeChat(e)
+if __name__ == '__main__':
+    main()
