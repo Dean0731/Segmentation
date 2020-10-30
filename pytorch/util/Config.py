@@ -6,9 +6,10 @@
 # @History  :
 #   2020/8/26 Dean First Release
 from pytorch.util.Dataset import Dataset
+from pytorch.util import TrainMethod2
 from torchvision import transforms
 import torch.optim as optim
-from pytorch.network import Segnet
+from pytorch.network import Segnet,Deeplabv3
 import numpy as np
 import torch
 import os
@@ -47,10 +48,15 @@ path = DatasetPath('dom')
 learning_rate = 1e-4
 num_epochs = int(flag.get('epochs') or 40)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = Segnet.Segnet2(in_channels,out_channels).to(device)
+# model = Segnet.Segnet2(in_channels,out_channels).to(device)
+# trainMethod = TrainMethod
+model = Deeplabv3.deeplabv3_resnet50(num_classes=2).to(device)
+trainMethod = TrainMethod2
+
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 loss = torch.nn.CrossEntropyLoss()
 log = True
+
 if log:
     _,h5_dir,event_dir = get_dir(os.path.join(util.getParentDir(),'source/pytorch'))
 else:
@@ -66,8 +72,8 @@ transform = [
     transforms.Resize(input_size,interpolation=0),
     transforms.ToTensor()
 ]
-_train_dataset = Dataset(path.getPath(DatasetPath.TRAIN),transform=transform,target_transform= target_transforms)
-train_dataloader = torch.utils.data.DataLoader(dataset=_train_dataset,batch_size=batch_size,shuffle=True,pin_memory=True)
+train_dataset = Dataset(path.getPath(DatasetPath.TRAIN),transform=transform,target_transform= target_transforms)
+train_dataloader = torch.utils.data.DataLoader(dataset=train_dataset,batch_size=batch_size,shuffle=True,pin_memory=True)
 val_dataset = Dataset(path.getPath(DatasetPath.VAL),transform=transform,target_transform= target_transforms)
 val_dataloader = torch.utils.data.DataLoader(dataset=val_dataset,batch_size=batch_size,shuffle=False,pin_memory=True)
 test_dataset = Dataset(path.getPath(DatasetPath.TEST),transform=transform,target_transform= target_transforms)

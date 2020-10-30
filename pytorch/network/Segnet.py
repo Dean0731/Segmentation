@@ -6,8 +6,6 @@
 # @History  :
 #   2020/8/26 Dean First Release
 from torch import nn
-import torch
-
 pool_args = {"kernel_size":(2,2),"stride":(2,2),"return_indices":True}
 unpool_args = {"kernel_size":(2,2),"stride":(2,2)}
 activate = 'relu'

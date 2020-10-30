@@ -19,15 +19,16 @@ def main():
         if type == 'tensorflow':
             from tf import train
             train.main()
-        elif type == 'pytorch':
-            from pytorch import train
-            train.main()
         elif type == 'paddlepaddle':
             from paddlepaddle import train
             train.main()
         else:
-            print("启动参数出错")
+            from pytorch import train
+            train.main()
+            logging.info("默认执行pytorch")
     except Exception as e:
+        logging.exception(e)
         util.sendMessageWeChat(e)
+
 if __name__ == '__main__':
     main()

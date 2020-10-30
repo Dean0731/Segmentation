@@ -41,7 +41,7 @@ class ToTrainModel():
         metrice_dict = {" Train epoch":epoch}
         for idx,(data,target) in enumerate(train_dataloader,start=1):
             data,target = data.to(device),target.to(device)
-            pred = model(data) # batch_size * 10
+            pred = model(data)['out'] # batch_size * 10
             loss = loss_func(pred,target.long()) # 交叉熵损失函数 ,每个batch中的一张图片的损失
             loss.backward()
             optimizer.step()
@@ -56,7 +56,7 @@ class ToTrainModel():
         with torch.no_grad():
             for (idx,(data,target)),_ in zip(enumerate(val_dataloader,start=1),tqdm(range(len(val_dataloader)))):
                 data,target = data.to(device),target.to(device)
-                pred = model(data) # batch_size * 10
+                pred = model(data)['out'] # batch_size * 10
                 metrice_dict = ToTrainModel.computerMetrics(metrics,pred,target,metrice_dict)
             metrice_dict = {k:(v/len(val_dataloader.dataset)) for k,v in metrice_dict.items()}
             print("Val - {}".format(metrice_dict))
@@ -67,7 +67,7 @@ class ToTrainModel():
         with torch.no_grad():
             for (idx,(data,target)),_ in zip(enumerate(test_dataloader,start=1),tqdm(range(len(test_dataloader)))):
                 data,target = data.to(self.device),target.to(self.device)
-                pred = self.model(data) # batch_size * 10
+                pred = self.model(data)['out'] # batch_size * 10
                 metrice_dict = ToTrainModel.computerMetrics(self.metrics,pred,target,metrice_dict)
             metrice_dict = {k:(v/len(test_dataloader.dataset)) for k,v in metrice_dict.items()}
             print("Test - {}".format(metrice_dict))

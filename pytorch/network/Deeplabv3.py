@@ -1,0 +1,3 @@
+import torchvision
+
+deeplabv3_resnet50 = torchvision.models.segmentation.deeplabv3_resnet50
