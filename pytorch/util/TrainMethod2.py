@@ -38,7 +38,7 @@ class ToTrainModel():
     @staticmethod
     def train(model,device,train_dataloader,optimizer,epoch,loss_func):
         model.train()
-        metrice_dict = {" Train epoch":epoch}
+        metrice_dict = {}
         for idx,(data,target) in enumerate(train_dataloader,start=1):
             data,target = data.to(device),target.to(device)
             pred = model(data)['out'] # batch_size * 10

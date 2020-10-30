@@ -38,7 +38,7 @@ class ToTrainModel():
     @staticmethod
     def train(model,device,train_dataloader,optimizer,epoch,loss_func):
         model.train()
-        metrice_dict = {" Train epoch":epoch}
+        metrice_dict = {}
         for idx,(data,target) in enumerate(train_dataloader,start=1):
             data,target = data.to(device),target.to(device)
             pred = model(data) # batch_size * 10
@@ -60,7 +60,7 @@ class ToTrainModel():
                 metrice_dict = ToTrainModel.computerMetrics(metrics,pred,target,metrice_dict)
             metrice_dict = {k:(v/len(val_dataloader.dataset)) for k,v in metrice_dict.items()}
             print("Val - {}".format(metrice_dict))
-            return metrice_dict
+        return metrice_dict
     def test(self,test_dataloader):
         self.model.eval()
         metrice_dict={metric.__name__ if hasattr(metric,"__name__") else metric.__class__.__name__ :torch.tensor(0,dtype=torch.float32) for metric in self.metrics}
@@ -71,7 +71,7 @@ class ToTrainModel():
                 metrice_dict = ToTrainModel.computerMetrics(self.metrics,pred,target,metrice_dict)
             metrice_dict = {k:(v/len(test_dataloader.dataset)) for k,v in metrice_dict.items()}
             print("Test - {}".format(metrice_dict))
-            return metrice_dict
+        return metrice_dict
     def save(self,h5_dir):
         if h5_dir==False:
             return

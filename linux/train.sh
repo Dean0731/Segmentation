@@ -1,1 +1,1 @@
-nohup python main.py --type pytorch--epoch 2 >train.log 2>&1 &
+nohup python main.py --type pytorch--epoch 80 >train.log 2>&1 &
