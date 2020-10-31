@@ -76,7 +76,7 @@ class ToTrainModel():
         if h5_dir==False:
             return
         elif os.path.exists(h5_dir):
-            torch.save(self.model.state_dict(),os.path.join(h5_dir,"mnist_cnn.pt"))
+            torch.save(self.model.state_dict(),os.path.join(h5_dir,"last.pt"))
     @staticmethod
     def computerMetrics(metrics,pred,target,metrice_dict):
         for metric in metrics:

@@ -46,12 +46,12 @@ target_size = input_size
 batch_size = 3
 path = DatasetPath('dom')
 learning_rate = 1e-4
-num_epochs = int(flag.get('epochs') or 40)
+num_epochs = int(flag.get('epochs') or 80)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# model = Segnet.Segnet2(in_channels,out_channels).to(device)
-# trainMethod = TrainMethod
-model = Deeplabv3.deeplabv3_resnet50(num_classes=2).to(device)
-trainMethod = TrainMethod2
+model = Segnet.Segnet2(in_channels,out_channels).to(device)
+trainMethod = TrainMethod
+# model = Deeplabv3.deeplabv3_resnet50(num_classes=2).to(device)
+# trainMethod = TrainMethod2
 
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 loss = torch.nn.CrossEntropyLoss()

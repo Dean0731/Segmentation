@@ -43,7 +43,7 @@ def main():
         train(model, Config.device, Config.train_dataloader, optimizer, epoch)
     test(model, Config.device, Config.test_dataloader)
 
-# torch.save(model.state_dict(),"mnist_cnn.pt")
+# torch.save(model.state_dict(),"last.pt")
 
 
 if __name__ == '__main__':
