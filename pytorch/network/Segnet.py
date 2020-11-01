@@ -206,4 +206,4 @@ class Segnet(nn.Module):
 if __name__ == '__main__':
     model = Segnet2(3,2)
     from torchsummary import summary
-    summary(model,(3,512,512))
+    summary(model,(3,3072,3072))

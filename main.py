@@ -24,8 +24,9 @@ def main():
             train.main()
         else:
             from pytorch import train
-            train.main()
             logging.info("默认执行pytorch")
+            train.main()
+
     except Exception as e:
         logging.exception(e)
         util.sendMessageWeChat(e)

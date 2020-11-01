@@ -6,7 +6,7 @@
 # @History  :
 #   2020/8/26 Dean First Release
 from pytorch.util.Dataset import Dataset
-from pytorch.util import TrainMethod2,TrainMethod,Transform
+from pytorch.util import Transform
 import torch.optim as optim
 from pytorch.network import Segnet,Deeplabv3
 import torch
