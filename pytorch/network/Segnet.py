@@ -71,7 +71,8 @@ class Segnet2(nn.Module):
             else:
                 x = layer(x)
         return x
-
+    def __str__(self):
+        return "Pytorch Segnet2网络"
 class Segnet(nn.Module):
     def __init__(self, input_num, label_num):
         super(Segnet, self).__init__()

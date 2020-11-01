@@ -1,6 +1,4 @@
-import tqdm
-import torch
-
-a = torch.as_tensor([1,2])
-print(a)
-print(a.long())
+d = {"a":1,"b":2,"c":3}
+print( d.get("a") or 1)
+print( d.get("b") or 1)
+print([0,0] or [1,1])

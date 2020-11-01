@@ -16,7 +16,7 @@ def main1():
     pass
 
 def main2():
-    model = Config.trainMethod.ToTrainModel(Config.model)
+    model = TrainMethod.ToTrainModel(Config.model)
     model.compile(Config.loss,Config.optimizer,Config.metrics)
     model.fit(Config.train_dataloader,Config.num_epochs,Config.val_dataloader,logs_dir=Config.event_dir)
     model.test(test_dataloader=Config.test_dataloader)
