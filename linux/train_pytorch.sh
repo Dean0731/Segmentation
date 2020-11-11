@@ -1,1 +1,0 @@
-#!/bin/bashtrain='/home/aistudio/work/Segmentation/main.py'dir=''if [ -z $1 ]; then  dir='train.log'else  dir=$1fiecho $dirnohup /opt/conda/envs/python35-paddle120-env/bin/python $train > $dir 2>&1 &
