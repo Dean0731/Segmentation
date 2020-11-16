@@ -9,8 +9,6 @@
 
 from paddlepaddle.util.Config import *
 import util
-@util.cls.Decorator.sendMessageWeChat()
-@util.cls.Decorator.timer(flag=True)
 def main():
     # optim = paddle.optimizer.RMSProp(learning_rate=larning_rate,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False,parameters=model.parameters())
     optim = paddle.optimizer.Adam(learning_rate=learning_rate)

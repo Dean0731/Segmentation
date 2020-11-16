@@ -10,7 +10,6 @@ import torch,os
 
 from pytorch.util import Config
 from pytorch.util import TrainMethod
-import util
 print("Pytorch Version",torch.__version__)
 def main1():
     pass
@@ -21,8 +20,6 @@ def main2():
     model.fit(Config.train_dataloader,Config.num_epochs,Config.val_dataloader,logs_dir=Config.event_dir)
     model.test(test_dataloader=Config.test_dataloader)
     model.save(Config.h5_dir)
-@util.cls.Decorator.sendMessageWeChat()
-@util.cls.Decorator.timer()
 def main():
     main2()
 

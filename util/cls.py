@@ -113,23 +113,29 @@ class Decorator:
             return inner
         return outer
     @staticmethod
-    def sendMessageWeChat(message=''):
+    def sendMessageWeChat(message='',flag=True):
         def inner(f):
             def inner2(*args,**kwargs):
-                ret,seconds = f(*args,**kwargs)
-                msg = Decorator._messageHandler(seconds,message)
-                url = "https://python.api.dean0731.top/message/sendMessageWeChat?content={}".format(msg)
-                return getUrlAndLog(url)
+                if flag:
+                    ret,seconds = f(*args,**kwargs)
+                    msg = Decorator._messageHandler(seconds,message)
+                    url = "https://python.api.dean0731.top/message/sendMessageWeChat?content={}".format(msg)
+                    return getUrlAndLog(url)
+                else:
+                    ret,seconds = f(*args,**kwargs)
             return inner2
         return inner
     @staticmethod
-    def sendMessageDingTalk(message=None,tels:str=None,all:str=False):
+    def sendMessageDingTalk(message=None,tels:str=None,all:str=False,flag=True):
         def inner(f):
             def inner2(*args,**kwargs):
-                ret,seconds = f(*args,**kwargs)
-                msg = Decorator._messageHandler(seconds,message)
-                url = "https://python.api.dean0731.top//message/sendMessageToDingTalk?message={}&tels={}&all={}".format(msg,tels,all)
-                return getUrlAndLog(url)
+                if flag:
+                    ret,seconds = f(*args,**kwargs)
+                    msg = Decorator._messageHandler(seconds,message)
+                    url = "https://python.api.dean0731.top//message/sendMessageToDingTalk?message={}&tels={}&all={}".format(msg,tels,all)
+                    return getUrlAndLog(url)
+                else:
+                    ret,seconds = f(*args,**kwargs)
             return inner2
         return inner
 class progressbar(object):

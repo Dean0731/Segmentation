@@ -13,10 +13,25 @@ softamx 不属于网络结构，
     acc 需要用
 
 
-nohup python main.py --type paddlepaddle --epoch 20 >train.log 2>&1 &
-git fetch --all && git reset --hard origin/dev && git pull
-git add . && git commit -m 'update' && git push
+
 
 常见错误：
     数据形状不对：层数参数错误
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+nohup python main.py --type paddlepaddle --epoch 20 >train.log 2>&1 &
+git fetch --all && git reset --hard origin/dev && git pull
+git add . && git commit -m 'update' && git push

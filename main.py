@@ -12,8 +12,11 @@
 
 import util
 import logging
+
+@util.cls.Decorator.sendMessageWeChat(flag=int(util.flag.get("info")))
+@util.cls.Decorator.timer(flag=True)
 def main():
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.ERROR)
     type = util.flag.get("type")
     try:
         if type == 'tensorflow':
@@ -29,7 +32,8 @@ def main():
 
     except Exception as e:
         logging.exception(e)
-        util.sendMessageWeChat(e)
+        if int(util.flag.get("info")):
+            util.sendMessageWeChat(e)
 
 if __name__ == '__main__':
     main()

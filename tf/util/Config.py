@@ -6,7 +6,6 @@
 # @History  :
 #   2020/7/19 Dean First Release
 import os
-import easydict
 import tensorflow as tf
 from tensorflow import keras
 from util.func import get_dir
@@ -14,6 +13,7 @@ from util.cls import DatasetPath
 from tf.util.Dataset import Dataset
 from tf.network import Model
 from util import flag
+import util
 class MyMeanIOU(tf.keras.metrics.MeanIoU):
     def update_state(self, y_true, y_pred, sample_weight=None):
         return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
@@ -42,7 +42,7 @@ def getCallBack():
         # 只保存权重文件
         save_weights_only=True,
         # 每个checkpoint之间epochs间隔数量
-        period = config.period
+        period = period
     )
     def scheduler(epoch):
         if epoch < 20:
@@ -53,42 +53,58 @@ def getCallBack():
     learningRateScheduler = tf.keras.callbacks.LearningRateScheduler(scheduler)
     return [tensorBoardDir, checkpoint]
 
-config = easydict.EasyDict()
-config.train_model = "segnet"
-config.target_size = (512,512)
-config.mask_size = (512,512)
-config.num_classes = 2
-config.log = True
-config.EPOCH_NUM = int(flag.get('epochs') or 40)
-config.learning_rate = 0.001
-config.batch_size = 4
-config.pre_file = r'h5'
-config.loss = tf.keras.losses.SparseCategoricalCrossentropy()
-# config.loss = tf.keras.losses.CategoricalCrossentropy()
-config.period = max(1,config.EPOCH_NUM/10) # 每1/10 epochs保存一次
-config.dataset = Dataset(DatasetPath("dom").getPath(DatasetPath.ALL),config.target_size,config.mask_size,config.num_classes)
+train_model = "deeplabv3plus"
+input_size = (512,512)
+target_size = (512,512)
+num_classes = 2
+log = True
+num_epochs = int(flag.get('epochs') or 40)
+learning_rate = 0.001
+batch_size = 2
+pre_file = r'h5'
+path = DatasetPath("dom")
+loss = tf.keras.losses.SparseCategoricalCrossentropy()
+# loss = tf.keras.losses.CategoricalCrossentropy()
+period = max(1,num_epochs/10) # 每1/10 epochs保存一次
+dataset = Dataset(path.getPath(DatasetPath.ALL),input_size,target_size,num_classes)
 # data,validation_data,test_data = dataset.getDataset(transform=Transform.transform_double_input)
 from tf.util import Transform
-config.data,config.validation_data,config.test_data = [dataset.batch(config.batch_size) for dataset in config.dataset.getDataset(transform=Transform.transform_common,seed=7)]
-config.model = Model.getModel(config.train_model, config.target_size, n_labels=config.num_classes)
-config.model.compile(
-    loss=config.loss,
-    optimizer=keras.optimizers.Adam(lr=config.learning_rate),
-    metrics=[
-        tf.metrics.CategoricalAccuracy(),
-        MyMeanIOU(num_classes=config.num_classes),
-    ]
-)
+data,validation_data,test_data = [dataset.batch(batch_size) for dataset in dataset.getDataset(transform=Transform.transform_common,seed=7)]
+model = Model.getModel(train_model, target_size, n_labels=num_classes)
+optimizer = keras.optimizers.Adam(lr=learning_rate)
+metrics=[
+    tf.metrics.CategoricalAccuracy(),
+    tf.metrics.MeanIoU(num_classes=num_classes),
+    tf.metrics.Precision(),
+    tf.metrics.Recall(),
+    MyMeanIOU(num_classes=num_classes),
+]
+model.compile(loss=loss,optimizer= optimizer,metrics=metrics)
+
 # 是否有与预训练文件，有的话导入
-if os.path.exists(config.pre_file):
-    config.model.load_weights(config.pre_file)
-# 生成参数日志文件夹
-if config.log:
-    _,h5_dir,event_dir = get_dir()
-    config.callback = getCallBack()
-    config.h5_dir = h5_dir
+if os.path.exists(pre_file):
+    model.load_weights(pre_file)
+log = int(flag.get('log'))
+
+if log:
+    log_,h5_dir,event_dir = get_dir(os.path.join(util.getParentDir(),'source/tensorflow'))
+    callback = getCallBack()
+    with open(os.path.join(log_,"txt"),"w")as f:
+        f.write("metrice:{}\n".format(metrics))
+        f.write("input_size:{}\n".format(input_size))
+        f.write("target_size:{}\n".format(target_size))
+        f.write("in_channels:3\n")
+        f.write("out_channels:{}\n".format(num_classes))
+        f.write("batch_size:{}\n".format(batch_size))
+        f.write("datasetPath:{}\n".format(path))
+        f.write("learningRate:{}\n".format(learning_rate))
+        f.write("num_epochs:{}\n".format(num_epochs))
+        f.write("device:{}\n".format('GUP' if tf.test.is_gpu_available() else "cup"))
+        f.write("model:{}\n".format(model._get_name()))
+        f.write("optimizer:{}\n".format(optimizer))
+        f.write("loss:{}\n".format(loss))
 else:
-    config.callback,config.h5_dir = None,None
+    h5_dir,event_dir,callback = False,False,None
 
 if __name__ == '__main__':
     print(DatasetPath('dom').getPath(DatasetPath.ALL))
