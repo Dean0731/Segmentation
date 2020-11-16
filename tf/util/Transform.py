@@ -18,9 +18,14 @@ def transform_common(line_x,line_y):
     label = tf.io.read_file(line_y)
     label = tf.io.decode_png(label,channels=1)
     label = tf.image.resize(label,target_size,method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-    label = tf.cast(label,dtype=tf.float32)
 
-    label[label==38]=1
+    print(label.numpy())
+    for i in range(512):
+        for j in range(512):
+            print(label[i][j].numpy(),end='')
+        print()
+
+    label[label==tf.constant(38,dtype=tf.float32)]=tf.constant(1,dtype=tf.float32)
     # label = tf.convert_to_tensor(label)
     y = label
     return x,y

@@ -23,7 +23,7 @@ softamx 不属于网络结构，
 
 
 
-
+git add . && git commit -m "update" && git push
 
 
 
