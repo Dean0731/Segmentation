@@ -19,14 +19,8 @@ def transform_common(line_x,line_y):
     label = tf.io.decode_png(label,channels=1)
     label = tf.image.resize(label,target_size,method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
 
-    print(label.numpy())
-    for i in range(512):
-        for j in range(512):
-            print(label[i][j].numpy(),end='')
-        print()
-
-    label[label==tf.constant(38,dtype=tf.float32)]=tf.constant(1,dtype=tf.float32)
-    # label = tf.convert_to_tensor(label)
+    label = tf.one_hot(tf.squeeze(label),depth=2)
+    label = tf.expand_dims(label[:,:,1],axis=-1)
     y = label
     return x,y
 # 双输入

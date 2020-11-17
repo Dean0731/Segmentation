@@ -16,16 +16,19 @@ from util import flag
 import util
 class MyMeanIOU(tf.keras.metrics.MeanIoU):
     def update_state(self, y_true, y_pred, sample_weight=None):
-        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
-class MyPrecusion(tf.keras.metrics.Precision):
-    def update_state(self, y_true, y_pred, sample_weight=None):
-        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
-class MyRecall(tf.keras.metrics.Recall):
-    def update_state(self, y_true, y_pred, sample_weight=None):
-        return super().update_state(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1), sample_weight)
+        y_pred = tf.argmax(y_pred,axis=-1)
+        y_pred = tf.reshape(y_pred,shape=(-1,512*512))
+        y_true = tf.reshape(y_true,shape=(-1,512*512))
+        super().update_state(y_true,y_pred,sample_weight)
 
-def my_loss(y_true,y_pred):
-    pass
+
+class MyAcc(tf.keras.metrics.BinaryAccuracy):
+    def update_state(self, y_true, y_pred, sample_weight=None):
+        y_pred = tf.argmax(y_pred,axis=-1)
+        y_pred = tf.reshape(y_pred,shape=(-1,512*512))
+        y_true = tf.reshape(y_true,shape=(-1,512*512))
+        super().update_state(y_true,y_pred,sample_weight)
+
 def getCallBack():
 
     tensorBoardDir = keras.callbacks.TensorBoard(log_dir=event_dir)
@@ -73,11 +76,9 @@ data,validation_data,test_data = [dataset.batch(batch_size) for dataset in datas
 model = Model.getModel(train_model, target_size, n_labels=num_classes)
 optimizer = keras.optimizers.Adam(lr=learning_rate)
 metrics=[
-    tf.metrics.CategoricalAccuracy(),
-    tf.metrics.MeanIoU(num_classes=num_classes),
-    tf.metrics.Precision(),
-    tf.metrics.Recall(),
-    MyMeanIOU(num_classes=num_classes),
+    MyAcc(),
+    MyMeanIOU(num_classes=num_classes)
+
 ]
 model.compile(loss=loss,optimizer= optimizer,metrics=metrics)
 
@@ -100,7 +101,7 @@ if log:
         f.write("learningRate:{}\n".format(learning_rate))
         f.write("num_epochs:{}\n".format(num_epochs))
         f.write("device:{}\n".format('GUP' if tf.test.is_gpu_available() else "cup"))
-        f.write("model:{}\n".format(model._get_name()))
+        f.write("model:{}\n".format(model.name))
         f.write("optimizer:{}\n".format(optimizer))
         f.write("loss:{}\n".format(loss))
 else:
@@ -108,3 +109,9 @@ else:
 
 if __name__ == '__main__':
     print(DatasetPath('dom').getPath(DatasetPath.ALL))
+
+
+
+
+
+
