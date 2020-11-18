@@ -36,7 +36,7 @@ input_size = (576,576)
 in_channels = 3
 out_channels = 2
 target_size = input_size
-batch_size = 3
+batch_size = 4
 path = DatasetPath('dom')
 learning_rate = 1e-4
 num_epochs = int(flag.get('epochs') or 80)
@@ -47,7 +47,7 @@ model = Deeplabv3.deeplabv3_resnet50(num_classes=2).to(device)
 
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 loss = torch.nn.CrossEntropyLoss()
-log = bool(flag.get('log') or True)
+log = int(flag.get('log'))
 
 if log:
     log_,h5_dir,event_dir = get_dir(os.path.join(util.getParentDir(),'source/pytorch'))

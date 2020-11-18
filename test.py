@@ -1,5 +1,4 @@
-import  tensorflow as tf
-
-acc = tf.keras.metrics.Accuracy()
-acc.update_state([1,0,1,0,1,0],[1,1,1,1,1,1])
-print(acc.result().numpy())
+if 0:
+    print(1)
+else:
+    print(12)
