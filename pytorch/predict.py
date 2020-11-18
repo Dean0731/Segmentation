@@ -1,20 +1,23 @@
 import numpy as np
 import torch,os
 from PIL import Image
+
 from pytorch.network import Segnet,Deeplabv3
 from pytorch.util.Dataset import Dataset
 from pytorch.util import Transform
-def getModel(device):
+
+def getModel(device,pt):
     # model = Segnet.Segnet2(3,2)
     # model.load_state_dict(torch.load(r'./source/mnist_cnn.pt',map_location=device))
     model = Deeplabv3.deeplabv3_resnet50(num_classes=2)
-    model.load_state_dict(torch.load(r'./source/last.pt',map_location=device))
+    model.load_state_dict(torch.load(pt,map_location=device))
     return model
 def main():
     color = 2
     batch_size = 4
     device = torch.device("cpu")
-    model = getModel(device)
+    weight = r'./source/last.pt'
+    model = getModel(device,weight)
     target_size = (512,512)
     dir = r'./source/images'
     test_dataset = Dataset('./source/data.txt',transform=Transform.getTransforms(target_size),target_transform= Transform.getTargetTransforms(target_size))

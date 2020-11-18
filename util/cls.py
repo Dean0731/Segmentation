@@ -138,29 +138,3 @@ class Decorator:
                     ret,seconds = f(*args,**kwargs)
             return inner2
         return inner
-class progressbar(object):
-
-    def __init__(self, count,block_char='.'):
-        self.block = block_char
-        self.f = sys.stdout
-        self.scale = count/100
-        self.last = 0
-    def progress(self, i):
-        if(i - self.last) * self.scale >=self.scale:
-            print()
-
-        if self.finalcount:
-            percentcomplete = int(round(100.0 * count / self.finalcount))
-            if percentcomplete < 1:
-                percentcomplete = 1
-        else:
-            percentcomplete = 100
-        blockcount = int(percentcomplete // 2)
-        if blockcount <= self.blockcount:
-            return
-        for i in range(self.blockcount, blockcount):
-            self.f.write(self.block)
-        self.f.flush()
-        self.blockcount = blockcount
-        if percentcomplete == 100:
-            self.f.write("\n")

@@ -1,5 +1,5 @@
 # @Time     : 2020/8/26 13:40
-# @File     : main
+# @log     : main
 # @Email    : dean0731@qq.com
 # @Software : PyCharm
 # @Desc     :
@@ -12,12 +12,17 @@
 
 import util
 import logging
-
+import os
 @util.cls.Decorator.sendMessageWeChat(flag=int(util.flag.get("info")))
 @util.cls.Decorator.timer(flag=True)
 def main():
     logging.basicConfig(level=logging.ERROR)
     type = util.flag.get("type")
+    log = util.flag.get('log')
+    if log != None:
+        if not os.path.exists(str(log)):
+            util.flag['log'] = util.func.get_dir(os.path.join(util.getParentDir(), 'source/pytorch'))
+        print("log_dir:",util.flag['log'])
     try:
         if type == 'tensorflow':
             from tf import train

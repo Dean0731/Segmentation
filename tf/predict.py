@@ -19,8 +19,8 @@ def main():
     set='testSet'
     set='M-testSet'
     model = getModel(h5,type,target_size,num_classes)
-    dir = os.path.join('../source/images/img', set)
-    label_dir = os.path.join('../source/images/img', "{}_pre_label".format(set))
+    dir = os.path.join('../file/source/images/img', set)
+    label_dir = os.path.join('../file/source/images/img', "{}_pre_label".format(set))
     if not os.path.exists(label_dir):
         os.mkdir(label_dir)
     for img in os.listdir(dir):

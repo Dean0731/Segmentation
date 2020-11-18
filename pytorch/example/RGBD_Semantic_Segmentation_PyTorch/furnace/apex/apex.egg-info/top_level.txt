@@ -1,6 +1,0 @@
-amp_C
-apex
-apex_C
-fused_adam_cuda
-fused_layer_norm_cuda
-syncbn

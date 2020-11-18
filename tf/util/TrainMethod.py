@@ -11,8 +11,8 @@ import json
 from util.func import getNumbySize
 # train_on_batch
 def train_on_batch(model,data,steps_per_epoch,epochs,validation_data,validation_steps,log_dir):
-    with open(os.path.join(log_dir,'train.log'),'w',encoding='UTF-8')as f:
-        with open(os.path.join(log_dir,'val.log'),'w',encoding="UTF-8")as f2:
+    with open(os.path.join(log_dir,'train.file'),'w',encoding='UTF-8')as f:
+        with open(os.path.join(log_dir,'val.file'),'w',encoding="UTF-8")as f2:
             for epoch in tf.range(1,epochs+1):
                 tf.print("Epoch {}/{}:".format(epoch,epochs))
                 model.reset_metrics()

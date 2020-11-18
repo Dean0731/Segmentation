@@ -33,10 +33,9 @@
 # output = F.nll_loss(pred, target)
 # print(output)
 
-import os
 import numpy as np
 from torchvision import datasets,transforms,models,utils
-from util.cls import DatasetPath
+from util import DatasetPath
 from pytorch.util.Dataset import Dataset
 import torch
 p = DatasetPath('dom')

@@ -55,7 +55,7 @@ class ToTrainModel():
         with torch.no_grad():
             for (idx,(input,target)),_ in zip(enumerate(val_dataloader,start=1),tqdm(range(len(val_dataloader)))):
                 pred,target = ToTrainModel._getPred(model,input,target,device)
-                metrice_dict = ToTrainModel.computerMetrics(metrics,pred,target,metrice_dict)
+                ToTrainModel.computerMetrics(metrics,pred,target,metrice_dict)
             metrice_dict = {k:(v/len(val_dataloader.dataset)) for k,v in metrice_dict.items()}
             print("Val - {}".format(metrice_dict))
         return metrice_dict
@@ -65,7 +65,7 @@ class ToTrainModel():
         with torch.no_grad():
             for (idx,(input,target)),_ in zip(enumerate(test_dataloader,start=1),tqdm(range(len(test_dataloader)))):
                 pred,target = ToTrainModel._getPred(self.model,input,target,self.device)
-                metrice_dict = ToTrainModel.computerMetrics(self.metrics,pred,target,metrice_dict)
+                ToTrainModel.computerMetrics(self.metrics,pred,target,metrice_dict)
             metrice_dict = {k:(v/len(test_dataloader.dataset)) for k,v in metrice_dict.items()}
             print("Test - {}".format(metrice_dict))
         return metrice_dict
@@ -88,4 +88,3 @@ class ToTrainModel():
                 metrice_dict[metric.__name__] = metrice_dict[metric.__name__] + metric(pred,target)
             else:
                 metrice_dict[metric.__class__.__name__] = metrice_dict[metric.__class__.__name__] + metric(pred,target)
-        return metrice_dict

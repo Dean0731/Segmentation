@@ -85,7 +85,7 @@ model.compile(loss=loss,optimizer= optimizer,metrics=metrics)
 # 是否有与预训练文件，有的话导入
 if os.path.exists(pre_file):
     model.load_weights(pre_file)
-log = int(flag.get('log'))
+log = int(flag.get('file'))
 
 if log:
     log_,h5_dir,event_dir = get_dir(os.path.join(util.getParentDir(),'source/tensorflow'))
