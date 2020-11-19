@@ -8,7 +8,7 @@
 
 import time
 import logging
-import os,sys
+import os
 from .func import getSecondToTime,getUrlAndLog,get_name_hostname
 class DatasetPath:
     TRAIN = 0
@@ -81,7 +81,7 @@ class DatasetPath:
             raise FileNotFoundError("根据环境选数据集位置失败")
         return os.path.join(parent,file)
     def __str__(self):
-        return self.getPath(DatasetPath.TRAIN)
+        return self.getPath("all")
 class Decorator:
     @staticmethod
     def _messageHandler(seconds,message):

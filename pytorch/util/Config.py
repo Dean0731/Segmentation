@@ -9,7 +9,8 @@ import torch.optim as optim
 from pytorch.util.Dataset import Dataset
 from pytorch.util import Transform
 from pytorch.util.Metrice import Segmentation
-from pytorch.network import Segnet,Deeplabv3
+from pytorch.network import Segnet
+from pytorch.network.deeplabv3plus import modeling
 import torch
 import os,sys
 from util import flag
@@ -27,7 +28,7 @@ learning_rate = 1e-4
 num_epochs = int(flag.get('epochs') or 80)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # model = Segnet.Segnet2(in_channels,out_channels).to(device)
-model = Deeplabv3.deeplabv3_resnet50(num_classes=2).to(device)
+model = modeling.deeplabv3_resnet50(2, pretrained_backbone=False).to(device)
 
 
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
@@ -48,5 +49,6 @@ val_dataloader = torch.utils.data.DataLoader(dataset=val_dataset,batch_size=batc
 test_dataset = Dataset(path.getPath(DatasetPath.TEST),transform=Transform.getTransforms(input_size),target_transform= Transform.getTargetTransforms(target_size))
 test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset,batch_size=batch_size,shuffle=False,pin_memory=True)
 
-train_dataloader = test_dataloader
+if flag.get("test"):
+    train_dataloader = test_dataloader
 

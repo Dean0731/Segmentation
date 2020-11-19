@@ -73,8 +73,9 @@ class ToTrainModel():
     def _getPred(model,input,target,device):
         input,target = input.to(device),target.to(device)
         pred = model(input) # batch_size * 10
-        if pred.get('out') is not None:
-            pred = pred.get('out')
+        if hasattr(pred,"get"):
+            if pred.get('out') is not None:
+                pred = pred.get('out')
         return pred,target
     def save(self,h5_dir):
         if h5_dir==False:
