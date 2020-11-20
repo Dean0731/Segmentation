@@ -3,6 +3,6 @@ train.log
 last.h5
 *__pycache__*
 file/source
-file/test
+file/temp
 test.py
 *http.log*

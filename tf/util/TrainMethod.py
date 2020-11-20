@@ -51,7 +51,7 @@ def test_on_batch(model,data,test_steps):
         step = step + 1
         if step==test_steps+1:
             break
-    tf.print("test - step:{: >3}/{} - {}".format(step - 1, test_steps, dict(zip(model.metrics_names, func.getNumbySize(test_result, 4)))))
+    tf.print("temp - step:{: >3}/{} - {}".format(step - 1, test_steps, dict(zip(model.metrics_names, func.getNumbySize(test_result, 4)))))
     return model
 # 自定义，不能用因为，写的不好，OOM异常
 def define_on_train(model,data,steps_per_epoch,epochs,validation_data,validation_steps,log_dir):

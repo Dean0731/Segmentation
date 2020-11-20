@@ -6,7 +6,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 import paddlex as pdx
 # 图像预处理流程
 target_size = 512
-log = 'test'
+log = 'temp'
 data_dir='/home/aistudio/data/data51222/'
 train_list='/home/aistudio/data/data51222/data_train.txt'
 val_list='/home/aistudio/data/data51222/data_val.txt'

@@ -33,7 +33,7 @@ def test(model,device,test_dataloader):
             pred = model(data) # batch_size * 10
             total_loss += F.nll_loss(pred,target,reduction="sum").item()
             correct += pred.argmax(dim=1).eq(target).sum().item()
-        print("test Accuracy:{}, loss:{}".format(correct/len(test_dataloader.dataset),total_loss/len(test_dataloader.dataset)))
+        print("temp Accuracy:{}, loss:{}".format(correct/len(test_dataloader.dataset),total_loss/len(test_dataloader.dataset)))
 @func.Decorator.sendMessage()
 @func.Decorator.timer()
 def main():
