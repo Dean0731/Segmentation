@@ -16,11 +16,11 @@ def main():
     color = 2
     batch_size = 4
     device = torch.device("cpu")
-    weight = r'./file/source/last.pt'
+    weight = r'C:\Users\root\OneDrive - bit.edu.cn\桌面\毕业设计\source\last.pt'
     model = getModel(device,weight)
     target_size = (512,512)
-    dir = r'./file/source/images'
-    test_dataset = Dataset('./file/source/data.txt',transform=Transform.getTransforms(target_size),target_transform= Transform.getTargetTransforms(target_size))
+    dir = r'C:\Users\root\OneDrive - bit.edu.cn\桌面\毕业设计\source\images'
+    test_dataset = Dataset(r'C:\Users\root\OneDrive - bit.edu.cn\桌面\毕业设计\source\data.txt',transform=Transform.getTransforms(target_size),target_transform= Transform.getTargetTransforms(target_size))
     test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset,batch_size=batch_size,shuffle=False,pin_memory=True)
     with torch.no_grad():
         for idx,(data,target) in enumerate(test_dataloader,start=0):
