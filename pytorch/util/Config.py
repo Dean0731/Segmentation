@@ -29,7 +29,9 @@ num_epochs = int(flag.get('epochs') or 80)
 pretrain=r"/home/dean/PythonWorkSpace/source/pytorch/logs-2020-11-20-11-50-15/last.pt"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # model = Segnet.Segnet2(in_channels,out_channels).to(device)
-model = modeling.deeplabv3plus_resnet50(2, pretrained_backbone=False).to(device)
+model = modeling.deeplabv3plus_resnet50(2, pretrained_backbone=True).to(device)
+# from pytorch.network.mydeeplabv3plus import model as m
+# model = m.to(device)
 if os.path.exists(pretrain):
     model.load_state_dict(torch.load(pretrain,map_location=device))
 

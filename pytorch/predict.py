@@ -2,30 +2,33 @@ import numpy as np
 import torch,os
 from PIL import Image
 
-from pytorch.network import Segnet,Deeplabv3
+from pytorch.network.deeplabv3plus import modeling
 from pytorch.util.Dataset import Dataset
 from pytorch.util import Transform
 
 def getModel(device,pt):
     # model = Segnet.Segnet2(3,2)
     # model.load_state_dict(torch.load(r'./source/mnist_cnn.pt',map_location=device))
-    model = Deeplabv3.deeplabv3_resnet50(num_classes=2)
+    model = modeling.deeplabv3plus_resnet50(2, pretrained_backbone=False).to(device)
     model.load_state_dict(torch.load(pt,map_location=device))
     return model
 def main():
     color = 2
     batch_size = 4
     device = torch.device("cpu")
-    weight = r'./source/last.pt'
+    weight = r'./file/source/last.pt'
     model = getModel(device,weight)
     target_size = (512,512)
-    dir = r'./source/images'
-    test_dataset = Dataset('./source/data.txt',transform=Transform.getTransforms(target_size),target_transform= Transform.getTargetTransforms(target_size))
+    dir = r'./file/source/images'
+    test_dataset = Dataset('./file/source/data.txt',transform=Transform.getTransforms(target_size),target_transform= Transform.getTargetTransforms(target_size))
     test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset,batch_size=batch_size,shuffle=False,pin_memory=True)
     with torch.no_grad():
         for idx,(data,target) in enumerate(test_dataloader,start=0):
             data,target = data.to(device),target.to(device)
-            pred = model(data)['out'] # batch_size * 10
+            pred = model(data) # batch_size * 10
+            if hasattr(pred,"get"):
+                if pred.get('out') is not None:
+                    pred = pred.get('out')
             pred = torch.argmax(pred,dim=1)
             for id,i in enumerate(pred,start=0):
                 image = Image.open(test_dataset.imgs[batch_size*idx+id][0]).resize(target_size)
