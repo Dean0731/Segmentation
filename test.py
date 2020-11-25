@@ -1,44 +1,72 @@
-from PIL import Image
+import csv
+import os
+import sys
 import numpy as np
-import util
-def max_pooling_forward(z, pooling, strides=(2, 2), padding=(0, 0)):
-    """
-    最大池化前向过程
-    :param z: 卷积层矩阵,形状(N,C,H,W)，N为batch_size，C为通道数
-    :param pooling: 池化大小(k1,k2)
-    :param strides: 步长
-    :param padding: 0填充
-    :return:
-    """
-    N, C, H, W = z.shape
-    # 零填充
-    padding_z = np.lib.pad(z, ((0, 0), (0, 0), (padding[0], padding[0]), (padding[1], padding[1])), 'constant', constant_values=0)
+import copy
+import shutil
+import pandas as pd
+from collections import Counter
+from shutil import copyfile
+import cv2
 
-    # 输出的高度和宽度
-    out_h = (H + 2 * padding[0] - pooling[0]) // strides[0] + 1
-    out_w = (W + 2 * padding[1] - pooling[1]) // strides[1] + 1
+path = os.getcwd()
+print(path)
+path_1 = path + '/' + 'data_error_0813'
+list_name = os.listdir(path_1)
+for n in list_name:
+    if n[-3:] == 'csv':
+        csvpath = path_1 + '/' + n
+        imgpath = path_1 + '/' + n[:-3] + 'JPG'
+        print(imgpath)
+        if not os.path.exists(imgpath):
+            print("nothing")
 
-    pool_z = np.zeros((N, C, out_h, out_w))
+        filehand = open(csvpath,'r')
+        csvlist = filehand.readlines()
+        mark = []
+        image = []
+        count = 1
 
-    for n in np.arange(N):
-        for c in np.arange(C):
-            for i in np.arange(out_h):
-                for j in np.arange(out_w):
-                    pool_z[n, c, i, j] = np.max(padding_z[n, c,
-                                                strides[0] * i:strides[0] * i + pooling[0],
-                                                strides[1] * j:strides[1] * j + pooling[1]])
-    return pool_z
-path = r'C:\Users\root\OneDrive - bit.edu.cn\桌面\毕业设计\temp\test.jpg'
-img = Image.open(path)
-img = np.array(img)
-img = np.expand_dims(img,axis=0)
-print(img.shape)
-img = img.transpose(0,3,1,2)
-print(img.shape)
-img = max_pooling_forward(img,(2,2))
-print(img.shape)
-img = img.transpose(0,2,3,1)
-print(img.shape)
-img = img[0,:,:,:]
-seg_img = Image.fromarray(np.uint8(img)).convert('RGB')
-seg_img.save(r"C:\Users\root\OneDrive - bit.edu.cn\桌面\毕业设计\temp\test-maxpool.jpg")
+
+        for m in csvlist[1:]:
+            m_split = m.split(',')
+            xy = [m_split[2], m_split[3]]
+            mark.append(xy)
+            image = cv2.imread(imgpath)
+            print("type:",type(image))
+            first_point = (int(m_split[2])-50,int(m_split[3])-50)
+            last_point = (int(m_split[2])+50,int(m_split[3])+50)
+            cv2.rectangle(image, first_point, last_point, (0,255,0),2)
+            cv2.imwrite(imgpath,image)
+            print("标记次数",count)
+            count = count + 1
+
+    else:
+        continue
+    print(mark)
+
+
+
+import glob
+import xml.etree.ElementTree as ET
+
+def load_dataset(path):
+    dataset = []
+    for xml_file in glob.glob("{}/*xml".format(path)):
+        try:
+            tree = ET.parse(xml_file)
+        except Exception as e:
+            print(xml_file)
+
+        height = int(tree.findtext("./size/height"))
+        width = int(tree.findtext("./size/width"))
+
+        for obj in tree.iter("object"):
+            xmin = int(obj.findtext("bndbox/xmin")) / width
+            ymin = int(obj.findtext("bndbox/ymin")) / height
+            xmax = int(obj.findtext("bndbox/xmax")) / width
+            ymax = int(obj.findtext("bndbox/ymax")) / height
+            if (xmax - xmin)>0 and (ymax - ymin) >0:
+                dataset.append([xmax - xmin, ymax - ymin])
+
+    return np.array(dataset)
