@@ -14,12 +14,10 @@ print("设备信息如下所示".center(20,'*'))
 local_device = device_lib.list_local_devices()
 [print(x) for x in local_device]
 print("Tensorflow version:",tf.__version__)
-# 2.3之前
-print("gpu-available:",tf.test.is_gpu_available())
-# 2.3及之后
-gpu = tf.config.get_visible_devices('CPU')
-cpu = tf.config.get_visible_devices('GPU')
+
+# 2.4及之后
+gpu = tf.config.list_physical_devices('GPU')
+cpu = tf.config.list_physical_devices('GPU')
 print("cpu:",cpu)
 print("gpu:",gpu)
-
 

@@ -1,72 +1,28 @@
-import csv
-import os
-import sys
-import numpy as np
-import copy
-import shutil
-import pandas as pd
-from collections import Counter
-from shutil import copyfile
 import cv2
 
-path = os.getcwd()
-print(path)
-path_1 = path + '/' + 'data_error_0813'
-list_name = os.listdir(path_1)
-for n in list_name:
-    if n[-3:] == 'csv':
-        csvpath = path_1 + '/' + n
-        imgpath = path_1 + '/' + n[:-3] + 'JPG'
-        print(imgpath)
-        if not os.path.exists(imgpath):
-            print("nothing")
+def write():
+    img = cv2.imread(path)
 
-        filehand = open(csvpath,'r')
-        csvlist = filehand.readlines()
-        mark = []
-        image = []
-        count = 1
+    # cv2.rectangle(img,(100,50),(300,150),(0,0,255),-2)
+    cv2.putText(img,world,(100,100),cv2.FONT_HERSHEY_COMPLEX,2.0,(100,200,200),5)
 
+    cv2.rectangle(img,(black[0],black[1]),(black[2],black[3]),(0,0,0),2)
+    cv2.rectangle(img,(red[0],red[1]),(red[2],red[3]),(0,0,255),2)
+    cv2.rectangle(img,(green[0],green[1]),(green[2],green[3]),(0,255,0),2)
+    cv2.rectangle(img,(blue[0],blue[1]),(blue[2],blue[3]),(255,0,0),2)
+    cv2.imwrite(path.split(".")[0]+"-result.jpg",img)
 
-        for m in csvlist[1:]:
-            m_split = m.split(',')
-            xy = [m_split[2], m_split[3]]
-            mark.append(xy)
-            image = cv2.imread(imgpath)
-            print("type:",type(image))
-            first_point = (int(m_split[2])-50,int(m_split[3])-50)
-            last_point = (int(m_split[2])+50,int(m_split[3])+50)
-            cv2.rectangle(image, first_point, last_point, (0,255,0),2)
-            cv2.imwrite(imgpath,image)
-            print("标记次数",count)
-            count = count + 1
+if __name__ == '__main__':
+    path = r'G:\car\000001.jpg'
 
-    else:
-        continue
-    print(mark)
+    # 字符
+    world = '#16'
+    # [左上点x,左上点y,右下x，右下y]
+    black=[300,300,500,500]
+    red= [i+10 for i in black]
+    green=[i+20 for i in black]
+    blue=[i+30 for i in black]
+
+    write()
 
 
-
-import glob
-import xml.etree.ElementTree as ET
-
-def load_dataset(path):
-    dataset = []
-    for xml_file in glob.glob("{}/*xml".format(path)):
-        try:
-            tree = ET.parse(xml_file)
-        except Exception as e:
-            print(xml_file)
-
-        height = int(tree.findtext("./size/height"))
-        width = int(tree.findtext("./size/width"))
-
-        for obj in tree.iter("object"):
-            xmin = int(obj.findtext("bndbox/xmin")) / width
-            ymin = int(obj.findtext("bndbox/ymin")) / height
-            xmax = int(obj.findtext("bndbox/xmax")) / width
-            ymax = int(obj.findtext("bndbox/ymax")) / height
-            if (xmax - xmin)>0 and (ymax - ymin) >0:
-                dataset.append([xmax - xmin, ymax - ymin])
-
-    return np.array(dataset)
