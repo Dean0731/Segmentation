@@ -10,7 +10,8 @@ class Segmentation():
             FP = torch.sum((y_==dic['bg']) & (y_pred_==dic['house']))
             FN = torch.sum((y_==dic['house']) & (y_pred_==dic['bg']))
             TN = torch.sum((y_==dic['bg']) & (y_pred_==dic['bg']))
-            acc = acc + float((TP+TN)/(TP+FN+FP+TN))
+            #acc = acc + float((TP+TN)/(TP+FN+FP+TN))
+            acc = acc + torch.true_divide((TP+TN),(TP+FN+FP+TN))
         return acc
     # @staticmethod
     # def getIou(y_pred,y):

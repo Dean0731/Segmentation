@@ -9,7 +9,6 @@ import requests
 import sys
 import random,os
 import numpy as np
-from captcha.image import ImageCaptcha
 import cv2
 import getpass
 import socket
@@ -20,14 +19,6 @@ def get_name_hostname():
     host_name = socket.gethostname()
     return user_name,host_name
 
-def genCaptchaTextImage(size=5,width=140, height = 60,path=None):
-    def getRandomText(char,size):
-        return "".join([random.choice(char) for _ in range(size)])
-    image = ImageCaptcha(width=width,height=height)
-    captchaText = getRandomText(char=CAPTCHA_LIST,size=size)
-    if path != None and os.path.exists(path):
-        image.write(captchaText,os.path.join(path,"{}.png".format(captchaText)))
-    return captchaText,np.array(Image.open(image.generate(captchaText)))
 
 def computerNetworkSize(model):
     # from keras import applications

@@ -9,7 +9,6 @@ import torch.optim as optim
 from pytorch.util.Dataset import Dataset
 from pytorch.util import Transform
 from pytorch.util.Metrice import Segmentation
-from pytorch.network import Segnet
 from pytorch.network.deeplabv3plus import modeling
 import torch
 import os,sys
@@ -25,11 +24,11 @@ target_size = input_size
 batch_size = 4
 path = DatasetPath('dom')
 learning_rate = 1e-4
-num_epochs = int(flag.get('epochs') or 80)
+num_epochs = int(flag.get('epochs') or 2)
 pretrain=r"/home/dean/PythonWorkSpace/source/pytorch/logs-2020-11-20-11-50-15/last.pt"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # model = Segnet.Segnet2(in_channels,out_channels).to(device)
-model = modeling.deeplabv3plus_resnet50(2, pretrained_backbone=True).to(device)
+model = modeling.deeplabv3plus_resnet50(2, pretrained_backbone=False).to(device)
 # from pytorch.network.mydeeplabv3plus import model as m
 # model = m.to(device)
 if os.path.exists(pretrain):

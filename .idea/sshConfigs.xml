@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="192.168.101.181" id="3f459675-dcab-4849-a32e-9a3e5212785f" port="22" nameFormat="DESCRIPTIVE" username="yqw" />
+      <sshConfig authType="PASSWORD" host="172.16.7.233" id="ad16a00b-4459-45e8-8ef4-ded15df442eb" port="22" nameFormat="DESCRIPTIVE" username="dean" />
+      <sshConfig host="172.99.1.100" id="dd012054-85ce-40d7-aaff-c18b675f6985" keyPath="C:\Users\root\OneDrive - gs.zzu.edu.cn\ssh\ssh2\id_rsa" port="22" nameFormat="DESCRIPTIVE" username="huzhanpeng" />
+    </configs>
+  </component>
+</project>

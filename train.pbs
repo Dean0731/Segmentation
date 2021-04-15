@@ -1,0 +1,11 @@
+#!/bin/bash
+#PBS -N huzhanpengtrain
+#PBS -l nodes=1:ppn=16
+#PBS -l walltime=7200:00:00
+#PBS -o /public/home/huzhanpeng/output/$PBS_JOBID.out
+#PBS -e /public/home/huzhanpeng/output/$PBS_JOBID.err
+##PBS -q gpu
+
+uname -a
+whereis python
+ping www.baidu.com

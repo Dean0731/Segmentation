@@ -9,10 +9,16 @@
 
 # from pytorch.example import pytorch_for_cnn
 # pytorch_for_cnn.main()
-
+# --epochs 2 训练轮数
+# --info 1/0 是否发送消息
+# --log 是否有日志
+# --type 框架选择
+import sys
+sys.path.append(r'/public/home/huzhanpeng/anaconda3/envs/python3.6/lib/python3.6/site-packages')
 import util
 import logging
 import os
+
 @util.cls.Decorator.sendMessageWeChat(flag=int(util.flag.get("info")))
 @util.cls.Decorator.timer(flag=True)
 def main():

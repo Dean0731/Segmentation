@@ -20,3 +20,16 @@ device = torch.device("cuda:1" if (torch.cuda.is_available() and ngpu > 0) else 
 print(device)
 print(torch.cuda.get_device_name(0))
 print(torch.rand(3,3).cuda())
+
+
+
+
+print("--------------------------------")
+available = torch.cuda.is_available()
+print("cuda available:",available)
+gpu_number = torch.cuda.device_count()
+print("cuda count:",gpu_number)
+for i in range(gpu_number):
+    print(torch.cuda.device(i),torch.cuda.get_device_name(i))
+print(torch.device("cpu"))
+

@@ -2,7 +2,9 @@
 train.log
 last.h5
 *__pycache__*
-file/source
-file/temp
+runs
 test.py
 *http.log*
+
+
+# git add . && git commit -m "update" && git push

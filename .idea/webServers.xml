@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="984bc47c-2485-4825-9803-b7152ca55293" name="super">
+        <fileTransfer rootFolder="/public/home/huzhanpeng/Segmentation" accessType="SFTP" host="172.99.1.100" port="22" sshConfigId="dd012054-85ce-40d7-aaff-c18b675f6985" sshConfig="huzhanpeng@172.99.1.100:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
